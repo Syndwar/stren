@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+dotry(${1:func})
+]]></content>
+    <tabTrigger>dotry</tabTrigger>
+    <scope>source.lua</scope>
+    <description>dotry</description>
+</snippet>

@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+table.diff(${1:table1}, ${2:table2})
+]]></content>
+    <tabTrigger>table.diff</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

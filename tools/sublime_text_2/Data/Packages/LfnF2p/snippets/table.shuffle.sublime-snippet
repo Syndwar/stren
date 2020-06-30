@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+table.shuffle(${1:tablename})
+]]></content>
+    <tabTrigger>table.shuffle</tabTrigger>
+    <scope>source.lua</scope>
+    <description>table.shuffle</description>
+</snippet>

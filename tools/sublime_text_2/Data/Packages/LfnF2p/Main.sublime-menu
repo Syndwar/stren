@@ -1,0 +1,78 @@
+[
+    {
+        "caption": "Stren Game",
+        "mnemonic": "G",
+        "id": "stren",
+        "children":
+        [
+            { "caption": "-" },
+            {   "command" : "open_file",
+                "args": {"file": "${packages}/LfnF2p/README.md"},
+                "caption": "Readme"
+            },
+            { "caption": "-" },
+            {
+                "command": "run_file",
+                "args": { "filename": "strend.exe", "folder":"\\bin"},
+                "caption": "Stren Debug"
+            },
+            {
+                "command": "run_file",
+                "args": { "filename": "stren.exe", "folder":"\\bin"},
+                "caption": "Stren Release"
+            },
+            { "caption": "-" },
+            {
+                "command": "run_file",
+                "args": { "filename": "\\build_debug.bat" },
+                "caption": "Build Debug"
+            },
+            {
+                "command": "run_file",
+                "args": { "filename": "\\rebuild_debug.bat" },
+                "caption": "Rebuild Debug"
+            },
+            {
+                "command": "run_file",
+                "args": { "filename": "\\build_release.bat" },
+                "caption": "Build Release"
+            },
+            {
+                "command": "run_file",
+                "args": { "filename": "\\rebuild_release.bat" },
+                "caption": "Rebuild Release"
+            },
+            { "caption": "-" },
+            {
+                "command": "update_folder",
+                "caption": "Update"
+            },
+            {
+                "command": "commit_folder",
+                "caption": "Commit..."
+            },
+            {
+                "command": "cleanup_folder",
+                "caption": "Cleanup..."
+            },
+            {
+                "command": "log_folder",
+                "caption": "Log"
+            },
+            { "caption": "-" },
+            {
+                "caption": "Preferences",
+                "id": "project_prefs",
+                "children":
+                [
+                    { "caption": "-" },
+                    { "command": "open_dir", "args": {"dir": "$packages/LfnF2p/snippets"}, "caption": "Browse Snippets..."},
+                    { "command": "open_file", "args": {"file": "${packages}/Lua/Lua.tmLanguage"}, "caption": "Edit Lua language XML…"},
+                    { "command": "open_file", "args": {"file": "${packages}/User/lfn_f2p_lua.YAML-tmLanguage"}, "caption": "Edit Lua language YAML…"},
+                    { "command": "open_file", "args": {"file": "${packages}/LfnF2p/Main.sublime-menu"}, "caption": "Edit Main Menu…"},
+                    { "caption": "-" }
+                ]
+            }
+        ]
+    }
+]

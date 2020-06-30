@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+--#pragma region#
+]]></content>
+    <tabTrigger>pragmar</tabTrigger>
+    <scope>source.lua</scope>
+    <description>pragma region</description>
+</snippet>

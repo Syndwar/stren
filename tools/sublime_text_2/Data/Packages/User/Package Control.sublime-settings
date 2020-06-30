@@ -1,0 +1,23 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"Alignment",
+		"Coem2",
+		"Evaluate",
+		"Find++",
+		"Git",
+		"Go2Function",
+		"LfnF2p",
+		"Package Control",
+		"PackageDev",
+		"RegReplace",
+		"SyncedSideBar",
+		"SyntaxFold",
+		"Tagify",
+		"TortoiseSVN"
+	]
+}

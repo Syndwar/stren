@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+spairs(${1:tablename}, ${2:func})
+]]></content>
+    <tabTrigger>spairs</tabTrigger>
+    <scope>source.lua</scope>
+    <description>sort table</description>
+</snippet>

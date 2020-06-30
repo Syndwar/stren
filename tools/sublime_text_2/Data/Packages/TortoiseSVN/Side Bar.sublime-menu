@@ -1,0 +1,12 @@
+[
+	{ "caption": "-" },
+	{ "caption": "SVN Add", "command": "svn_add", "args": {"paths":[]}},
+	{ "caption": "SVN Update", "command": "svn_update", "args": {"paths":[]}},
+	{ "caption": "SVN Commit", "command": "svn_commit", "args": {"paths":[]}},
+	{ "caption": "SVN Revert", "command": "svn_revert", "args": {"paths":[]}},
+	{ "caption": "SVN Log", "command": "svn_log", "args": {"paths":[]}},
+	{ "caption": "SVN Blame", "command": "svn_blame", "args": {"paths":[]}},
+	{ "caption": "SVN Switch", "command": "svn_switch", "args": {"paths":[]}},
+    { "caption": "SVN Delete", "command": "svn_delete", "args": {"paths":[]}},
+	{ "caption": "-", "id": "end" }
+]

@@ -1,0 +1,6 @@
+<snippet>
+    <content><![CDATA[table.count( ${1:tablename}, ${2:valueToCount} )]]></content>
+    <tabTrigger>table.count</tabTrigger>
+    <scope>source.lua</scope>
+    <description>table.count</description>
+</snippet>

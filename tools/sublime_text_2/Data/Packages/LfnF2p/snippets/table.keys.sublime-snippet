@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+table.keys(${1:table})
+]]></content>
+    <tabTrigger>table.keys</tabTrigger>
+    <scope>source.lua</scope>
+    <description>get keys</description>
+</snippet>

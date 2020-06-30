@@ -1,0 +1,190 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/D/svn/trunk/sublime_text_2/Data/Packages/Coem2/Main.sublime-menu",
+		"/D/other/StrenProject/bin/base/res/sprites.lua",
+		"/D/other/StrenProject/bin/base/res/texts.lua",
+		"/D/other/StrenProject/bin/base/res/fonts.lua",
+		"/D/other/StrenProject/bin/base/scripts/main.lua",
+		"/D/other/StrenProject/bin/base/scripts/config.lua",
+		"/C/Users/Alexandr.Nemichenko/Downloads/Desktop_USB_8_13 (1).log",
+		"/D/soft/sublime_text_2/Data/Packages/LfnF2p/Main.sublime-menu",
+		"/D/docs/config_info_desktop.txt",
+		"/D/sublime_text.exe",
+		"/D/PuzzleHeart/ph-f2p-trunk/res/support/Lua-5.1/samples/user_tbl.lua",
+		"/C/Users/hovanskiy/AppData/Roaming/Awem/PuzzleHeart/assets/downloadable/balance.lua"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"ADE/ADR",
+			"Implemented DownloadRes",
+			"downloadresources",
+			"downloadresources ",
+			"downloadtimeout",
+			"[a",
+			"[remoting]",
+			"customport ",
+			"customhostname",
+			"userticketmanager",
+			"remoting",
+			"bandwidthoptimization",
+			"[alert]",
+			"08d4a75",
+			"cohort",
+			"patch",
+			"Quest_Area1_FeedSpot",
+			"Quest_BargeCallJack",
+			"version",
+			"Cutscene_Area2_WaitFeedPets",
+			"Act_SelectorLockInfo",
+			"Cutscene_FoundWaterArtefact0",
+			"Cutscene_FoundWaterArtefact09",
+			"wind_artefact_01",
+			"Cutscene_FoundWindArtefact01",
+			"Cutscene_FoundStoneArtefact05",
+			"Cutscene_HalloweenDecorArea6",
+			"Cutscene_HalloweenFirstPurchase",
+			"Cutscene_Area1_EndHalloweenEvent",
+			"Cutscene_HalloweenShopSlot_1_2",
+			"Cutscene_HalloweenFirstPurchase",
+			"HalloweenSkinArea",
+			"Cutscene_HalloweenFirstPurchase",
+			"Cutscene_HalloweenFirstPurchase2",
+			"FoundStone",
+			"artefact_0",
+			"stone",
+			"Cutscene_Found",
+			"Cutscene_FoundWaterArtefact01",
+			"            ca_wait_click(),\nCutscene_FoundStoneArtefact0",
+			"Cutscene_FoundStoneArtefact05",
+			"Cutscene_FoundStoneArtefact0",
+			"Cutscene_FoundStoneArtefact06",
+			"Cutscene_FoundStoneArtefact0",
+			"Cutscene_FoundStoneArtefact05",
+			"Cutscene_FoundStoneArtefact06"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 329.0,
+	"status_bar_visible": true
+}

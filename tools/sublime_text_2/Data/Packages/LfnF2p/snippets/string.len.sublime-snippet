@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+string.len(${1:string})
+]]></content>
+    <tabTrigger>string.len</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

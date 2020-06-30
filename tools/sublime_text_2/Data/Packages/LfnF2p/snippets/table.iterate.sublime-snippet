@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+table.iterate( ${1:tablename}, ${2:func} )
+]]></content>
+    <tabTrigger>table.iterate</tabTrigger>
+    <scope>source.lua</scope>
+    <description>iterate values</description>
+</snippet>

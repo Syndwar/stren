@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+table.kgenerator(${1:tablename})
+]]></content>
+    <tabTrigger>table.kgenerator</tabTrigger>
+    <scope>source.lua</scope>
+    <description>generator</description>
+</snippet>

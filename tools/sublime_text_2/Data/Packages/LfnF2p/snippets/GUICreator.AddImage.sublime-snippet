@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+GUICreator.AddImage(${1:container}, ${2:id}, ${3:desc})
+]]></content>
+    <tabTrigger>GUICreator.AddImage</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

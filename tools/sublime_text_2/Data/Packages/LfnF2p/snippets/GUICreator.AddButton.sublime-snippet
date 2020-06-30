@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+GUICreator.AddButton(${1:container}, ${2:id}, ${3:desc}, ${4:callback})
+]]></content>
+    <tabTrigger>GUICreator.AddButton</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

@@ -1,0 +1,1 @@
+{"description": "Simple find and replace sequencer plugin for Sublime Text", "url": "https://github.com/facelessuser/RegReplace", "platforms": ["*"], "version": "1.10.1", "sublime_text": "<3000", "dependencies": []}

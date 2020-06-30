@@ -1,0 +1,4 @@
+[
+  { "caption": "-" , "id":"side-bar-end-separator"},
+  { "caption": "Go to definition", "command": "go_to_function"}
+]

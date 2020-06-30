@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+GUICreator.AddEmitter(${1:container}, ${2:id}, ${3:desc})
+]]></content>
+    <tabTrigger>GUICreator.AddEmitter</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

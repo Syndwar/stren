@@ -1,0 +1,7 @@
+[
+    { "caption": "-", "id": "selection" },
+    { "caption": "-", "id": "file" },
+    { "command": "copy_filename", "caption": "Copy File Name"},
+    { "caption": "-", "id": "end" },
+    { "command": "go_to_description", "caption": "Go to description"}
+]

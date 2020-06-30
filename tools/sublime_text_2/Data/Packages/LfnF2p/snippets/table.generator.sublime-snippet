@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+table.generator(${1:tablename})
+]]></content>
+    <tabTrigger>table.generator</tabTrigger>
+    <scope>source.lua</scope>
+    <description>generator</description>
+</snippet>

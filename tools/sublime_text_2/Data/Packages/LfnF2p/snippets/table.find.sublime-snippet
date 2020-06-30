@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+table.find(${1:tablename}, ${2:valueToFind})
+]]></content>
+    <tabTrigger>table.find</tabTrigger>
+    <scope>source.lua</scope>
+    <description>find in table</description>
+</snippet>

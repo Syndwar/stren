@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+Utils.EngineLog("#", ${1:...})
+]]></content>
+    <tabTrigger>Utils.EngineLog</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

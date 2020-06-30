@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+string.byte(${1:string}, ${2:i}, ${3:j})
+]]></content>
+    <tabTrigger>string.byte</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

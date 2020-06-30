@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+assert(${1:string})
+]]></content>
+    <tabTrigger>assert</tabTrigger>
+    <scope>source.lua</scope>
+    <description>assert</description>
+</snippet>

@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+string.rep(${1:string}, ${2:n})
+]]></content>
+    <tabTrigger>string.rep</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

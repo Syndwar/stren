@@ -1,0 +1,32 @@
+{
+    "replacements": {
+        "convert_xml_to_lua_string": {
+            "find" : "(type|string|sprite|style|h_align|v_align|kind|id|emitter|outside_click|align|theme|mode|text|value|construction|pack|paths|selector)=\"([\\w\\d\\s,]*)\">?",
+            "replace": "\\1 = \"\\2\","
+        },
+        "convert_xml_to_lua_number": {
+            "find" : "(width|height|left|top|mouse_transparency|order|modal|transparency|upgrade|bubble_view)=\"(-?[\\d.]*)\">?",
+            "replace": "\\1 = \\2,"
+        },
+        "convert_xml_to_lua_table_start": {
+            "find" : "<Control|<Page",
+            "replace": "{"
+        },
+        "convert_xml_to_lua_table_end": {
+            "find" : "/>|</\\w+>",
+            "replace": "},"
+        },
+        "convert_xml_to_lua_vectors": {
+            "find" : "(offset|center|size|max_items|step)=\"(-?\\d+) (-?\\d+)\"",
+            "replace": "\\1 = {\\2, \\3},"
+        },
+        "convert_xml_to_lua_comments": {
+            "find" : "<!(.*)-->\\s*\\n",
+            "replace": "\\1\\n"
+        },
+        "remove_final_comas": {
+            "find" : "([\\d\\w]), s*\\}",
+            "replace": "\\1}"
+        }
+    }
+}

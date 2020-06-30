@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+Functor(${1:object}, ${2:method})
+]]></content>
+    <tabTrigger>Functor</tabTrigger>
+    <scope>source.lua</scope>
+    <description>class</description>
+</snippet>

@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+--#pragma endregion#
+]]></content>
+    <tabTrigger>pragmaendr</tabTrigger>
+    <scope>source.lua</scope>
+    <description>pragma endregion</description>
+</snippet>

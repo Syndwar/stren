@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+string.gsub(${1:string}, ${2:pattern}, ${2:repl})
+]]></content>
+    <tabTrigger>string.gsub</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

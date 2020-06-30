@@ -1,0 +1,16 @@
+{
+    "folders":
+    [
+        {
+            "name": "go 2 function",
+            "path": "..\\Data\\Packages\\Go2Function",
+            "file_include_patterns": ["*.py", "*.lua"]
+        }
+    ],
+    "settings":
+    {
+        "tab_size": 4,
+        "translate_tabs_to_spaces": false,
+        "trim_automatic_white_space": true
+    }
+}

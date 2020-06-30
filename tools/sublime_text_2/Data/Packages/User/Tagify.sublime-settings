@@ -1,0 +1,18 @@
+{
+    "analyse_on_start": false,
+    "common_tags": ["todo", "bug", "workaround"],
+
+    // Extensions of files which will be processed by tagify
+    "extensions": ["lua"],
+    "file_exclude_patterns":
+    [
+        "quests_1_",
+        "string-table.lua",
+        "_desc.lua"
+    ],
+
+    "folder_include_patterns": [
+        "assets\\data\\scripts",
+        "assets\\downloadable"
+    ]
+}

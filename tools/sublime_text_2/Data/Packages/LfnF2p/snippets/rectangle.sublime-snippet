@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+Rectangle(${1:x}, ${2:y}, ${3:width}, ${4:height})
+]]></content>
+    <tabTrigger>Rectangle</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>lua</string>
+	</array>
+	<key>name</key>
+	<string>LfnF2p Lua Files</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>(?![^.]\.|:)\b(table\.(diff|count|find|generator|iterate|keys|kiterate|kgenerator|shuffle|size)|math\.(ceilf|floorf|isodd|l2r|r2l))\b(?=[( {])</string>
+			<key>name</key>
+			<string>support.function.library.lua</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?![^.]\.|:)\b(((Engine|Game|GUICreator|Utils|UI)[\.:](\b[a-zA-Z_0-9]*\b))|dotry|range_random|spairs|Button|CircleProgressBar|Emitter|Functor|Image|Label|ProgressBar|SocialWebObject|Winder)\b(?=[( {])</string>
+			<key>name</key>
+			<string>support.function.lua</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.lua</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.scope.lua</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.lua</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b(class)\s+(['"][A-Za-z0-9_]+['"])\s*(\([A-Za-z0-9_]+\))?</string>
+			<key>name</key>
+			<string>meta.class.derived.lua</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>source.lua</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.lua.lfn</string>
+	<key>uuid</key>
+	<string>eb28f254-4c3f-4b86-8ac0-c60eb7a876ae</string>
+</dict>
+</plist>

@@ -1,0 +1,22 @@
+/*
+ * find unused strings settings
+ *
+ *
+ * To set your own settings, do so in a Users settings file.
+ */
+
+{
+	"folder_include_patterns": [
+		"assets\\scripts",
+		"assets\\settings"
+	],
+	"file_include_patterns": [
+		"*.lua",
+		"*.xml"
+	],
+	"file_exclude_patterns": [
+		"locale.xml"
+	],
+    "input_line_pattern": "<String alias=\"(.*?)\"",
+    "include_files": ["locale.xml"]
+}

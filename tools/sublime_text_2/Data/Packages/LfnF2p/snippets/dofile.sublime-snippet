@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+dofile("${1:string}")
+]]></content>
+    <tabTrigger>dofile</tabTrigger>
+    <scope>source.lua</scope>
+    <description>dofile</description>
+</snippet>

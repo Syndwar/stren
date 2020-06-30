@@ -1,0 +1,15 @@
+/*
+ * enumerate collection default settings
+ *
+ *
+ * To set your own settings, do so in a Users settings file.
+ */
+
+{
+    "input_line_pattern": "((^\\t.*unlock level\\s*=.*\\n)|(^\\t{2}\\bid = .*,.*\\n))",
+    "subs_template": "{0} -- number {1} (level {2})\n",
+    "ignore_level_value": 0,
+    "level_key": "unlock level",
+    "cut_symbol": "--",
+    "include_files": ["collection_items.lua", "artifact_items.lua"]
+}

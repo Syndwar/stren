@@ -1,0 +1,15 @@
+/*
+ * go2function default settings
+ *
+ *
+ * To set your own function patterns, do so in a Users settings file.
+ */
+
+{
+	"folder_include_patterns": [],
+	"file_include_patterns": [],
+	"folder_exclude_patterns": [],
+	"file_exclude_patterns": [],
+	"enable_auto_complete": false,
+	"use_cached_paths": false
+}

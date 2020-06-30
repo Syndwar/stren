@@ -1,0 +1,45 @@
+[
+	{
+		"id": "preferences",
+		"children":
+		[
+			{
+				"caption": "Package Settings",
+				"id": "package-settings",
+				"children":
+				[
+					{
+						"caption": "Go2Function",
+						"children":
+						[
+							{   "command" : "open_file",
+									"args": {"file": "${packages}/Go2Function/README.md"},
+									"caption": "Readme"
+							},
+							{ "caption": "-" },
+							{
+									"command": "open_file",
+									"args": {"file": "${packages}/Go2Function/go2function.sublime-settings"},
+									"caption": "Settings – Default"
+							},
+							{
+									"command": "open_file",
+									"args": {"file": "${packages}/User/go2function.sublime-settings"},
+									"caption": "Settings – User"
+							},
+							{ "caption": "-" },
+							{
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/User/Default.sublime-keymap",
+									"platform": "Windows"
+								},
+								"caption": "Key Bindings – User"
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+]

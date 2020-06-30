@@ -1,0 +1,8 @@
+[
+	{ "caption": "TortoiseSVN: Update", "command": "svn_update" },
+	{ "caption": "TortoiseSVN: Commit", "command": "svn_commit" },
+	{ "caption": "TortoiseSVN: Revert", "command": "svn_revert" },
+	{ "caption": "TortoiseSVN: Log", "command": "svn_log" },
+    { "caption": "TortoiseSVN Blame", "command": "svn_blame", "args": {"paths":[]}},
+    { "caption": "TortoiseSVN Delete", "command": "svn_delete"}
+]

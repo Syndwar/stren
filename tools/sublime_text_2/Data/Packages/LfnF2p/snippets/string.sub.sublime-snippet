@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+string.sub(${1:string}, ${2:i}, ${3:j})
+]]></content>
+    <tabTrigger>string.sub</tabTrigger>
+    <scope>source.lua</scope>
+    <description>function</description>
+</snippet>

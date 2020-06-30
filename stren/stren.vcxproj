@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\common\alignment.h" />
+    <ClInclude Include="src\common\colour.h" />
+    <ClInclude Include="src\common\delegate.h" />
+    <ClInclude Include="src\common\point.h" />
+    <ClInclude Include="src\common\rect.h" />
+    <ClInclude Include="src\common\string_ext.h" />
+    <ClInclude Include="src\engine\action.h" />
+    <ClInclude Include="src\engine\app_window.h" />
+    <ClInclude Include="src\engine\camera.h" />
+    <ClInclude Include="src\engine\config.h" />
+    <ClInclude Include="src\engine\console.h" />
+    <ClInclude Include="src\engine\engine.h" />
+    <ClInclude Include="src\engine\engine_handler.h" />
+    <ClInclude Include="src\engine\event.h" />
+    <ClInclude Include="src\engine\event_listener.h" />
+    <ClInclude Include="src\engine\event_processor.h" />
+    <ClInclude Include="src\engine\listener.h" />
+    <ClInclude Include="src\engine\logger.h" />
+    <ClInclude Include="src\engine\observer.h" />
+    <ClInclude Include="src\engine\system\debug_panel.h" />
+    <ClInclude Include="src\engine\system\widget_tree.h" />
+    <ClInclude Include="src\engine\system_tools.h" />
+    <ClInclude Include="src\engine\transform.h" />
+    <ClInclude Include="src\engine\save_data.h" />
+    <ClInclude Include="src\game\battlefield.h" />
+    <ClInclude Include="src\game\unit.h" />
+    <ClInclude Include="src\lua\lua_binding.h" />
+    <ClInclude Include="src\lua\lua_ext.h" />
+    <ClInclude Include="src\lua\lua_function.h" />
+    <ClInclude Include="src\lua\lua_stack.h" />
+    <ClInclude Include="src\lua\lua_table.h" />
+    <ClInclude Include="src\lua\lua_value.h" />
+    <ClInclude Include="src\lua\lua_wrapper.h" />
+    <ClInclude Include="src\media\music.h" />
+    <ClInclude Include="src\media\music_repository.h" />
+    <ClInclude Include="src\media\sound.h" />
+    <ClInclude Include="src\media\sounds_repository.h" />
+    <ClInclude Include="src\media\sound_system.h" />
+    <ClInclude Include="src\render\clabel.h" />
+    <ClInclude Include="src\render\font_texture.h" />
+    <ClInclude Include="src\render\glyph.h" />
+    <ClInclude Include="src\render\image_texture.h" />
+    <ClInclude Include="src\render\itexture.h" />
+    <ClInclude Include="src\render\primitive_figures.h" />
+    <ClInclude Include="src\render\renderer.h" />
+    <ClInclude Include="src\render\sprite.h" />
+    <ClInclude Include="src\render\texture.h" />
+    <ClInclude Include="src\repo\fonts_repository.h" />
+    <ClInclude Include="src\repo\sprites_repository.h" />
+    <ClInclude Include="src\repo\texts_repository.h" />
+    <ClInclude Include="src\repo\textures_repository.h" />
+    <ClInclude Include="src\screens\main_screen.h" />
+    <ClInclude Include="src\screens\map_editor_screen.h" />
+    <ClInclude Include="src\screens\options_screen.h" />
+    <ClInclude Include="src\screens\screen_ids.h" />
+    <ClInclude Include="src\screens\screen_selector.h" />
+    <ClInclude Include="src\screens\start_screen.h" />
+    <ClInclude Include="src\screens\test_atlas_screen.h" />
+    <ClInclude Include="src\screens\test_fader_screen.h" />
+    <ClInclude Include="src\screens\test_font_screen.h" />
+    <ClInclude Include="src\screens\test_primitive_screen.h" />
+    <ClInclude Include="src\screens\test_screen.h" />
+    <ClInclude Include="src\screens\test_scroll_screen.h" />
+    <ClInclude Include="src\screens\test_sound_screen.h" />
+    <ClInclude Include="src\screens\test_widgets_screen.h" />
+    <ClInclude Include="src\tests\test_color.h" />
+    <ClInclude Include="src\tests\test_lua.h" />
+    <ClInclude Include="src\tests\test_observer.h" />
+    <ClInclude Include="src\tests\test_unit.h" />
+    <ClInclude Include="src\tests\test_widgets.h" />
+    <ClInclude Include="src\utils\utils.h" />
+    <ClInclude Include="src\widgets\area.h" />
+    <ClInclude Include="src\widgets\button.h" />
+    <ClInclude Include="src\widgets\container.h" />
+    <ClInclude Include="src\widgets\dialog.h" />
+    <ClInclude Include="src\widgets\fader.h" />
+    <ClInclude Include="src\widgets\image.h" />
+    <ClInclude Include="src\widgets\label.h" />
+    <ClInclude Include="src\widgets\mods\widget_transform_mod.h" />
+    <ClInclude Include="src\widgets\primitive.h" />
+    <ClInclude Include="src\widgets\progressbar.h" />
+    <ClInclude Include="src\widgets\screen.h" />
+    <ClInclude Include="src\widgets\scroll_container.h" />
+    <ClInclude Include="src\widgets\timer.h" />
+    <ClInclude Include="src\widgets\widget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\common\colour.cpp" />
+    <ClCompile Include="src\common\point.cpp" />
+    <ClCompile Include="src\common\rect.cpp" />
+    <ClCompile Include="src\common\string_ext.cpp" />
+    <ClCompile Include="src\engine\app_window.cpp" />
+    <ClCompile Include="src\engine\camera.cpp" />
+    <ClCompile Include="src\engine\config.cpp" />
+    <ClCompile Include="src\engine\console.cpp" />
+    <ClCompile Include="src\engine\engine.cpp" />
+    <ClCompile Include="src\engine\engine_handler.cpp" />
+    <ClCompile Include="src\engine\event.cpp" />
+    <ClCompile Include="src\engine\event_listener.cpp" />
+    <ClCompile Include="src\engine\event_processor.cpp" />
+    <ClCompile Include="src\engine\listener.cpp" />
+    <ClCompile Include="src\engine\logger.cpp" />
+    <ClCompile Include="src\engine\observer.cpp" />
+    <ClCompile Include="src\engine\system\debug_panel.cpp" />
+    <ClCompile Include="src\engine\system\widget_tree.cpp" />
+    <ClCompile Include="src\engine\system_tools.cpp" />
+    <ClCompile Include="src\engine\transform.cpp" />
+    <ClCompile Include="src\engine\save_data.cpp" />
+    <ClCompile Include="src\game\battlefield.cpp" />
+    <ClCompile Include="src\lua\lua_binding.cpp" />
+    <ClCompile Include="src\lua\lua_function.cpp" />
+    <ClCompile Include="src\lua\lua_stack.cpp" />
+    <ClCompile Include="src\lua\lua_table.cpp" />
+    <ClCompile Include="src\lua\lua_value.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\media\music.cpp" />
+    <ClCompile Include="src\media\music_repository.cpp" />
+    <ClCompile Include="src\media\sound.cpp" />
+    <ClCompile Include="src\media\sounds_repository.cpp" />
+    <ClCompile Include="src\media\sound_system.cpp" />
+    <ClCompile Include="src\render\clabel.cpp" />
+    <ClCompile Include="src\render\font_texture.cpp" />
+    <ClCompile Include="src\render\glyph.cpp" />
+    <ClCompile Include="src\render\image_texture.cpp" />
+    <ClCompile Include="src\render\primitive_figures.cpp" />
+    <ClCompile Include="src\render\renderer.cpp" />
+    <ClCompile Include="src\render\sprite.cpp" />
+    <ClCompile Include="src\repo\fonts_repository.cpp" />
+    <ClCompile Include="src\repo\sprites_repository.cpp" />
+    <ClCompile Include="src\repo\texts_repository.cpp" />
+    <ClCompile Include="src\repo\textures_repository.cpp" />
+    <ClCompile Include="src\screens\main_screen.cpp" />
+    <ClCompile Include="src\screens\map_editor_screen.cpp" />
+    <ClCompile Include="src\screens\options_screen.cpp" />
+    <ClCompile Include="src\screens\screen_selector.cpp" />
+    <ClCompile Include="src\screens\start_screen.cpp" />
+    <ClCompile Include="src\screens\test_atlas_screen.cpp" />
+    <ClCompile Include="src\screens\test_fader_screen.cpp" />
+    <ClCompile Include="src\screens\test_font_screen.cpp" />
+    <ClCompile Include="src\screens\test_primitive_screen.cpp" />
+    <ClCompile Include="src\screens\test_screen.cpp" />
+    <ClCompile Include="src\screens\test_scroll_screen.cpp" />
+    <ClCompile Include="src\screens\test_sound_screen.cpp" />
+    <ClCompile Include="src\screens\test_widgets_screen.cpp" />
+    <ClCompile Include="src\utils\utils.cpp" />
+    <ClCompile Include="src\widgets\area.cpp" />
+    <ClCompile Include="src\widgets\button.cpp" />
+    <ClCompile Include="src\widgets\container.cpp" />
+    <ClCompile Include="src\widgets\dialog.cpp" />
+    <ClCompile Include="src\widgets\fader.cpp" />
+    <ClCompile Include="src\widgets\image.cpp" />
+    <ClCompile Include="src\widgets\label.cpp" />
+    <ClCompile Include="src\widgets\mods\widget_transform_mod.cpp" />
+    <ClCompile Include="src\widgets\primitive.cpp" />
+    <ClCompile Include="src\widgets\progressbar.cpp" />
+    <ClCompile Include="src\widgets\screen.cpp" />
+    <ClCompile Include="src\widgets\scroll_container.cpp" />
+    <ClCompile Include="src\widgets\timer.cpp" />
+    <ClCompile Include="src\widgets\widget.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D4E33939-5809-4C3B-8F81-70C6D86E637D}</ProjectGuid>
+    <RootNamespace>SDLProject</RootNamespace>
+    <ProjectName>stren</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir).output\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir).temp\stren\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir).output\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir).temp\stren\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\common;$(ProjectDir)src\engine;$(ProjectDir)src\lua;$(ProjectDir)src\media;$(ProjectDir)src\render;$(ProjectDir)src\game;$(ProjectDir)src\repo;$(ProjectDir)src\tests;$(ProjectDir)src\utils;$(SolutionDir)libs\lua\src;$(SolutionDir)libs\sdl2\include;$(SolutionDir)libs\sdl2_mix;$(SolutionDir)libs\sdl2_ttf;$(SolutionDir)libs\sdl2_img</AdditionalIncludeDirectories>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ShowIncludes>false</ShowIncludes>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WIN32;DEBUG;STREN_UNIT_TEST</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SDL2d.lib;SDL2maind.lib;SDL2_imaged.lib;SDL2_mixerd.lib;SDL2_ttfd.lib;luad.lib;user32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <OutputFile>$(TargetPath)</OutputFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>XCOPY $(TargetPath) $(SolutionDir)bin\ /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\common;$(ProjectDir)src\engine;$(ProjectDir)src\lua;$(ProjectDir)src\media;$(ProjectDir)src\render;$(ProjectDir)src\game;$(ProjectDir)src\repo;$(ProjectDir)src\tests;$(ProjectDir)src\utils;$(SolutionDir)libs\lua\src;$(SolutionDir)libs\sdl2\include;$(SolutionDir)libs\sdl2_mix;$(SolutionDir)libs\sdl2_ttf;$(SolutionDir)libs\sdl2_img</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WIN32;NDEBUG;STREN_UNIT_TEST</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;lua.lib;user32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <OutputFile>$(TargetPath)</OutputFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>XCOPY $(TargetPath) $(SolutionDir)bin\ /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+Texture ${1:file_name}_tex         {filename="assets/graphics/interface/options_dlg/${1:file_name}.png"}
+Sprite ${1:file_name}_spr          {texture="${1:file_name}_tex" rect=${2:x},${3:y},${4:w},${5:h}}
+]]></content>
+    <tabTrigger>Texture</tabTrigger>
+    <scope>text.res</scope>
+</snippet>

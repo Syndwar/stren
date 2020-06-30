@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[
+table.kiterate(${1:tablename}, ${2:func})
+]]></content>
+    <tabTrigger>table.kiterate</tabTrigger>
+    <scope>source.lua</scope>
+    <description>iterate keys</description>
+</snippet>

@@ -1,0 +1,22 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+name: LfnF2p Lua Files 
+scopeName: source.lua.lfn
+fileTypes: [lua]
+uuid: eb28f254-4c3f-4b86-8ac0-c60eb7a876ae
+
+patterns:
+- name: support.function.library.lua
+  match: (?![^.]\.|:)\b(table\.(diff|count|find|generator|iterate|keys|kiterate|kgenerator|shuffle|size)|math\.(ceilf|floorf|isodd|l2r|r2l))\b(?=[( {])
+
+- name: support.function.lua
+  match: (?![^.]\.|:)\b(((Engine|Game|GUICreator|Utils|UI)[\.:](\b[a-zA-Z_0-9]*\b))|dotry|range_random|spairs|Button|CircleProgressBar|Emitter|Functor|Image|Label|ProgressBar|SocialWebObject|Winder)\b(?=[( {])
+
+- name: meta.class.derived.lua
+  match: \b(class)\s+(['"][A-Za-z0-9_]+['"])\s*(\([A-Za-z0-9_]+\))?
+  captures:
+    '1': {name: string.quoted.double.lua}
+    '2': {name: entity.name.function.scope.lua}
+    '3': {name: variable.parameter.function.lua}
+
+- include: source.lua
+...

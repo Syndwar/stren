@@ -1,0 +1,31 @@
+{
+	"config":
+	[
+		{
+			"endMarker": "'#End",
+			"name": "Example",
+			"startMarker": "'#Start"
+		},
+		{
+			"endMarker": "#endregion",
+			"name": "C#",
+			"startMarker": "#region"
+		},
+		{
+			"endMarker": "#pragma endregion",
+			"name": "C+",
+			"startMarker": "#pragma region"
+		},
+		{
+			"endMarker": "--#pragma endregion#",
+			"name": "Lua",
+			"startMarker": "--#pragma region#"
+		}
+	],
+	"default":
+	{
+		"endMarker": "--#pragma endregion#",
+		"name": "Default",
+		"startMarker": "--#pragma region#"
+	}
+}

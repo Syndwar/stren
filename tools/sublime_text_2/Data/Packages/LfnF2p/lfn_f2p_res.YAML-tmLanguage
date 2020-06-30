@@ -1,0 +1,41 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+comment: Lfnf2p Res syntax 0.1
+name: Lfnf2p Res Files
+scopeName: text.res
+fileTypes: [res]
+uuid: acb774dc-46d2-4adb-8b92-4b386adb182d
+
+patterns:
+- name: constant.numeric.res
+  match: Texture
+
+- name: entity.name.function.res
+  match: Sprite
+
+- name: variable.parameter.function.res
+  match: Include
+
+- comment: double quoted string
+  name: string.quoted.double.res
+  begin: \"
+  end: \"
+
+- comment: single quoted string
+  name: string.quoted.single.res
+  begin: \'
+  end: \'
+
+- name: constant.numeric.res
+  match: Font
+
+- comment: Comment
+  name: comment.block.res
+  match: ;.*\n
+
+- name: constant.language.res
+  match: \b(true|false)
+
+- comment: Numbers
+  name: constant.numeric.res
+  match: (?![\d.])\s0x[a-fA-F\d]+|\b\d+(\.\d+)?([eE]-?\d+)?|\.\d+([eE]-?\d+)?
+...

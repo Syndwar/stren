@@ -1,0 +1,517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="tests">
+      <UniqueIdentifier>{655397f4-f17c-499d-96da-970d2564be8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{21793232-61ec-42d1-b55c-6bed01a18448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="widgets">
+      <UniqueIdentifier>{99e82fed-41cf-413b-a5c5-e631341292e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{192351df-793a-4872-ae71-195006299626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{2aa4dcd9-5d6b-4052-9e34-b3eb49f4df91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media">
+      <UniqueIdentifier>{a2fc3795-090d-48e1-a043-797dde76231c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render">
+      <UniqueIdentifier>{af2e43ac-3643-4b64-b270-2e0deb96318c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="repo">
+      <UniqueIdentifier>{cc860826-5ed2-4c7e-8601-75d4829ee5d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{5dab40b9-6e15-492f-b1e9-f179048740e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{72437340-0176-4964-84a3-3ae98d681888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="screens">
+      <UniqueIdentifier>{21ed1ff4-f904-483c-876c-e901241526c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\system">
+      <UniqueIdentifier>{b4bb43ac-2387-40ae-a65f-e18d42d54853}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="widgets\mods">
+      <UniqueIdentifier>{8d1c4770-06d8-485d-922d-66dd79e7e63a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\tests\test_color.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\test_lua.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\test_observer.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\test_unit.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\point.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\rect.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\area.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\button.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\container.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\dialog.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\fader.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\image.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\label.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\primitive.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\progressbar.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\screen.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\scroll_container.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\timer.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\widget.h">
+      <Filter>widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\clabel.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\font_texture.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\glyph.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\image_texture.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\itexture.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\renderer.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\sprite.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\texture.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\repo\fonts_repository.h">
+      <Filter>repo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\repo\sprites_repository.h">
+      <Filter>repo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\repo\texts_repository.h">
+      <Filter>repo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\repo\textures_repository.h">
+      <Filter>repo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\utils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\media\music.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="src\media\music_repository.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="src\media\sound.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="src\media\sound_system.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="src\media\sounds_repository.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_binding.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_ext.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_function.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_stack.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_table.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_value.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_wrapper.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\action.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\app_window.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\camera.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\config.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\engine.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\engine_handler.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\event.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\event_listener.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\event_processor.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\listener.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\logger.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\observer.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\transform.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\alignment.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\colour.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\delegate.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\string_ext.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\primitive_figures.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\battlefield.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\console.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\start_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\screen_selector.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\main_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\test_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\test_sound_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\test_widgets_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\map_editor_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\options_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\test_fader_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\test_font_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\test_primitive_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\test_scroll_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\save_data.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\test_atlas_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\system_tools.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\system\widget_tree.h">
+      <Filter>engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\system\debug_panel.h">
+      <Filter>engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screens\screen_ids.h">
+      <Filter>screens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\test_widgets.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\widgets\mods\widget_transform_mod.h">
+      <Filter>widgets\mods</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\unit.h">
+      <Filter>game</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\common\point.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\rect.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\widgets\area.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\button.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\container.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\dialog.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\fader.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\image.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\label.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\primitive.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\progressbar.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\screen.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\scroll_container.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\timer.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\widget.cpp">
+      <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\clabel.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\font_texture.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\glyph.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\image_texture.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\renderer.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\sprite.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\repo\fonts_repository.cpp">
+      <Filter>repo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\repo\sprites_repository.cpp">
+      <Filter>repo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\repo\texts_repository.cpp">
+      <Filter>repo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\repo\textures_repository.cpp">
+      <Filter>repo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\utils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\media\music.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="src\media\music_repository.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="src\media\sound.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="src\media\sound_system.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="src\media\sounds_repository.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_binding.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_function.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_stack.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_table.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_value.cpp">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\app_window.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\camera.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\config.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\engine.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\engine_handler.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\event.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\event_listener.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\event_processor.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\listener.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\logger.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\observer.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\transform.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\colour.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\string_ext.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\primitive_figures.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\battlefield.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\console.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\start_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\screen_selector.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\main_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\test_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\test_sound_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\test_widgets_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\map_editor_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\options_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\test_fader_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\test_font_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\test_primitive_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\test_scroll_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\save_data.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\test_atlas_screen.cpp">
+      <Filter>screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\system_tools.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\system\widget_tree.cpp">
+      <Filter>engine\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\system\debug_panel.cpp">
+      <Filter>engine\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets\mods\widget_transform_mod.cpp">
+      <Filter>widgets\mods</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

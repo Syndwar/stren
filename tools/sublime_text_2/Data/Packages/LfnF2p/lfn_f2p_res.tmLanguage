@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>Lfnf2p Res syntax 0.1</string>
+	<key>fileTypes</key>
+	<array>
+		<string>res</string>
+	</array>
+	<key>name</key>
+	<string>Lfnf2p Res Files</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>Texture</string>
+			<key>name</key>
+			<string>constant.numeric.res</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>Sprite</string>
+			<key>name</key>
+			<string>entity.name.function.res</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>Include</string>
+			<key>name</key>
+			<string>variable.parameter.function.res</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\"</string>
+			<key>comment</key>
+			<string>double quoted string</string>
+			<key>end</key>
+			<string>\"</string>
+			<key>name</key>
+			<string>string.quoted.double.res</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\'</string>
+			<key>comment</key>
+			<string>single quoted string</string>
+			<key>end</key>
+			<string>\'</string>
+			<key>name</key>
+			<string>string.quoted.single.res</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>Font</string>
+			<key>name</key>
+			<string>constant.numeric.res</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Comment</string>
+			<key>match</key>
+			<string>;.*\n</string>
+			<key>name</key>
+			<string>comment.block.res</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(true|false)</string>
+			<key>name</key>
+			<string>constant.language.res</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Numbers</string>
+			<key>match</key>
+			<string>(?![\d.])\s0x[a-fA-F\d]+|\b\d+(\.\d+)?([eE]-?\d+)?|\.\d+([eE]-?\d+)?</string>
+			<key>name</key>
+			<string>constant.numeric.res</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.res</string>
+	<key>uuid</key>
+	<string>acb774dc-46d2-4adb-8b92-4b386adb182d</string>
+</dict>
+</plist>

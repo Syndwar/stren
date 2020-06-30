@@ -1,0 +1,15 @@
+{
+	"folder_include_patterns": [
+		"assets\\scripts"
+		// "Go2Function"
+	],
+	"file_include_patterns": [
+		"*.lua"
+	],
+	"file_exclude_patterns": [
+		"balance.lua",
+		"string-table.lua"
+	],
+	"enable_auto_complete": false,
+    "use_cached_paths": false
+}
