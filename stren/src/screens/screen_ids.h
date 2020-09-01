@@ -20,6 +20,7 @@ enum class ScreenId
     TestPrimitiveScreen,
     TestScrollScreen,
     TestWidgetsScreen,
+    TestBattlefieldScreen,
 };
 } // stren
 

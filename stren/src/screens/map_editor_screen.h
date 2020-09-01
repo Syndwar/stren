@@ -12,9 +12,9 @@ class Primitive;
 class MapEditorScreen : public Screen
 {
 private:
-    MapData *           mapData_;           ///< @todo
-    std::string         selectedItemId_;    ///< @todo
-    Primitive *         grid_;              ///< @todo
+    MapData *           m_mapData;           ///< @todo
+    std::string         m_selectedItemId;    ///< @todo
+    Primitive *         m_grid;              ///< @todo
 public:
     ///
     /// Constructor

@@ -14,6 +14,7 @@
 #include "screens/test_scroll_screen.h"
 #include "screens/test_widgets_screen.h"
 #include "screens/test_atlas_screen.h"
+#include "screens/test_battle_field_screen.h"
 #include "widgets/screen.h"
 
 namespace stren
@@ -127,6 +128,11 @@ void ScreenSelector::switchToScreen(const ScreenId & id)
     case ScreenId::TestWidgetsScreen:
     {
         newScreen = new TestWidgetsScreen();
+    }
+    break;
+    case ScreenId::TestBattlefieldScreen:
+    {
+        newScreen = new TestBattleFieldScreen();
     }
     break;
     }

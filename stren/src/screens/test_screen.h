@@ -48,7 +48,11 @@ private:
     ///
     /// @todo
     ///
-    void toBattlefieldScreen();
+    void toAtlasScreen();
+    ///
+    /// @todo
+    ///
+    void toBattlefield();
 };
 } // stren
 

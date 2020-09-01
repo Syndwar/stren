@@ -297,6 +297,9 @@
     <ClInclude Include="src\game\unit.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="src\screens\test_battle_field_screen.h">
+      <Filter>screens</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\common\point.cpp">
@@ -512,6 +515,9 @@
     </ClCompile>
     <ClCompile Include="src\widgets\mods\widget_transform_mod.cpp">
       <Filter>widgets\mods</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screens\test_battle_field_screen.cpp">
+      <Filter>screens</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

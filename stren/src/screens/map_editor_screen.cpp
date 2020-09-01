@@ -431,7 +431,7 @@ private:
 MapEditorScreen::MapEditorScreen()
     : Screen("mapEditorScreen")
 {
-    mapData_ = new MapData();
+    m_mapData = new MapData();
 
     const int screenWidth = EngineHandler::getScreenWidth();
     const int screenHeight = EngineHandler::getScreenHeight();
@@ -448,12 +448,12 @@ MapEditorScreen::MapEditorScreen()
 
     battlefield->moveBy(32, 32);
 
-    grid_ = new Primitive("gridLines");
-    grid_->setColour(Colour::Green);
+    m_grid = new Primitive("gridLines");
+    m_grid->setColour(Colour::Green);
     std::vector<Point> gridPoints;
     createGrid(gridPoints);
-    grid_->createLines(gridPoints);
-    battlefield->attach(grid_);
+    m_grid->createLines(gridPoints);
+    battlefield->attach(m_grid);
 
     MapEditorSystemPanel * systemPanel = new MapEditorSystemPanel("systemPanel");
     attach(systemPanel);
@@ -461,7 +461,7 @@ MapEditorScreen::MapEditorScreen()
     MapEditorFiltersPanel * filtersCnt = new MapEditorFiltersPanel("filtersPanel");
     attach(filtersCnt);
 
-    MapEditorItemsPanel * itemsPanel = new MapEditorItemsPanel("itemsPanel", mapData_);
+    MapEditorItemsPanel * itemsPanel = new MapEditorItemsPanel("itemsPanel", m_mapData);
     attach(itemsPanel);
 
     Image * selectedItemImg = new Image("selectedItemImg");
@@ -471,10 +471,10 @@ MapEditorScreen::MapEditorScreen()
 
 MapEditorScreen::~MapEditorScreen()
 {
-    if (mapData_)
+    if (m_mapData)
     {
-        delete mapData_;
-        mapData_ = nullptr;
+        delete m_mapData;
+        m_mapData = nullptr;
     }
 }
 
@@ -561,20 +561,20 @@ void MapEditorScreen::onBattleFieldClicked()
 
 void MapEditorScreen::enableGrid(const bool value)
 {
-    if (grid_)
+    if (m_grid)
     {
-        grid_->view(value);
+        m_grid->view(value);
     }
 }
 
 void MapEditorScreen::selectItem(const std::string & id)
 {
     EngineHandler::consoleLog(id);
-    selectedItemId_ = id;
+    m_selectedItemId = id;
 
     if (Image * img = findWidget<Image>("selectedItemImg"))
     {
-        const MapData::EntityData & data = mapData_->getData(id);
+        const MapData::EntityData & data = m_mapData->getData(id);
         img->setSprite(data.sprite);
     }
 }

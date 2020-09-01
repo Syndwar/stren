@@ -69,6 +69,7 @@
     <ClInclude Include="src\screens\screen_selector.h" />
     <ClInclude Include="src\screens\start_screen.h" />
     <ClInclude Include="src\screens\test_atlas_screen.h" />
+    <ClInclude Include="src\screens\test_battle_field_screen.h" />
     <ClInclude Include="src\screens\test_fader_screen.h" />
     <ClInclude Include="src\screens\test_font_screen.h" />
     <ClInclude Include="src\screens\test_primitive_screen.h" />
@@ -148,6 +149,7 @@
     <ClCompile Include="src\screens\screen_selector.cpp" />
     <ClCompile Include="src\screens\start_screen.cpp" />
     <ClCompile Include="src\screens\test_atlas_screen.cpp" />
+    <ClCompile Include="src\screens\test_battle_field_screen.cpp" />
     <ClCompile Include="src\screens\test_fader_screen.cpp" />
     <ClCompile Include="src\screens\test_font_screen.cpp" />
     <ClCompile Include="src\screens\test_primitive_screen.cpp" />

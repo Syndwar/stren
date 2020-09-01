@@ -80,14 +80,24 @@ TestScreen::TestScreen()
     btn->addCallback(EventType::MouseClicked, this, &TestScreen::toTestFontScreen);
     attach(btn);
 
-    btn = new Button("testBattlefieldBtn");
+    btn = new Button("testAtlasScreenBtn");
     btn->setText("Test Atlas Screen");
     btn->setFont("robo_bold_15_fnt");
     btn->setRect(0, 0, 256, 64);
     btn->setAlignment(Alignment::Right | Alignment::Top, -64, 582);
     btn->setTextAlignment(Alignment::Center | Alignment::Middle);
     btn->setSprites("up_btn_spr", "down_btn_spr", "over_btn_spr");
-    btn->addCallback(EventType::MouseClicked, this, &TestScreen::toBattlefieldScreen);
+    btn->addCallback(EventType::MouseClicked, this, &TestScreen::toAtlasScreen);
+    attach(btn);
+
+    btn = new Button("testBattlefieldScreenBtn");
+    btn->setText("Test BattleField Screen");
+    btn->setFont("robo_bold_15_fnt");
+    btn->setRect(0, 0, 256, 64);
+    btn->setAlignment(Alignment::Right | Alignment::Top, -64, 656);
+    btn->setTextAlignment(Alignment::Center | Alignment::Middle);
+    btn->setSprites("up_btn_spr", "down_btn_spr", "over_btn_spr");
+    btn->addCallback(EventType::MouseClicked, this, &TestScreen::toBattlefield);
     attach(btn);
 }
 
@@ -130,8 +140,13 @@ void TestScreen::toTestFontScreen()
     EngineHandler::switchScreen(ScreenId::TestFontScreen);
 }
 
-void TestScreen::toBattlefieldScreen()
+void TestScreen::toAtlasScreen()
 {
     EngineHandler::switchScreen(ScreenId::TestAtlasScreen);
+}
+
+void TestScreen::toBattlefield()
+{
+    EngineHandler::switchScreen(ScreenId::TestBattlefieldScreen);
 }
 } // stren
