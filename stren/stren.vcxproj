@@ -36,6 +36,7 @@
     <ClInclude Include="src\engine\transform.h" />
     <ClInclude Include="src\engine\save_data.h" />
     <ClInclude Include="src\game\battlefield.h" />
+    <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\game\unit.h" />
     <ClInclude Include="src\lua\lua_binding.h" />
     <ClInclude Include="src\lua\lua_ext.h" />
@@ -44,6 +45,10 @@
     <ClInclude Include="src\lua\lua_table.h" />
     <ClInclude Include="src\lua\lua_value.h" />
     <ClInclude Include="src\lua\lua_wrapper.h" />
+    <ClInclude Include="src\map_editor\map_data.h" />
+    <ClInclude Include="src\map_editor\map_editor_filters_panel.h" />
+    <ClInclude Include="src\map_editor\map_editor_items_panel.h" />
+    <ClInclude Include="src\map_editor\map_editor_system_panel.h" />
     <ClInclude Include="src\media\music.h" />
     <ClInclude Include="src\media\music_repository.h" />
     <ClInclude Include="src\media\sound.h" />
@@ -121,12 +126,17 @@
     <ClCompile Include="src\engine\transform.cpp" />
     <ClCompile Include="src\engine\save_data.cpp" />
     <ClCompile Include="src\game\battlefield.cpp" />
+    <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\lua\lua_binding.cpp" />
     <ClCompile Include="src\lua\lua_function.cpp" />
     <ClCompile Include="src\lua\lua_stack.cpp" />
     <ClCompile Include="src\lua\lua_table.cpp" />
     <ClCompile Include="src\lua\lua_value.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\map_editor\map_data.cpp" />
+    <ClCompile Include="src\map_editor\map_editor_filters_panel.cpp" />
+    <ClCompile Include="src\map_editor\map_editor_items_panel.cpp" />
+    <ClCompile Include="src\map_editor\map_editor_system_panel.cpp" />
     <ClCompile Include="src\media\music.cpp" />
     <ClCompile Include="src\media\music_repository.cpp" />
     <ClCompile Include="src\media\sound.cpp" />

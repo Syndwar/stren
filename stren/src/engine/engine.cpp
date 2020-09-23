@@ -12,6 +12,7 @@
 #include "renderer.h"
 #include "console.h"
 #include "widgets/screen.h"
+#include "game/game.h"
 
 namespace stren
 {
@@ -23,6 +24,7 @@ Engine::Engine()
     , m_frameTimeLimit(17)
     , m_lastFrameTime(0)
     , m_frameIndex(0)
+    , m_game(nullptr)
 {
     m_frameTimeHistory.resize(kFramesAmount);
     Logger("green") << "[Engine] Engine created";
@@ -30,6 +32,11 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+    if (m_game)
+    {
+        delete m_game;
+        m_game = nullptr;
+    }
 }
 
 void Engine::process()
@@ -122,6 +129,10 @@ void Engine::createGame()
 {
     lua::bindWithVM();
     switchScreen(ScreenId::StartScreen);
+    if (!m_game)
+    {
+        m_game = new Game();
+    }
 }
 
 void Engine::switchScreen(const ScreenId id)
@@ -205,6 +216,11 @@ void Engine::render()
 
 void Engine::update(const size_t dt)
 {
+    if (m_game)
+    {
+        m_game->update(dt);
+    }
+
     if (Screen * currentScreen = m_screenSelector.getCurrentScreen())
     {
         currentScreen->update(dt);

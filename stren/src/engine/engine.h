@@ -26,6 +26,7 @@ namespace stren
 class SystemTools;
 class Screen;
 class Widget;
+class Game;
 
 // class Engine
 class Engine
@@ -60,6 +61,7 @@ private:
     EventProcessor          m_eventProcessor;    ///< @todo
     SaveData                m_saveData;          ///< @todo
     SystemTools             m_systemTools;       ///< @todo
+    Game *                  m_game;              ///< @todo
 
 public:
     ///
@@ -194,4 +196,4 @@ private:
 };
 
 } // stren
-#endif // STREN_ENGINE_H
+#endif // !STREN_ENGINE_H
