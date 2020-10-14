@@ -7,6 +7,11 @@ Exceptions and compatibility shims for consistently using ctypes and cffi
 from __future__ import unicode_literals, division, absolute_import, print_function
 
 import sys
+import platform
+
+from ctypes.util import find_library
+
+from . import ffi
 from ._types import str_cls, byte_cls, int_types, bytes_to_list
 
 
@@ -24,6 +29,7 @@ __all__ = [
     'deref',
     'errno',
     'FFIEngineError',
+    'get_library',
     'is_null',
     'native',
     'new',
@@ -40,7 +46,7 @@ __all__ = [
 ]
 
 
-try:
+if ffi() == 'cffi':
     from cffi import FFI
 
     _ffi_registry = {}
@@ -56,6 +62,8 @@ try:
         return ffi
 
     def buffer_from_bytes(initializer):
+        if sys.platform == 'win32':
+            return ffi.new('unsigned char[]', initializer)
         return ffi.new('char[]', initializer)
 
     def buffer_from_unicode(initializer):
@@ -183,7 +191,7 @@ try:
 
     engine = 'cffi'
 
-except (ImportError):
+else:
 
     import ctypes
     from ctypes import pointer, c_int, c_char_p, c_uint, c_void_p, c_wchar_p
@@ -194,11 +202,13 @@ except (ImportError):
         'void *': True,
         'wchar_t *': True,
         'char *': True,
+        'char **': True,
     }
     _type_map = {
         'void *': c_void_p,
         'wchar_t *': c_wchar_p,
         'char *': c_char_p,
+        'char **': ctypes.POINTER(c_char_p),
         'int': c_int,
         'unsigned int': c_uint,
         'size_t': ctypes.c_size_t,
@@ -213,6 +223,7 @@ except (ImportError):
             'LPCWSTR': True,
         })
         _type_map.update({
+            'BYTE': ctypes.c_byte,
             'LPSTR': c_char_p,
             'LPWSTR': c_wchar_p,
             'LPCSTR': c_char_p,
@@ -220,6 +231,7 @@ except (ImportError):
             'ULONG': wintypes.ULONG,
             'DWORD': wintypes.DWORD,
             'char *': ctypes.POINTER(ctypes.c_byte),
+            'char **': ctypes.POINTER(ctypes.POINTER(ctypes.c_byte)),
         })
 
     def _type_info(library, type_):
@@ -333,6 +345,8 @@ except (ImportError):
         return output
 
     def ref(value, offset=0):
+        if offset == 0:
+            return ctypes.byref(value)
         return ctypes.cast(ctypes.addressof(value) + offset, ctypes.POINTER(ctypes.c_byte))
 
     def native(type_, value):
@@ -374,6 +388,44 @@ except (ImportError):
         return getattr(library, signature_type)(func)
 
     engine = 'ctypes'
+
+
+def get_library(name, dylib_name, version):
+    """
+    Retrieve the C library path with special handling for Mac
+
+    :param name:
+        A unicode string of the library to search the system for
+
+    :param dylib_name:
+        Mac only - a unicode string of the unversioned dylib name
+
+    :param version:
+        Mac only - a unicode string of the dylib version to use. Used on macOS
+        10.15+ when the unversioned dylib is found, since unversioned
+        OpenSSL/LibreSSL are just placeholders, and a versioned dylib must be
+        imported. Used on macOS 10.16+ when find_library() doesn't return a
+        result, due to system dylibs not being present on the filesystem any
+        longer.
+
+    :return:
+        A unicode string of the path to the library
+    """
+
+    library = find_library(name)
+
+    if sys.platform == 'darwin':
+        unversioned = '/usr/lib/%s' % dylib_name
+        versioned = unversioned.replace('.dylib', '.%s.dylib' % version)
+        mac_ver = tuple(map(int, platform.mac_ver()[0].split('.')))
+        if not library and mac_ver >= (10, 16):
+            # On macOS 10.16+, find_library doesn't work, so we set a static path
+            library = versioned
+        elif mac_ver >= (10, 15) and library == unversioned:
+            # On macOS 10.15+, we want to strongly version since unversioned libcrypto has a non-stable ABI
+            library = versioned
+
+    return library
 
 
 class FFIEngineError(Exception):

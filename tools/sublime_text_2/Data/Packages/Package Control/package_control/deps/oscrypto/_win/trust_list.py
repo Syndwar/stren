@@ -5,8 +5,7 @@ import datetime
 import hashlib
 import struct
 
-from ...asn1crypto.x509 import Certificate
-
+from .._asn1 import Certificate
 from .._ffi import (
     array_from_pointer,
     buffer_from_bytes,
@@ -33,7 +32,7 @@ def system_path():
     return None
 
 
-def extract_from_system(cert_callback=None):
+def extract_from_system(cert_callback=None, callback_only_on_failure=False):
     """
     Extracts trusted CA certificates from the Windows certificate store
 
@@ -42,6 +41,10 @@ def extract_from_system(cert_callback=None):
         It should accept two parameters: an asn1crypto.x509.Certificate object,
         and a reason. The reason will be None if the certificate is being
         exported, otherwise it will be a unicode string of the reason it won't.
+
+    :param callback_only_on_failure:
+        A boolean - if the callback should only be called when a certificate is
+        not exported.
 
     :raises:
         OSError - when an error is returned by the OS crypto library
@@ -93,7 +96,7 @@ def extract_from_system(cert_callback=None):
                     if cert_callback:
                         cert_callback(Certificate.load(data), 'not yet valid')
                     continue
-            except (ValueError, OSError) as e:
+            except (ValueError, OSError):
                 # If there is an error converting the not before timestamp,
                 # it is almost certainly because it is from too long ago,
                 # which means the cert is definitely valid by now.
@@ -184,7 +187,7 @@ def extract_from_system(cert_callback=None):
                         if oid not in trust_oids:
                             reject_oids.add(oid)
 
-            if cert_callback:
+            if cert_callback and not callback_only_on_failure:
                 if cert is None:
                     cert = Certificate.load(data)
                 cert_callback(cert, None)

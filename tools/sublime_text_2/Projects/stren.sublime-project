@@ -4,7 +4,7 @@
 		{
 			"path": "../../../",
             "folder_exclude_patterns":[".temp", ".vs", "sublime_text_2", "libs", "docs", ".temp"],
-            "file_include_patterns":["*.lua", "*.sav", "*.h", "*.cpp", "*.bat", "*.txt"]
+            "file_include_patterns":["*.lua", "*.sav", "*.bat"]
 		}
 	]
 }

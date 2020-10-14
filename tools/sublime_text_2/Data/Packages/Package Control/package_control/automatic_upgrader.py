@@ -1,5 +1,6 @@
 import threading
 import os
+import json
 import datetime
 # To prevent import errors in thread with datetime
 import locale  # noqa
@@ -8,12 +9,16 @@ import functools
 
 import sublime
 
+from .sys_path import pc_cache_dir
 from .show_error import show_error
 from .console_write import console_write
 from .package_installer import PackageInstaller
 from .package_renamer import PackageRenamer
+from .file_not_found_error import FileNotFoundError
 from .open_compat import open_compat, read_compat, write_compat
 from .settings import pc_settings_filename, load_list_setting
+
+USE_QUICK_PANEL_ITEM = hasattr(sublime, 'QuickPanelItem')
 
 
 class AutomaticUpgrader(threading.Thread):
@@ -45,15 +50,21 @@ class AutomaticUpgrader(threading.Thread):
         self.auto_upgrade = self.settings.get('auto_upgrade')
         self.auto_upgrade_ignore = self.settings.get('auto_upgrade_ignore')
 
+        now = int(time.time())
+
+        self.last_run = None
+        self.last_version = 0
+        self.next_run = now
+        self.current_version = int(sublime.version())
+
         self.load_last_run()
-        self.determine_next_run()
 
         # Detect if a package is missing that should be installed
         self.missing_packages = list(set(self.installed_packages) - set(found_packages))
         self.missing_dependencies = list(set(self.manager.find_required_dependencies()) - set(found_dependencies))
 
-        if self.auto_upgrade and self.next_run <= time.time():
-            self.save_last_run(time.time())
+        if self.auto_upgrade and self.next_run <= now:
+            self.save_last_run(now)
 
         threading.Thread.__init__(self)
 
@@ -62,30 +73,27 @@ class AutomaticUpgrader(threading.Thread):
         Loads the last run time from disk into memory
         """
 
-        self.last_run = None
-
-        self.last_run_file = os.path.join(sublime.packages_path(), 'User', 'Package Control.last-run')
-
-        if os.path.isfile(self.last_run_file):
-            with open_compat(self.last_run_file) as fobj:
-                try:
+        legacy_last_run_file = os.path.join(sublime.packages_path(), 'User', 'Package Control.last-run')
+        if os.path.exists(legacy_last_run_file):
+            try:
+                with open_compat(legacy_last_run_file) as fobj:
                     self.last_run = int(read_compat(fobj))
-                except ValueError:
-                    pass
+                os.unlink(legacy_last_run_file)
+            except (FileNotFoundError, ValueError):
+                pass
 
-    def determine_next_run(self):
-        """
-        Figure out when the next run should happen
-        """
-
-        self.next_run = int(time.time())
+        try:
+            with open_compat(os.path.join(pc_cache_dir(), 'last_run.json')) as fobj:
+                last_run_data = json.loads(read_compat(fobj))
+            self.last_run = int(last_run_data['timestamp'])
+            self.last_version = int(last_run_data['st_version'])
+        except (FileNotFoundError, ValueError, TypeError):
+            pass
 
         frequency = self.settings.get('auto_upgrade_frequency')
         if frequency:
             if self.last_run:
                 self.next_run = int(self.last_run) + (frequency * 60 * 60)
-            else:
-                self.next_run = time.time()
 
     def save_last_run(self, last_run):
         """
@@ -95,8 +103,14 @@ class AutomaticUpgrader(threading.Thread):
             The unix timestamp of when to record the last run as
         """
 
-        with open_compat(self.last_run_file, 'w') as fobj:
-            write_compat(fobj, int(last_run))
+        with open_compat(os.path.join(pc_cache_dir(), 'last_run.json'), 'w') as fobj:
+            write_compat(
+                fobj,
+                json.dumps({
+                    'timestamp': last_run,
+                    'st_version': self.current_version
+                })
+            )
 
     def load_settings(self):
         """
@@ -110,9 +124,17 @@ class AutomaticUpgrader(threading.Thread):
     def run(self):
         self.install_missing()
 
-        if self.next_run > time.time():
+        if self.next_run > int(time.time()) and \
+                self.last_version == self.current_version:
             self.print_skip()
             return
+
+        if self.last_version != self.current_version and self.last_version != 0:
+            console_write(
+                u'''
+                Detected Sublime Text update, looking for package updates
+                '''
+            )
 
         self.upgrade_packages()
 
@@ -257,19 +279,20 @@ class AutomaticUpgrader(threading.Thread):
             ignore_packages=self.auto_upgrade_ignore
         )
 
-        # If Package Control is being upgraded, just do that and restart
-        for package in package_list:
-            if package[0] != 'Package Control':
-                continue
+        if USE_QUICK_PANEL_ITEM:
+            package_list = [info.trigger for info in package_list]
+        else:
+            package_list = [info[0] for info in package_list]
 
+        # If Package Control is being upgraded, just do that and restart
+        if 'Package Control' in package_list:
             if self.last_run:
                 def reset_last_run():
                     # Re-save the last run time so it runs again after PC has
                     # been updated
                     self.save_last_run(self.last_run)
                 sublime.set_timeout(reset_last_run, 1)
-            package_list = [package]
-            break
+            package_list = ['Package Control']
 
         if not package_list:
             console_write(
@@ -292,16 +315,14 @@ class AutomaticUpgrader(threading.Thread):
         # in the main thread. We then then wait a bit and continue with the
         # upgrades.
         def disable_packages():
-            packages = [info[0] for info in package_list]
-            disabled_packages.extend(self.installer.disable_packages(packages, 'upgrade'))
+            disabled_packages.extend(self.installer.disable_packages(package_list, 'upgrade'))
+
         sublime.set_timeout(disable_packages, 1)
 
         # Wait so that the ignored packages can be "unloaded"
         time.sleep(0.7)
 
-        for info in package_list:
-            package_name = info[0]
-
+        for package_name in package_list:
             if self.installer.manager.install_package(package_name):
                 if package_name in disabled_packages:
                     # We use a functools.partial to generate the on-complete callback in

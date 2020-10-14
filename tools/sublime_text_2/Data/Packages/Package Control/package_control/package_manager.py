@@ -28,7 +28,7 @@ from .console_write import console_write
 from .open_compat import open_compat, read_compat
 from .file_not_found_error import FileNotFoundError
 from .unicode import unicode_from_os
-from .clear_directory import clear_directory, delete_directory
+from .clear_directory import clear_directory, unlink_or_delete_directory, is_directory_symlink
 from .cache import clear_cache, set_cache, get_cache, merge_cache_under_settings, set_cache_under_settings
 from .versions import version_comparable, version_sort
 from .downloaders.background_downloader import BackgroundDownloader
@@ -418,7 +418,7 @@ class PackageManager():
         updated_channels = []
         found_default = False
         for channel in channels:
-            if re.match('https?://([^.]+\.)*package-control.io', channel):
+            if re.match(r'https?://([^.]+\.)*package-control\.io', channel):
                 console_write('Removed malicious channel %s' % channel)
                 continue
             if channel in OLD_DEFAULT_CHANNELS:
@@ -562,7 +562,7 @@ class PackageManager():
         # Repositories are run in reverse order so that the ones first
         # on the list will overwrite those last on the list
         for repo in repositories[::-1]:
-            if re.match('https?://([^.]+\.)*package-control.io', repo):
+            if re.match(r'https?://([^.]+\.)*package-control\.io', repo):
                 console_write('Removed malicious repository %s' % repo)
                 continue
 
@@ -817,7 +817,7 @@ class PackageManager():
         if not os.path.exists(path):
             return output
         for filename in os.listdir(path):
-            if not re.search('\.sublime-package$', filename):
+            if not re.search(r'\.sublime-package$', filename):
                 continue
             output.add(filename.replace('.sublime-package', ''))
         return output
@@ -1245,7 +1245,9 @@ class PackageManager():
             unpacked_metadata_file = os.path.join(unpacked_package_dir, metadata_filename)
             if os.path.exists(unpacked_metadata_file) and not unpack:
                 self.backup_package_dir(package_name)
-                if not clear_directory(unpacked_package_dir):
+                if is_directory_symlink(unpacked_package_dir):
+                    unlink_or_delete_directory(unpacked_package_dir)
+                elif not clear_directory(unpacked_package_dir):
                     # If deleting failed, queue the package to upgrade upon next start
                     # where it will be disabled
                     reinstall_file = os.path.join(unpacked_package_dir, 'package-control.reinstall')
@@ -1265,7 +1267,7 @@ class PackageManager():
                     )
                     return None
                 else:
-                    os.rmdir(unpacked_package_dir)
+                    unlink_or_delete_directory(unpacked_package_dir)
 
             # If we determined it should be unpacked, we extract directly
             # into the Packages/{package_name}/ folder
@@ -1292,8 +1294,9 @@ class PackageManager():
 
             # Here we don't use .extractall() since it was having issues on OS X
             overwrite_failed = False
-            extracted_paths = []
-            for path in package_zip.namelist():
+            extracted_paths = set()
+            for info in package_zip.infolist():
+                path = info.filename
                 dest = path
 
                 try:
@@ -1310,7 +1313,7 @@ class PackageManager():
                     return False
 
                 if os.name == 'nt':
-                    regex = ':|\*|\?|"|<|>|\|'
+                    regex = r':|\*|\?|"|<|>|\|'
                     if re.search(regex, dest) is not None:
                         console_write(
                             u'''
@@ -1349,7 +1352,7 @@ class PackageManager():
 
                 def add_extracted_dirs(dir_):
                     while dir_ not in extracted_paths:
-                        extracted_paths.append(dir_)
+                        extracted_paths.add(dir_)
                         dir_ = os.path.dirname(dir_)
                         if dir_ == package_dir:
                             break
@@ -1363,7 +1366,7 @@ class PackageManager():
                     if not os.path.exists(dest_dir):
                         os.makedirs(dest_dir)
                     add_extracted_dirs(dest_dir)
-                    extracted_paths.append(dest)
+                    extracted_paths.add(dest)
                     try:
                         with open_compat(dest, 'wb') as f:
                             f.write(package_zip.read(path))
@@ -1399,7 +1402,9 @@ class PackageManager():
 
                 # Don't delete the metadata file, that way we have it
                 # when the reinstall happens, and the appropriate
-                # usage info can be sent back to the server
+                # usage info can be sent back to the server.
+                # No need to handle symlink at this stage it was already removed
+                # and we are not working with symlink here anymore.
                 clear_directory(package_dir, [reinstall_file, package_metadata_file])
 
                 show_error(
@@ -1414,6 +1419,8 @@ class PackageManager():
             # Here we clean out any files that were not just overwritten. It is ok
             # if there is an error removing a file. The next time there is an
             # upgrade, it should be cleaned out successfully then.
+            # No need to handle symlink at this stage it was already removed
+            # and we are not working with symlink here anymore.
             clear_directory(package_dir, extracted_paths)
 
             new_version = release['version']
@@ -1533,7 +1540,7 @@ class PackageManager():
             # Try to remove the tmp dir after a second to make sure
             # a virus scanner is holding a reference to the zipfile
             # after we close it.
-            sublime.set_timeout(lambda: delete_directory(tmp_dir), 1000)
+            sublime.set_timeout(lambda: unlink_or_delete_directory(tmp_dir), 1000)
 
     def install_dependencies(self, dependencies, fail_early=True):
         """
@@ -1708,7 +1715,7 @@ class PackageManager():
             )
             try:
                 if os.path.exists(package_backup_dir):
-                    delete_directory(package_backup_dir)
+                    unlink_or_delete_directory(package_backup_dir)
             except (UnboundLocalError):
                 pass  # Exeption occurred before package_backup_dir defined
             return False
@@ -1737,13 +1744,12 @@ class PackageManager():
             The new (string) version of the package
         """
 
-        messages_file = os.path.join(package_dir, 'messages.json')
-        if not os.path.exists(messages_file):
-            return
-
-        messages_fp = open_compat(messages_file, 'r')
         try:
-            message_info = json.loads(read_compat(messages_fp))
+            messages_file = os.path.join(package_dir, 'messages.json')
+            with open_compat(messages_file, 'r') as f:
+                message_info = json.loads(read_compat(f))
+        except (FileNotFoundError):
+            return
         except (ValueError):
             console_write(
                 u'''
@@ -1752,11 +1758,11 @@ class PackageManager():
                 package
             )
             return
-        messages_fp.close()
 
         def read_message(message_path):
             with open_compat(message_path, 'r') as f:
-                return '\n  %s\n' % read_compat(f).rstrip().replace('\n', '\n  ')
+                lines = read_compat(f).rstrip().split('\n')
+                return '\n' + '\n'.join('  ' + s if s else '' for s in lines)
 
         output = ''
         if not is_upgrade and message_info.get('install'):
@@ -1912,7 +1918,7 @@ class PackageManager():
         try:
             if os.path.exists(installed_package_path):
                 os.remove(installed_package_path)
-        except (OSError, IOError) as e:
+        except (OSError, IOError):
             cleanup_complete = False
 
         try:
@@ -1934,7 +1940,11 @@ class PackageManager():
             # We don't delete the actual package dir immediately due to a bug
             # in sublime_plugin.py
             can_delete_dir = True
-            if not clear_directory(package_dir):
+            if is_directory_symlink(package_dir):
+                # Assuming that deleting symlink won't fail in later step so
+                # not having any cleanup handling here
+                pass
+            elif not clear_directory(package_dir):
                 # If there is an error deleting now, we will mark it for
                 # cleanup the next time Sublime Text starts
                 open_compat(os.path.join(package_dir, 'package-control.cleanup'), 'w').close()
@@ -1959,7 +1969,7 @@ class PackageManager():
             sublime.set_timeout(save_names, 1)
 
         if os.path.exists(package_dir) and can_delete_dir:
-            os.rmdir(package_dir)
+            unlink_or_delete_directory(package_dir)
 
         if is_dependency:
             loader.remove(package_name)

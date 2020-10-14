@@ -49,6 +49,7 @@ Other type classes are defined that help compose the types listed above.
 from __future__ import unicode_literals, division, absolute_import, print_function
 
 from datetime import datetime, timedelta
+from fractions import Fraction
 import binascii
 import copy
 import math
@@ -60,7 +61,7 @@ from ._errors import unwrap
 from ._ordereddict import OrderedDict
 from ._types import type_name, str_cls, byte_cls, int_types, chr_cls
 from .parser import _parse, _dump_header
-from .util import int_to_bytes, int_from_bytes, timezone, extended_datetime
+from .util import int_to_bytes, int_from_bytes, timezone, extended_datetime, create_timezone, utc_with_dst
 
 if sys.version_info <= (3,):
     from cStringIO import StringIO as BytesIO
@@ -183,13 +184,12 @@ class Asn1Value(object):
     # structures where a string value is encoded using an incorrect tag
     _bad_tag = None
 
-    # A unicode string or None - "explicit" or "implicit" for
-    # tagged values, None for normal
-    tag_type = None
+    # If the value has been implicitly tagged
+    implicit = False
 
-    # If "explicit"ly tagged, the class and tag for the wrapped header
-    explicit_class = None
-    explicit_tag = None
+    # If explicitly tagged, a tuple of 2-element tuples containing the
+    # class int and tag int, from innermost to outermost
+    explicit = None
 
     # The BER/DER header bytes
     _header = None
@@ -230,15 +230,29 @@ class Asn1Value(object):
         value, _ = _parse_build(encoded_data, spec=spec, spec_params=kwargs, strict=strict)
         return value
 
-    def __init__(self, tag_type=None, class_=None, tag=None, optional=None, default=None, contents=None):
+    def __init__(self, explicit=None, implicit=None, no_explicit=False, tag_type=None, class_=None, tag=None,
+                 optional=None, default=None, contents=None, method=None):
         """
         The optional parameter is not used, but rather included so we don't
         have to delete it from the parameter dictionary when passing as keyword
         args
 
+        :param explicit:
+            An int tag number for explicit tagging, or a 2-element tuple of
+            class and tag.
+
+        :param implicit:
+            An int tag number for implicit tagging, or a 2-element tuple of
+            class and tag.
+
+        :param no_explicit:
+            If explicit tagging info should be removed from this instance.
+            Used internally to allow contructing the underlying value that
+            has been wrapped in an explicit tag.
+
         :param tag_type:
             None for normal values, or one of "implicit", "explicit" for tagged
-            values
+            values. Deprecated in favor of explicit and implicit params.
 
         :param class_:
             The class for the value - defaults to "universal" if tag_type is
@@ -247,10 +261,11 @@ class Asn1Value(object):
              - "application"
              - "context"
              - "private"
+            Deprecated in favor of explicit and implicit params.
 
         :param tag:
             The integer tag to override - usually this is used with tag_type or
-            class_
+            class_. Deprecated in favor of explicit and implicit params.
 
         :param optional:
             Dummy parameter that allows "optional" key in spec param dicts
@@ -261,57 +276,122 @@ class Asn1Value(object):
         :param contents:
             A byte string of the encoded contents of the value
 
+        :param method:
+            The method for the value - no default value since this is
+            normally set on a class. Valid values include:
+             - "primitive" or 0
+             - "constructed" or 1
+
         :raises:
-            ValueError - when tag_type, class_ or tag are invalid values
+            ValueError - when implicit, explicit, tag_type, class_ or tag are invalid values
         """
 
         try:
             if self.__class__ not in _SETUP_CLASSES:
                 cls = self.__class__
+                # Allow explicit to be specified as a simple 2-element tuple
+                # instead of requiring the user make a nested tuple
+                if cls.explicit is not None and isinstance(cls.explicit[0], int_types):
+                    cls.explicit = (cls.explicit, )
                 if hasattr(cls, '_setup'):
                     self._setup()
                 _SETUP_CLASSES[cls] = True
 
+            # Normalize tagging values
+            if explicit is not None:
+                if isinstance(explicit, int_types):
+                    if class_ is None:
+                        class_ = 'context'
+                    explicit = (class_, explicit)
+                # Prevent both explicit and tag_type == 'explicit'
+                if tag_type == 'explicit':
+                    tag_type = None
+                    tag = None
+
+            if implicit is not None:
+                if isinstance(implicit, int_types):
+                    if class_ is None:
+                        class_ = 'context'
+                    implicit = (class_, implicit)
+                # Prevent both implicit and tag_type == 'implicit'
+                if tag_type == 'implicit':
+                    tag_type = None
+                    tag = None
+
+            # Convert old tag_type API to explicit/implicit params
             if tag_type is not None:
-                if tag_type not in ('implicit', 'explicit'):
+                if class_ is None:
+                    class_ = 'context'
+                if tag_type == 'explicit':
+                    explicit = (class_, tag)
+                elif tag_type == 'implicit':
+                    implicit = (class_, tag)
+                else:
                     raise ValueError(unwrap(
                         '''
                         tag_type must be one of "implicit", "explicit", not %s
                         ''',
                         repr(tag_type)
                     ))
-                self.tag_type = tag_type
 
-                if class_ is None:
-                    class_ = 'context'
+            if explicit is not None:
+                # Ensure we have a tuple of 2-element tuples
+                if len(explicit) == 2 and isinstance(explicit[1], int_types):
+                    explicit = (explicit, )
+                for class_, tag in explicit:
+                    invalid_class = None
+                    if isinstance(class_, int_types):
+                        if class_ not in CLASS_NUM_TO_NAME_MAP:
+                            invalid_class = class_
+                    else:
+                        if class_ not in CLASS_NAME_TO_NUM_MAP:
+                            invalid_class = class_
+                        class_ = CLASS_NAME_TO_NUM_MAP[class_]
+                    if invalid_class is not None:
+                        raise ValueError(unwrap(
+                            '''
+                            explicit class must be one of "universal", "application",
+                            "context", "private", not %s
+                            ''',
+                            repr(invalid_class)
+                        ))
+                    if tag is not None:
+                        if not isinstance(tag, int_types):
+                            raise TypeError(unwrap(
+                                '''
+                                explicit tag must be an integer, not %s
+                                ''',
+                                type_name(tag)
+                            ))
+                    if self.explicit is None:
+                        self.explicit = ((class_, tag), )
+                    else:
+                        self.explicit = self.explicit + ((class_, tag), )
+
+            elif implicit is not None:
+                class_, tag = implicit
                 if class_ not in CLASS_NAME_TO_NUM_MAP:
                     raise ValueError(unwrap(
                         '''
-                        class_ must be one of "universal", "application",
+                        implicit class must be one of "universal", "application",
                         "context", "private", not %s
                         ''',
                         repr(class_)
                     ))
-                class_ = CLASS_NAME_TO_NUM_MAP[class_]
-
                 if tag is not None:
                     if not isinstance(tag, int_types):
                         raise TypeError(unwrap(
                             '''
-                            tag must be an integer, not %s
+                            implicit tag must be an integer, not %s
                             ''',
                             type_name(tag)
                         ))
-
-                if tag_type == 'implicit':
-                    self.class_ = class_
-                    self.tag = tag
-                else:
-                    self.explicit_class = class_
-                    self.explicit_tag = tag
+                self.class_ = CLASS_NAME_TO_NUM_MAP[class_]
+                self.tag = tag
+                self.implicit = True
             else:
                 if class_ is not None:
-                    if class_ not in CLASS_NUM_TO_NAME_MAP:
+                    if class_ not in CLASS_NAME_TO_NUM_MAP:
                         raise ValueError(unwrap(
                             '''
                             class_ must be one of "universal", "application",
@@ -321,8 +401,29 @@ class Asn1Value(object):
                         ))
                     self.class_ = CLASS_NAME_TO_NUM_MAP[class_]
 
+                if self.class_ is None:
+                    self.class_ = 0
+
                 if tag is not None:
                     self.tag = tag
+
+            if method is not None:
+                if method not in set(["primitive", 0, "constructed", 1]):
+                    raise ValueError(unwrap(
+                        '''
+                        method must be one of "primitive" or "constructed",
+                        not %s
+                        ''',
+                        repr(method)
+                    ))
+                if method == "primitive":
+                    method = 0
+                elif method == "constructed":
+                    method = 1
+                self.method = method
+
+            if no_explicit:
+                self.explicit = None
 
             if contents is not None:
                 self.contents = contents
@@ -337,7 +438,7 @@ class Asn1Value(object):
 
     def __str__(self):
         """
-        Since str is differnt in Python 2 and 3, this calls the appropriate
+        Since str is different in Python 2 and 3, this calls the appropriate
         method, __unicode__() or __bytes__()
 
         :return:
@@ -389,11 +490,10 @@ class Asn1Value(object):
         """
 
         new_obj = self.__class__()
-        new_obj.tag_type = self.tag_type
         new_obj.class_ = self.class_
         new_obj.tag = self.tag
-        new_obj.explicit_class = self.explicit_class
-        new_obj.explicit_tag = self.explicit_tag
+        new_obj.implicit = self.implicit
+        new_obj.explicit = self.explicit
         return new_obj
 
     def __copy__(self):
@@ -434,21 +534,25 @@ class Asn1Value(object):
 
         return copy.deepcopy(self)
 
-    def retag(self, tag_type, tag):
+    def retag(self, tagging, tag=None):
         """
         Copies the object, applying a new tagging to it
 
-        :param tag_type:
-            A unicode string of "implicit" or "explicit"
+        :param tagging:
+            A dict containing the keys "explicit" and "implicit". Legacy
+            API allows a unicode string of "implicit" or "explicit".
 
         :param tag:
-            A integer tag number
+            A integer tag number. Only used when tagging is a unicode string.
 
         :return:
             An Asn1Value object
         """
 
-        new_obj = self.__class__(tag_type=tag_type, tag=tag)
+        # This is required to preserve the old API
+        if not isinstance(tagging, dict):
+            tagging = {tagging: tag}
+        new_obj = self.__class__(explicit=tagging.get('explicit'), implicit=tagging.get('implicit'))
         new_obj._copy(self, copy.deepcopy)
         return new_obj
 
@@ -495,8 +599,8 @@ class Asn1Value(object):
 
         prefix = '  ' * nest_level
 
-        # This interacts with Any and moves the tag, tag_type, _header, contents, _footer
-        # to the parsed value so duplicate data isn't present
+        # This interacts with Any and moves the tag, implicit, explicit, _header,
+        # contents, _footer to the parsed value so duplicate data isn't present
         has_parsed = hasattr(self, 'parsed')
 
         _basic_debug(prefix, self)
@@ -524,26 +628,22 @@ class Asn1Value(object):
 
         contents = self.contents
 
+        # If the length is indefinite, force the re-encoding
+        if self._header is not None and self._header[-1:] == b'\x80':
+            force = True
+
         if self._header is None or force:
             if isinstance(self, Constructable) and self._indefinite:
                 self.method = 0
 
             header = _dump_header(self.class_, self.method, self.tag, self.contents)
-            trailer = b''
 
-            if self.tag_type == 'explicit':
-                container = Asn1Value()
-                container.method = 1
-                container.class_ = self.explicit_class
-                container.tag = self.explicit_tag
-                container.contents = header + self.contents + trailer
-                # Force the container to generate the header and footer
-                container.dump()
-                header = container._header + header
-                trailer += container._trailer
+            if self.explicit is not None:
+                for class_, tag in self.explicit:
+                    header = _dump_header(class_, 1, tag, header + self.contents) + header
 
             self._header = header
-            self._trailer = trailer
+            self._trailer = b''
 
         return self._header + contents + self._trailer
 
@@ -607,10 +707,9 @@ class Castable(object):
             ))
 
         new_obj = other_class()
-        new_obj.tag_type = self.tag_type
         new_obj.class_ = self.class_
-        new_obj.explicit_class = self.explicit_class
-        new_obj.explicit_tag = self.explicit_tag
+        new_obj.implicit = self.implicit
+        new_obj.explicit = self.explicit
         new_obj._header = self._header
         new_obj.contents = self.contents
         new_obj._trailer = self._trailer
@@ -627,12 +726,8 @@ class Constructable(object):
     """
 
     # Instance attribute indicating if an object was indefinite
-    # length when parsed – affects parsing and dumping
+    # length when parsed - affects parsing and dumping
     _indefinite = False
-
-    # Class attribute that indicates the offset into self.contents
-    # that contains the chunks of data to merge
-    _chunks_offset = 0
 
     def _merge_chunks(self):
         """
@@ -643,7 +738,7 @@ class Constructable(object):
         if not self._indefinite:
             return self._as_chunk()
 
-        pointer = self._chunks_offset
+        pointer = 0
         contents_len = len(self.contents)
         output = None
 
@@ -670,9 +765,21 @@ class Constructable(object):
             byte strings, unicode strings or tuples.
         """
 
-        if self._chunks_offset == 0:
-            return self.contents
-        return self.contents[self._chunks_offset:]
+        return self.contents
+
+    def _setable_native(self):
+        """
+        Returns a native value that can be round-tripped into .set(), to
+        result in a DER encoding. This differs from .native in that .native
+        is designed for the end use, and may account for the fact that the
+        merged value is further parsed as ASN.1, such as in the case of
+        ParsableOctetString() and ParsableOctetBitString().
+
+        :return:
+            A python value that is valid to pass to .set()
+        """
+
+        return self.native
 
     def _copy(self, other, copy_func):
         """
@@ -687,8 +794,10 @@ class Constructable(object):
         """
 
         super(Constructable, self)._copy(other, copy_func)
-        self.method = other.method
-        self._indefinite = other._indefinite
+        # We really don't want to dump BER encodings, so if we see an
+        # indefinite encoding, let's re-encode it
+        if other._indefinite:
+            self.set(other._setable_native())
 
 
 class Void(Asn1Value):
@@ -722,7 +831,7 @@ class Void(Asn1Value):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             None
@@ -774,7 +883,7 @@ class Any(Asn1Value):
                 if not isinstance(value, Asn1Value):
                     raise TypeError(unwrap(
                         '''
-                        value must be an instance of Ans1Value, not %s
+                        value must be an instance of Asn1Value, not %s
                         ''',
                         type_name(value)
                     ))
@@ -790,7 +899,7 @@ class Any(Asn1Value):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             The .native value from the parsed value object
@@ -835,11 +944,13 @@ class Any(Asn1Value):
 
         if self._parsed is None or self._parsed[1:3] != (spec, spec_params):
             try:
-                passed_params = spec_params
-                if self.tag_type == 'explicit':
-                    passed_params = {} if not spec_params else spec_params.copy()
-                    passed_params['tag_type'] = self.tag_type
-                    passed_params['tag'] = self.explicit_tag
+                passed_params = spec_params or {}
+                _tag_type_to_explicit_implicit(passed_params)
+                if self.explicit is not None:
+                    if 'explicit' in passed_params:
+                        passed_params['explicit'] = self.explicit + passed_params['explicit']
+                    else:
+                        passed_params['explicit'] = self.explicit
                 contents = self._header + self.contents + self._trailer
                 parsed_value, _ = _parse_build(
                     contents,
@@ -850,8 +961,9 @@ class Any(Asn1Value):
 
                 # Once we've parsed the Any value, clear any attributes from this object
                 # since they are now duplicate
-                self.tag_type = None
                 self.tag = None
+                self.explicit = None
+                self.implicit = False
                 self._header = b''
                 self.contents = contents
                 self._trailer = b''
@@ -909,6 +1021,10 @@ class Choice(Asn1Value):
     # The Asn1Value object for the chosen alternative
     _parsed = None
 
+    # Choice overrides .contents to be a property so that the code expecting
+    # the .contents attribute will get the .contents of the chosen alternative
+    _contents = None
+
     # A list of tuples in one of the following forms.
     #
     # Option 1, a unicode string field name and a value class
@@ -917,7 +1033,7 @@ class Choice(Asn1Value):
     #
     # Option 2, same as Option 1, but with a dict of class params
     #
-    # ("name", Asn1ValueClass, {'tag_type': 'explicit', 'tag': 5})
+    # ("name", Asn1ValueClass, {'explicit': 5})
     _alternatives = None
 
     # A dict that maps tuples of (class_, tag) to an index in _alternatives
@@ -964,7 +1080,7 @@ class Choice(Asn1Value):
             cls._id_map[id_] = index
             cls._name_map[info[0]] = index
 
-    def __init__(self, name=None, value=None, tag_type=None, **kwargs):
+    def __init__(self, name=None, value=None, **kwargs):
         """
         Checks to ensure implicit tagging is not being used since it is
         incompatible with Choice, then forwards on to Asn1Value.__init__()
@@ -972,24 +1088,22 @@ class Choice(Asn1Value):
         :param name:
             The name of the alternative to be set - used with value.
             Alternatively this may be a dict with a single key being the name
-            and the value being the value, or a two-element tuple of the the
-            name and the value.
+            and the value being the value, or a two-element tuple of the name
+            and the value.
 
         :param value:
             The alternative value to set - used with name
 
-        :param tag_type:
-            The tag_type of the value - None, "implicit" or "explicit"
-
         :raises:
-            ValueError - when tag_type is "implicit"
+            ValueError - when implicit param is passed (or legacy tag_type param is "implicit")
         """
 
-        kwargs['tag_type'] = tag_type
+        _tag_type_to_explicit_implicit(kwargs)
+
         Asn1Value.__init__(self, **kwargs)
 
         try:
-            if tag_type == 'implicit':
+            if kwargs.get('implicit') is not None:
                 raise ValueError(unwrap(
                     '''
                     The Choice type can not be implicitly tagged even if in an
@@ -1051,6 +1165,27 @@ class Choice(Asn1Value):
             raise e
 
     @property
+    def contents(self):
+        """
+        :return:
+            A byte string of the DER-encoded contents of the chosen alternative
+        """
+
+        if self._parsed is not None:
+            return self._parsed.contents
+
+        return self._contents
+
+    @contents.setter
+    def contents(self, value):
+        """
+        :param value:
+            A byte string of the DER-encoded contents of the chosen alternative
+        """
+
+        self._contents = value
+
+    @property
     def name(self):
         """
         :return:
@@ -1068,16 +1203,15 @@ class Choice(Asn1Value):
             An Asn1Value object of the chosen alternative
         """
 
-        if self._parsed is not None:
-            return self._parsed
-
-        try:
-            _, spec, params = self._alternatives[self._choice]
-            self._parsed, _ = _parse_build(self.contents, spec=spec, spec_params=params)
-        except (ValueError, TypeError) as e:
-            args = e.args[1:]
-            e.args = (e.args[0] + '\n    while parsing %s' % type_name(self),) + args
-            raise e
+        if self._parsed is None:
+            try:
+                _, spec, params = self._alternatives[self._choice]
+                self._parsed, _ = _parse_build(self._contents, spec=spec, spec_params=params)
+            except (ValueError, TypeError) as e:
+                args = e.args[1:]
+                e.args = (e.args[0] + '\n    while parsing %s' % type_name(self),) + args
+                raise e
+        return self._parsed
 
     @property
     def chosen(self):
@@ -1091,7 +1225,7 @@ class Choice(Asn1Value):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             The .native value from the contained value object
@@ -1119,8 +1253,8 @@ class Choice(Asn1Value):
 
         id_ = (class_, tag)
 
-        if self.tag_type == 'explicit':
-            if (self.explicit_class, self.explicit_tag) != id_:
+        if self.explicit is not None:
+            if self.explicit[-1] != id_:
                 raise ValueError(unwrap(
                     '''
                     %s was explicitly tagged, but the value provided does not
@@ -1200,13 +1334,17 @@ class Choice(Asn1Value):
             A byte string of the DER-encoded value
         """
 
-        self.contents = self.chosen.dump(force=force)
+        # If the length is indefinite, force the re-encoding
+        if self._header is not None and self._header[-1:] == b'\x80':
+            force = True
+
+        self._contents = self.chosen.dump(force=force)
         if self._header is None or force:
-            if self.tag_type == 'explicit':
-                self._header = _dump_header(self.explicit_class, 1, self.explicit_tag, self.contents)
-            else:
-                self._header = b''
-        return self._header + self.contents
+            self._header = b''
+            if self.explicit is not None:
+                for class_, tag in self.explicit:
+                    self._header = _dump_header(class_, 1, tag, self._header + self._contents) + self._header
+        return self._header + self._contents
 
 
 class Concat(object):
@@ -1287,7 +1425,7 @@ class Concat(object):
 
     def __str__(self):
         """
-        Since str is differnt in Python 2 and 3, this calls the appropriate
+        Since str is different in Python 2 and 3, this calls the appropriate
         method, __unicode__() or __bytes__()
 
         :return:
@@ -1573,6 +1711,10 @@ class Primitive(Asn1Value):
             A byte string of the DER-encoded value
         """
 
+        # If the length is indefinite, force the re-encoding
+        if self._header is not None and self._header[-1:] == b'\x80':
+            force = True
+
         if force:
             native = self.native
             self.contents = None
@@ -1615,7 +1757,7 @@ class Primitive(Asn1Value):
 
         # When tagging is going on, do the extra work of constructing new
         # objects to see if the dumped representation are the same
-        if self.tag_type is not None or other.tag_type is not None:
+        if self.implicit or self.explicit or other.implicit or other.explicit:
             return self.untag().dump() == other.untag().dump()
 
         return self.dump() == other.dump()
@@ -1690,7 +1832,7 @@ class AbstractString(Constructable, Primitive):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             A unicode string or None
@@ -1741,7 +1883,7 @@ class Boolean(Primitive):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             True, False or None
@@ -1820,7 +1962,7 @@ class Integer(Primitive, ValueMap):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             An integer or None
@@ -1836,7 +1978,115 @@ class Integer(Primitive, ValueMap):
         return self._native
 
 
-class BitString(Constructable, Castable, Primitive, ValueMap, object):
+class _IntegerBitString(object):
+    """
+    A mixin for IntegerBitString and BitString to parse the contents as an integer.
+    """
+
+    # Tuple of 1s and 0s; set through native
+    _unused_bits = ()
+
+    def _as_chunk(self):
+        """
+        Parse the contents of a primitive BitString encoding as an integer value.
+        Allows reconstructing indefinite length values.
+
+        :raises:
+            ValueError - when an invalid value is passed
+
+        :return:
+            A list with one tuple (value, bits, unused_bits) where value is an integer
+            with the value of the BitString, bits is the bit count of value and
+            unused_bits is a tuple of 1s and 0s.
+        """
+
+        if self._indefinite:
+            # return an empty chunk, for cases like \x23\x80\x00\x00
+            return []
+
+        unused_bits_len = ord(self.contents[0]) if _PY2 else self.contents[0]
+        value = int_from_bytes(self.contents[1:])
+        bits = (len(self.contents) - 1) * 8
+
+        if not unused_bits_len:
+            return [(value, bits, ())]
+
+        if len(self.contents) == 1:
+            # Disallowed by X.690 §8.6.2.3
+            raise ValueError('Empty bit string has {0} unused bits'.format(unused_bits_len))
+
+        if unused_bits_len > 7:
+            # Disallowed by X.690 §8.6.2.2
+            raise ValueError('Bit string has {0} unused bits'.format(unused_bits_len))
+
+        unused_bits = _int_to_bit_tuple(value & ((1 << unused_bits_len) - 1), unused_bits_len)
+        value >>= unused_bits_len
+        bits -= unused_bits_len
+
+        return [(value, bits, unused_bits)]
+
+    def _chunks_to_int(self):
+        """
+        Combines the chunks into a single value.
+
+        :raises:
+            ValueError - when an invalid value is passed
+
+        :return:
+            A tuple (value, bits, unused_bits) where value is an integer with the
+            value of the BitString, bits is the bit count of value and unused_bits
+            is a tuple of 1s and 0s.
+        """
+
+        if not self._indefinite:
+            # Fast path
+            return self._as_chunk()[0]
+
+        value = 0
+        total_bits = 0
+        unused_bits = ()
+
+        # X.690 §8.6.3 allows empty indefinite encodings
+        for chunk, bits, unused_bits in self._merge_chunks():
+            if total_bits & 7:
+                # Disallowed by X.690 §8.6.4
+                raise ValueError('Only last chunk in a bit string may have unused bits')
+            total_bits += bits
+            value = (value << bits) | chunk
+
+        return value, total_bits, unused_bits
+
+    def _copy(self, other, copy_func):
+        """
+        Copies the contents of another _IntegerBitString object to itself
+
+        :param object:
+            Another instance of the same class
+
+        :param copy_func:
+            An reference of copy.copy() or copy.deepcopy() to use when copying
+            lists, dicts and objects
+        """
+
+        super(_IntegerBitString, self)._copy(other, copy_func)
+        self._unused_bits = other._unused_bits
+
+    @property
+    def unused_bits(self):
+        """
+        The unused bits of the bit string encoding.
+
+        :return:
+            A tuple of 1s and 0s
+        """
+
+        # call native to set _unused_bits
+        self.native
+
+        return self._unused_bits
+
+
+class BitString(_IntegerBitString, Constructable, Castable, Primitive, ValueMap):
     """
     Represents a bit string from ASN.1 as a Python tuple of 1s and 0s
     """
@@ -1844,10 +2094,6 @@ class BitString(Constructable, Castable, Primitive, ValueMap, object):
     tag = 3
 
     _size = None
-
-    # Used with _as_chunk() from Constructable
-    _chunk = None
-    _chunks_offset = 1
 
     def _setup(self):
         """
@@ -1912,8 +2158,6 @@ class BitString(Constructable, Castable, Primitive, ValueMap, object):
                 type_name(value)
             ))
 
-        self._chunk = None
-
         if self._map is not None:
             if len(value) > self._size:
                 raise ValueError(unwrap(
@@ -1953,6 +2197,7 @@ class BitString(Constructable, Castable, Primitive, ValueMap, object):
             value_bytes = (b'\x00' * (size_in_bytes - len(value_bytes))) + value_bytes
 
         self.contents = extra_bits_byte + value_bytes
+        self._unused_bits = (0,) * extra_bits
         self._header = None
         if self._indefinite:
             self._indefinite = False
@@ -2064,40 +2309,10 @@ class BitString(Constructable, Castable, Primitive, ValueMap, object):
 
         self.set(self._native)
 
-    def _as_chunk(self):
-        """
-        Allows reconstructing indefinite length values
-
-        :return:
-            A tuple of integers
-        """
-
-        extra_bits = int_from_bytes(self.contents[0:1])
-        bit_string = '{0:b}'.format(int_from_bytes(self.contents[1:]))
-        byte_len = len(self.contents[1:])
-        bit_len = len(bit_string)
-
-        # Left-pad the bit string to a byte multiple to ensure we didn't
-        # lose any zero bits on the left
-        mod_bit_len = bit_len % 8
-        if mod_bit_len != 0:
-            bit_string = ('0' * (8 - mod_bit_len)) + bit_string
-            bit_len = len(bit_string)
-
-        if bit_len // 8 < byte_len:
-            missing_bytes = byte_len - (bit_len // 8)
-            bit_string = ('0' * (8 * missing_bytes)) + bit_string
-
-        # Trim off the extra bits on the right used to fill the last byte
-        if extra_bits > 0:
-            bit_string = bit_string[0:0 - extra_bits]
-
-        return tuple(map(int, tuple(bit_string)))
-
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             If a _map is set, a set of names, or if no _map is set, a tuple of
@@ -2112,7 +2327,9 @@ class BitString(Constructable, Castable, Primitive, ValueMap, object):
                 self.set(set())
 
         if self._native is None:
-            bits = self._merge_chunks()
+            int_value, bit_count, self._unused_bits = self._chunks_to_int()
+            bits = _int_to_bit_tuple(int_value, bit_count)
+
             if self._map:
                 self._native = set()
                 for index, bit in enumerate(bits):
@@ -2131,14 +2348,11 @@ class OctetBitString(Constructable, Castable, Primitive):
 
     tag = 3
 
-    # Whenever dealing with octet-based bit strings, we really want the
-    # bytes, so we just ignore the unused bits portion since it isn't
-    # applicable to the current use case
-    # unused_bits = struct.unpack('>B', self.contents[0:1])[0]
-    _chunks_offset = 1
-
     # Instance attribute of (possibly-merged) byte string
     _bytes = None
+
+    # Tuple of 1s and 0s; set through native
+    _unused_bits = ()
 
     def set(self, value):
         """
@@ -2163,6 +2377,7 @@ class OctetBitString(Constructable, Castable, Primitive):
         self._bytes = value
         # Set the unused bits to 0
         self.contents = b'\x00' + value
+        self._unused_bits = ()
         self._header = None
         if self._indefinite:
             self._indefinite = False
@@ -2179,7 +2394,18 @@ class OctetBitString(Constructable, Castable, Primitive):
         if self.contents is None:
             return b''
         if self._bytes is None:
-            self._bytes = self._merge_chunks()
+            if not self._indefinite:
+                self._bytes, self._unused_bits = self._as_chunk()[0]
+            else:
+                chunks = self._merge_chunks()
+                self._unused_bits = ()
+                for chunk in chunks:
+                    if self._unused_bits:
+                        # Disallowed by X.690 §8.6.4
+                        raise ValueError('Only last chunk in a bit string may have unused bits')
+                    self._unused_bits = chunk[1]
+                self._bytes = b''.join(chunk[0] for chunk in chunks)
+
         return self._bytes
 
     def _copy(self, other, copy_func):
@@ -2196,11 +2422,46 @@ class OctetBitString(Constructable, Castable, Primitive):
 
         super(OctetBitString, self)._copy(other, copy_func)
         self._bytes = other._bytes
+        self._unused_bits = other._unused_bits
+
+    def _as_chunk(self):
+        """
+        Allows reconstructing indefinite length values
+
+        :raises:
+            ValueError - when an invalid value is passed
+
+        :return:
+            List with one tuple, consisting of a byte string and an integer (unused bits)
+        """
+
+        unused_bits_len = ord(self.contents[0]) if _PY2 else self.contents[0]
+        if not unused_bits_len:
+            return [(self.contents[1:], ())]
+
+        if len(self.contents) == 1:
+            # Disallowed by X.690 §8.6.2.3
+            raise ValueError('Empty bit string has {0} unused bits'.format(unused_bits_len))
+
+        if unused_bits_len > 7:
+            # Disallowed by X.690 §8.6.2.2
+            raise ValueError('Bit string has {0} unused bits'.format(unused_bits_len))
+
+        mask = (1 << unused_bits_len) - 1
+        last_byte = ord(self.contents[-1]) if _PY2 else self.contents[-1]
+
+        # zero out the unused bits in the last byte.
+        zeroed_byte = last_byte & ~mask
+        value = self.contents[1:-1] + (chr(zeroed_byte) if _PY2 else bytes((zeroed_byte,)))
+
+        unused_bits = _int_to_bit_tuple(last_byte & mask, unused_bits_len)
+
+        return [(value, unused_bits)]
 
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             A byte string or None
@@ -2211,15 +2472,27 @@ class OctetBitString(Constructable, Castable, Primitive):
 
         return self.__bytes__()
 
+    @property
+    def unused_bits(self):
+        """
+        The unused bits of the bit string encoding.
 
-class IntegerBitString(Constructable, Castable, Primitive):
+        :return:
+            A tuple of 1s and 0s
+        """
+
+        # call native to set _unused_bits
+        self.native
+
+        return self._unused_bits
+
+
+class IntegerBitString(_IntegerBitString, Constructable, Castable, Primitive):
     """
     Represents a bit string in ASN.1 as a Python integer
     """
 
     tag = 3
-
-    _chunks_offset = 1
 
     def set(self, value):
         """
@@ -2235,15 +2508,25 @@ class IntegerBitString(Constructable, Castable, Primitive):
         if not isinstance(value, int_types):
             raise TypeError(unwrap(
                 '''
-                %s value must be an integer, not %s
+                %s value must be a positive integer, not %s
                 ''',
                 type_name(self),
                 type_name(value)
             ))
 
+        if value < 0:
+            raise ValueError(unwrap(
+                '''
+                %s value must be a positive integer, not %d
+                ''',
+                type_name(self),
+                value
+            ))
+
         self._native = value
         # Set the unused bits to 0
         self.contents = b'\x00' + int_to_bytes(value, signed=True)
+        self._unused_bits = ()
         self._header = None
         if self._indefinite:
             self._indefinite = False
@@ -2251,31 +2534,10 @@ class IntegerBitString(Constructable, Castable, Primitive):
         if self._trailer != b'':
             self._trailer = b''
 
-    def _as_chunk(self):
-        """
-        Allows reconstructing indefinite length values
-
-        :return:
-            A unicode string of bits – 1s and 0s
-        """
-
-        extra_bits = int_from_bytes(self.contents[0:1])
-        bit_string = '{0:b}'.format(int_from_bytes(self.contents[1:]))
-
-        # Ensure we have leading zeros since these chunks may be concatenated together
-        mod_bit_len = len(bit_string) % 8
-        if mod_bit_len != 0:
-            bit_string = ('0' * (8 - mod_bit_len)) + bit_string
-
-        if extra_bits > 0:
-            return bit_string[0:0 - extra_bits]
-
-        return bit_string
-
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             An integer or None
@@ -2285,14 +2547,8 @@ class IntegerBitString(Constructable, Castable, Primitive):
             return None
 
         if self._native is None:
-            extra_bits = int_from_bytes(self.contents[0:1])
-            # Fast path
-            if not self._indefinite and extra_bits == 0:
-                self._native = int_from_bytes(self.contents[1:])
-            else:
-                if self._indefinite and extra_bits > 0:
-                    raise ValueError('Constructed bit string has extra bits on indefinite container')
-                self._native = int(self._merge_chunks(), 2)
+            self._native, __, self._unused_bits = self._chunks_to_int()
+
         return self._native
 
 
@@ -2362,7 +2618,7 @@ class OctetString(Constructable, Castable, Primitive):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             A byte string or None
@@ -2381,6 +2637,12 @@ class IntegerOctetString(Constructable, Castable, Primitive):
 
     tag = 4
 
+    # An explicit length in bytes the integer should be encoded to. This should
+    # generally not be used since DER defines a canonical encoding, however some
+    # use of this, such as when storing elliptic curve private keys, requires an
+    # exact number of bytes, even if the leading bytes are null.
+    _encoded_width = None
+
     def set(self, value):
         """
         Sets the value of the object
@@ -2395,14 +2657,23 @@ class IntegerOctetString(Constructable, Castable, Primitive):
         if not isinstance(value, int_types):
             raise TypeError(unwrap(
                 '''
-                %s value must be an integer, not %s
+                %s value must be a positive integer, not %s
                 ''',
                 type_name(self),
                 type_name(value)
             ))
 
+        if value < 0:
+            raise ValueError(unwrap(
+                '''
+                %s value must be a positive integer, not %d
+                ''',
+                type_name(self),
+                value
+            ))
+
         self._native = value
-        self.contents = int_to_bytes(value, signed=False)
+        self.contents = int_to_bytes(value, signed=False, width=self._encoded_width)
         self._header = None
         if self._indefinite:
             self._indefinite = False
@@ -2413,7 +2684,7 @@ class IntegerOctetString(Constructable, Castable, Primitive):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             An integer or None
@@ -2425,6 +2696,19 @@ class IntegerOctetString(Constructable, Castable, Primitive):
         if self._native is None:
             self._native = int_from_bytes(self._merge_chunks())
         return self._native
+
+    def set_encoded_width(self, width):
+        """
+        Set the explicit enoding width for the integer
+
+        :param width:
+            An integer byte width to encode the integer to
+        """
+
+        self._encoded_width = width
+        # Make sure the encoded value is up-to-date with the proper width
+        if self.contents is not None and len(self.contents) != width:
+            self.set(self.native)
 
 
 class ParsableOctetString(Constructable, Castable, Primitive):
@@ -2521,6 +2805,16 @@ class ParsableOctetString(Constructable, Castable, Primitive):
             self._bytes = self._merge_chunks()
         return self._bytes
 
+    def _setable_native(self):
+        """
+        Returns a byte string that can be passed into .set()
+
+        :return:
+            A python value that is valid to pass to .set()
+        """
+
+        return self.__bytes__()
+
     def _copy(self, other, copy_func):
         """
         Copies the contents of another ParsableOctetString object to itself
@@ -2540,7 +2834,7 @@ class ParsableOctetString(Constructable, Castable, Primitive):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             A byte string or None
@@ -2580,6 +2874,10 @@ class ParsableOctetString(Constructable, Castable, Primitive):
             A byte string of the DER-encoded value
         """
 
+        # If the length is indefinite, force the re-encoding
+        if self._indefinite:
+            force = True
+
         if force:
             if self._parsed is not None:
                 native = self.parsed.dump(force=force)
@@ -2594,12 +2892,6 @@ class ParsableOctetString(Constructable, Castable, Primitive):
 class ParsableOctetBitString(ParsableOctetString):
 
     tag = 3
-
-    # Whenever dealing with octet-based bit strings, we really want the
-    # bytes, so we just ignore the unused bits portion since it isn't
-    # applicable to the current use case
-    # unused_bits = struct.unpack('>B', self.contents[0:1])[0]
-    _chunks_offset = 1
 
     def set(self, value):
         """
@@ -2631,6 +2923,23 @@ class ParsableOctetBitString(ParsableOctetString):
         if self._trailer != b'':
             self._trailer = b''
 
+    def _as_chunk(self):
+        """
+        Allows reconstructing indefinite length values
+
+        :raises:
+            ValueError - when an invalid value is passed
+
+        :return:
+            A byte string
+        """
+
+        unused_bits_len = ord(self.contents[0]) if _PY2 else self.contents[0]
+        if unused_bits_len:
+            raise ValueError('ParsableOctetBitString should have no unused bits')
+
+        return self.contents[1:]
+
 
 class Null(Primitive):
     """
@@ -2654,7 +2963,7 @@ class Null(Primitive):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             None
@@ -2795,6 +3104,21 @@ class ObjectIdentifier(Primitive, ValueMap):
                 first = part
                 continue
             elif index == 1:
+                if first > 2:
+                    raise ValueError(unwrap(
+                        '''
+                        First arc must be one of 0, 1 or 2, not %s
+                        ''',
+                        repr(first)
+                    ))
+                elif first < 2 and part >= 40:
+                    raise ValueError(unwrap(
+                        '''
+                        Second arc must be less than 40 if first arc is 0 or
+                        1, not %s
+                        ''',
+                        repr(part)
+                    ))
                 part = (first * 40) + part
 
             encoded_part = chr_cls(0x7F & part)
@@ -2836,8 +3160,15 @@ class ObjectIdentifier(Primitive, ValueMap):
                 # Last byte in subidentifier has the eighth bit set to 0
                 if byte & 0x80 == 0:
                     if len(output) == 0:
-                        output.append(str_cls(part // 40))
-                        output.append(str_cls(part % 40))
+                        if part >= 80:
+                            output.append(str_cls(2))
+                            output.append(str_cls(part - 80))
+                        elif part >= 40:
+                            output.append(str_cls(1))
+                            output.append(str_cls(part - 40))
+                        else:
+                            output.append(str_cls(0))
+                            output.append(str_cls(part))
                     else:
                         output.append(str_cls(part))
                     part = 0
@@ -2848,7 +3179,7 @@ class ObjectIdentifier(Primitive, ValueMap):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             A unicode string or None. If _map is not defined, the unicode string
@@ -2861,8 +3192,8 @@ class ObjectIdentifier(Primitive, ValueMap):
 
         if self._native is None:
             self._native = self.dotted
-            if self._map is not None and self._native in self._map:
-                self._native = self._map[self._native]
+        if self._map is not None and self._native in self._map:
+            self._native = self._map[self._native]
         return self._native
 
 
@@ -2944,7 +3275,7 @@ class Enumerated(Integer):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             A unicode string or None
@@ -3005,7 +3336,7 @@ class Sequence(Asn1Value):
     #
     # Option 2, same as Option 1, but with a dict of class params
     #
-    # ("name", Asn1ValueClass, {'tag_type': 'explicit', 'tag': 5})
+    # ("name", Asn1ValueClass, {'explicit': 5})
     _fields = []
 
     # A dict with keys being the name of a field and the value being a unicode
@@ -3241,8 +3572,6 @@ class Sequence(Asn1Value):
         invalid_value = False
         if isinstance(new_value, Any):
             invalid_value = new_value.parsed is None
-        elif isinstance(new_value, Choice):
-            invalid_value = new_value.chosen.contents is None
         else:
             invalid_value = new_value.contents is None
 
@@ -3389,10 +3718,10 @@ class Sequence(Asn1Value):
         :return:
             A tuple containing the following elements:
              - unicode string of the field name
-             - Ans1Value class of the field spec
+             - Asn1Value class of the field spec
              - Asn1Value class of the value spec
              - None or dict of params to pass to the field spec
-             - None or Asn1Value class indicating the value spec was derived fomr an OID or a spec callback
+             - None or Asn1Value class indicating the value spec was derived from an OID or a spec callback
         """
 
         name, field_spec, field_params = self._fields[index]
@@ -3456,15 +3785,20 @@ class Sequence(Asn1Value):
         is_any = issubclass(field_spec, Any)
 
         if issubclass(value_spec, Choice):
-            if not isinstance(value, Asn1Value):
+            is_asn1value = isinstance(value, Asn1Value)
+            is_tuple = isinstance(value, tuple) and len(value) == 2
+            is_dict = isinstance(value, dict) and len(value) == 1
+            if not is_asn1value and not is_tuple and not is_dict:
                 raise ValueError(unwrap(
                     '''
                     Can not set a native python value to %s, which has the
-                    choice type of %s – value must be an instance of Asn1Value
+                    choice type of %s - value must be an instance of Asn1Value
                     ''',
                     field_name,
                     type_name(value_spec)
                 ))
+            if is_tuple or is_dict:
+                value = value_spec(value)
             if not isinstance(value, value_spec):
                 wrapper = value_spec()
                 wrapper.validate(value.class_, value.tag, value.contents)
@@ -3479,12 +3813,30 @@ class Sequence(Asn1Value):
                 new_value.parse(value_spec)
 
         elif (not specs_different or is_any) and not isinstance(value, value_spec):
+            if (not is_any or specs_different) and isinstance(value, Asn1Value):
+                raise TypeError(unwrap(
+                    '''
+                    %s value must be %s, not %s
+                    ''',
+                    field_name,
+                    type_name(value_spec),
+                    type_name(value)
+                ))
             new_value = value_spec(value, **field_params)
 
         else:
             if isinstance(value, value_spec):
                 new_value = value
             else:
+                if isinstance(value, Asn1Value):
+                    raise TypeError(unwrap(
+                        '''
+                        %s value must be %s, not %s
+                        ''',
+                        field_name,
+                        type_name(value_spec),
+                        type_name(value)
+                    ))
                 new_value = value_spec(value)
 
             # For when the field is OctetString or OctetBitString with embedded
@@ -3630,6 +3982,7 @@ class Sequence(Asn1Value):
                 index += 1
 
         except (ValueError, TypeError) as e:
+            self.children = None
             args = e.args[1:]
             e.args = (e.args[0] + '\n    while parsing %s' % type_name(self),) + args
             raise e
@@ -3638,8 +3991,8 @@ class Sequence(Asn1Value):
         """
         Determines the spec to use for the field specified. Depending on how
         the spec is determined (_oid_pair or _spec_callbacks), it may be
-        necessary to set preceeding field values before calling this. Usually
-        specs, if dynamic, are controlled by a preceeding ObjectIdentifier
+        necessary to set preceding field values before calling this. Usually
+        specs, if dynamic, are controlled by a preceding ObjectIdentifier
         field.
 
         :param field_name:
@@ -3676,7 +4029,7 @@ class Sequence(Asn1Value):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             An OrderedDict or None. If an OrderedDict, all child values are
@@ -3701,6 +4054,7 @@ class Sequence(Asn1Value):
                         name = str_cls(index)
                     self._native[name] = child.native
             except (ValueError, TypeError) as e:
+                self._native = None
                 args = e.args[1:]
                 e.args = (e.args[0] + '\n    while parsing %s' % type_name(self),) + args
                 raise e
@@ -3755,8 +4109,25 @@ class Sequence(Asn1Value):
             A byte string of the DER-encoded value
         """
 
+        # If the length is indefinite, force the re-encoding
+        if self._header is not None and self._header[-1:] == b'\x80':
+            force = True
+
         if force:
             self._set_contents(force=force)
+
+        if self._fields and self.children is not None:
+            for index, (field_name, _, params) in enumerate(self._fields):
+                if self.children[index] is not VOID:
+                    continue
+                if 'default' in params or 'optional' in params:
+                    continue
+                raise ValueError(unwrap(
+                    '''
+                    Field "%s" is missing from structure
+                    ''',
+                    field_name
+                ))
 
         return Asn1Value.dump(self)
 
@@ -3900,7 +4271,7 @@ class SequenceOf(Asn1Value):
                 raise ValueError(unwrap(
                     '''
                     Can not set a native python value to %s where the
-                    _child_spec is Any – value must be an instance of Asn1Value
+                    _child_spec is Any - value must be an instance of Asn1Value
                     ''',
                     type_name(self)
                 ))
@@ -3910,7 +4281,7 @@ class SequenceOf(Asn1Value):
                 raise ValueError(unwrap(
                     '''
                     Can not set a native python value to %s where the
-                    _child_spec is the choice type %s – value must be an
+                    _child_spec is the choice type %s - value must be an
                     instance of Asn1Value
                     ''',
                     type_name(self),
@@ -3927,13 +4298,10 @@ class SequenceOf(Asn1Value):
             return self._child_spec(value=value)
 
         params = {}
-        if self._child_spec.tag_type is not None:
-            params['tag_type'] = self._child_spec.tag_type
-            if params['tag_type'] == 'explicit':
-                params['tag'] = self._child_spec.explicit_tag
-            else:
-                params['tag'] = self._child_spec.tag
-
+        if self._child_spec.explicit:
+            params['explicit'] = self._child_spec.explicit
+        if self._child_spec.implicit:
+            params['implicit'] = (self._child_spec.class_, self._child_spec.tag)
         return _fix_tagging(new_value, params)
 
     def __len__(self):
@@ -4123,6 +4491,7 @@ class SequenceOf(Asn1Value):
                         child._parse_children(recurse=True)
                 self.children.append(child)
         except (ValueError, TypeError) as e:
+            self.children = None
             args = e.args[1:]
             e.args = (e.args[0] + '\n    while parsing %s' % type_name(self),) + args
             raise e
@@ -4141,7 +4510,7 @@ class SequenceOf(Asn1Value):
     @property
     def native(self):
         """
-        The a native Python datatype representation of this value
+        The native Python datatype representation of this value
 
         :return:
             A list or None. If a list, all child values are recursively
@@ -4207,6 +4576,10 @@ class SequenceOf(Asn1Value):
         :return:
             A byte string of the DER-encoded value
         """
+
+        # If the length is indefinite, force the re-encoding
+        if self._header is not None and self._header[-1:] == b'\x80':
+            force = True
 
         if force:
             self._set_contents(force=force)
@@ -4491,52 +4864,133 @@ class AbstractTime(AbstractString):
     """
 
     @property
-    def native(self):
+    def _parsed_time(self):
         """
-        The a native Python datatype representation of this value
+        The parsed datetime string.
+
+        :raises:
+            ValueError - when an invalid value is passed
 
         :return:
-            A datetime.datetime object in the UTC timezone or None
+            A dict with the parsed values
+        """
+
+        string = str_cls(self)
+
+        m = self._TIMESTRING_RE.match(string)
+        if not m:
+            raise ValueError(unwrap(
+                '''
+                Error parsing %s to a %s
+                ''',
+                string,
+                type_name(self),
+            ))
+
+        groups = m.groupdict()
+
+        tz = None
+        if groups['zulu']:
+            tz = timezone.utc
+        elif groups['dsign']:
+            sign = 1 if groups['dsign'] == '+' else -1
+            tz = create_timezone(sign * timedelta(
+                hours=int(groups['dhour']),
+                minutes=int(groups['dminute'] or 0)
+            ))
+
+        if groups['fraction']:
+            # Compute fraction in microseconds
+            fract = Fraction(
+                int(groups['fraction']),
+                10 ** len(groups['fraction'])
+            ) * 1000000
+
+            if groups['minute'] is None:
+                fract *= 3600
+            elif groups['second'] is None:
+                fract *= 60
+
+            fract_usec = int(fract.limit_denominator(1))
+
+        else:
+            fract_usec = 0
+
+        return {
+            'year': int(groups['year']),
+            'month': int(groups['month']),
+            'day': int(groups['day']),
+            'hour': int(groups['hour']),
+            'minute': int(groups['minute'] or 0),
+            'second': int(groups['second'] or 0),
+            'tzinfo': tz,
+            'fraction': fract_usec,
+        }
+
+    @property
+    def native(self):
+        """
+        The native Python datatype representation of this value
+
+        :return:
+            A datetime.datetime object, asn1crypto.util.extended_datetime object or
+            None. The datetime object is usually timezone aware. If it's naive, then
+            it's in the sender's local time; see X.680 sect. 42.3
         """
 
         if self.contents is None:
             return None
 
         if self._native is None:
-            string = str_cls(self)
-            has_timezone = re.search('[-\\+]', string)
+            parsed = self._parsed_time
 
-            # We don't know what timezone it is in, or it is UTC because of a Z
-            # suffix, so we just assume UTC
-            if not has_timezone:
-                string = string.rstrip('Z')
-                date = self._date_by_len(string)
-                self._native = date.replace(tzinfo=timezone.utc)
+            fraction = parsed.pop('fraction', 0)
 
-            else:
-                # Python 2 doesn't support the %z format code, so we have to manually
-                # process the timezone offset.
-                date = self._date_by_len(string[0:-5])
+            value = self._get_datetime(parsed)
 
-                hours = int(string[-4:-2])
-                minutes = int(string[-2:])
-                delta = timedelta(hours=abs(hours), minutes=minutes)
-                if hours < 0:
-                    date -= delta
-                else:
-                    date += delta
+            if fraction:
+                value += timedelta(microseconds=fraction)
 
-                self._native = date.replace(tzinfo=timezone.utc)
+            self._native = value
 
         return self._native
 
 
 class UTCTime(AbstractTime):
     """
-    Represents a UTC time from ASN.1 as a Python datetime.datetime object in UTC
+    Represents a UTC time from ASN.1 as a timezone aware Python datetime.datetime object
     """
 
     tag = 23
+
+    # Regular expression for UTCTime as described in X.680 sect. 43 and ISO 8601
+    _TIMESTRING_RE = re.compile(r'''
+        ^
+        # YYMMDD
+        (?P<year>\d{2})
+        (?P<month>\d{2})
+        (?P<day>\d{2})
+
+        # hhmm or hhmmss
+        (?P<hour>\d{2})
+        (?P<minute>\d{2})
+        (?P<second>\d{2})?
+
+        # Matches nothing, needed because GeneralizedTime uses this.
+        (?P<fraction>)
+
+        # Z or [-+]hhmm
+        (?:
+            (?P<zulu>Z)
+            |
+            (?:
+                (?P<dsign>[-+])
+                (?P<dhour>\d{2})
+                (?P<dminute>\d{2})
+            )
+        )
+        $
+    ''', re.X)
 
     def set(self, value):
         """
@@ -4550,6 +5004,15 @@ class UTCTime(AbstractTime):
         """
 
         if isinstance(value, datetime):
+            if not value.tzinfo:
+                raise ValueError('Must be timezone aware')
+
+            # Convert value to UTC.
+            value = value.astimezone(utc_with_dst)
+
+            if not 1950 <= value.year <= 2049:
+                raise ValueError('Year of the UTCTime is not in range [1950, 2049], use GeneralizedTime instead')
+
             value = value.strftime('%y%m%d%H%M%SZ')
             if _PY2:
                 value = value.decode('ascii')
@@ -4559,32 +5022,24 @@ class UTCTime(AbstractTime):
         # time that .native is called
         self._native = None
 
-    def _date_by_len(self, string):
+    def _get_datetime(self, parsed):
         """
-        Parses a date from a string based on its length
-
-        :param string:
-            A unicode string to parse
+        Create a datetime object from the parsed time.
 
         :return:
-            A datetime.datetime object or a unicode string
+            An aware datetime.datetime object
         """
 
-        strlen = len(string)
-
-        year_num = int(string[0:2])
-        if year_num < 50:
-            prefix = '20'
+        # X.680 only specifies that UTCTime is not using a century.
+        # So "18" could as well mean 2118 or 1318.
+        # X.509 and CMS specify to use UTCTime for years earlier than 2050.
+        # Assume that UTCTime is only used for years [1950, 2049].
+        if parsed['year'] < 50:
+            parsed['year'] += 2000
         else:
-            prefix = '19'
+            parsed['year'] += 1900
 
-        if strlen == 10:
-            return datetime.strptime(prefix + string, '%Y%m%d%H%M')
-
-        if strlen == 12:
-            return datetime.strptime(prefix + string, '%Y%m%d%H%M%S')
-
-        return string
+        return datetime(**parsed)
 
 
 class GeneralizedTime(AbstractTime):
@@ -4594,6 +5049,44 @@ class GeneralizedTime(AbstractTime):
     """
 
     tag = 24
+
+    # Regular expression for GeneralizedTime as described in X.680 sect. 42 and ISO 8601
+    _TIMESTRING_RE = re.compile(r'''
+        ^
+        # YYYYMMDD
+        (?P<year>\d{4})
+        (?P<month>\d{2})
+        (?P<day>\d{2})
+
+        # hh or hhmm or hhmmss
+        (?P<hour>\d{2})
+        (?:
+            (?P<minute>\d{2})
+            (?P<second>\d{2})?
+        )?
+
+        # Optional fraction; [.,]dddd (one or more decimals)
+        # If Seconds are given, it's fractions of Seconds.
+        # Else if Minutes are given, it's fractions of Minutes.
+        # Else it's fractions of Hours.
+        (?:
+            [,.]
+            (?P<fraction>\d+)
+        )?
+
+        # Optional timezone. If left out, the time is in local time.
+        # Z or [-+]hh or [-+]hhmm
+        (?:
+            (?P<zulu>Z)
+            |
+            (?:
+                (?P<dsign>[-+])
+                (?P<dhour>\d{2})
+                (?P<dminute>\d{2})?
+            )
+        )?
+        $
+    ''', re.X)
 
     def set(self, value):
         """
@@ -4608,7 +5101,18 @@ class GeneralizedTime(AbstractTime):
         """
 
         if isinstance(value, (datetime, extended_datetime)):
-            value = value.strftime('%Y%m%d%H%M%SZ')
+            if not value.tzinfo:
+                raise ValueError('Must be timezone aware')
+
+            # Convert value to UTC.
+            value = value.astimezone(utc_with_dst)
+
+            if value.microsecond:
+                fraction = '.' + str(value.microsecond).zfill(6).rstrip('0')
+            else:
+                fraction = ''
+
+            value = value.strftime('%Y%m%d%H%M%S') + fraction + 'Z'
             if _PY2:
                 value = value.decode('ascii')
 
@@ -4617,47 +5121,20 @@ class GeneralizedTime(AbstractTime):
         # time that .native is called
         self._native = None
 
-    def _date_by_len(self, string):
+    def _get_datetime(self, parsed):
         """
-        Parses a date from a string based on its length
-
-        :param string:
-            A unicode string to parse
+        Create a datetime object from the parsed time.
 
         :return:
-            A datetime.datetime object, asn1crypto.util.extended_datetime object or
-            a unicode string
+            A datetime.datetime object or asn1crypto.util.extended_datetime object.
+            It may or may not be aware.
         """
 
-        strlen = len(string)
-
-        date_format = None
-        if strlen == 10:
-            date_format = '%Y%m%d%H'
-        elif strlen == 12:
-            date_format = '%Y%m%d%H%M'
-        elif strlen == 14:
-            date_format = '%Y%m%d%H%M%S'
-        elif strlen == 18:
-            date_format = '%Y%m%d%H%M%S.%f'
-
-        if date_format:
-            if len(string) >= 4 and string[0:4] == '0000':
-                # Year 2000 shares a calendar with year 0, and is supported natively
-                t = datetime.strptime('2000' + string[4:], date_format)
-                return extended_datetime(
-                    0,
-                    t.month,
-                    t.day,
-                    t.hour,
-                    t.minute,
-                    t.second,
-                    t.microsecond,
-                    t.tzinfo
-                )
-            return datetime.strptime(string, date_format)
-
-        return string
+        if parsed['year'] == 0:
+            # datetime does not support year 0. Use extended_datetime instead.
+            return extended_datetime(**parsed)
+        else:
+            return datetime(**parsed)
 
 
 class GraphicString(AbstractString):
@@ -4738,26 +5215,49 @@ def _basic_debug(prefix, self):
         method_name = METHOD_NUM_TO_NAME_MAP.get(self.method)
         class_name = CLASS_NUM_TO_NAME_MAP.get(self.class_)
 
-    if self.tag_type == 'explicit':
-        print(
-            '%s    %s tag %s (explicitly tagged)' %
-            (
-                prefix,
-                CLASS_NUM_TO_NAME_MAP.get(self.explicit_class),
-                self.explicit_tag
+    if self.explicit is not None:
+        for class_, tag in self.explicit:
+            print(
+                '%s    %s tag %s (explicitly tagged)' %
+                (
+                    prefix,
+                    CLASS_NUM_TO_NAME_MAP.get(class_),
+                    tag
+                )
             )
-        )
         if has_header:
             print('%s      %s %s %s' % (prefix, method_name, class_name, self.tag))
 
-    elif self.tag_type == 'implicit':
+    elif self.implicit:
         if has_header:
             print('%s    %s %s tag %s (implicitly tagged)' % (prefix, method_name, class_name, self.tag))
 
     elif has_header:
         print('%s    %s %s tag %s' % (prefix, method_name, class_name, self.tag))
 
+    if self._trailer:
+        print('%s  Trailer: 0x%s' % (prefix, binascii.hexlify(self._trailer or b'').decode('utf-8')))
+
     print('%s  Data: 0x%s' % (prefix, binascii.hexlify(self.contents or b'').decode('utf-8')))
+
+
+def _tag_type_to_explicit_implicit(params):
+    """
+    Converts old-style "tag_type" and "tag" params to "explicit" and "implicit"
+
+    :param params:
+        A dict of parameters to convert from tag_type/tag to explicit/implicit
+    """
+
+    if 'tag_type' in params:
+        if params['tag_type'] == 'explicit':
+            params['explicit'] = (params.get('class', 2), params['tag'])
+        elif params['tag_type'] == 'implicit':
+            params['implicit'] = (params.get('class', 2), params['tag'])
+        del params['tag_type']
+        del params['tag']
+        if 'class' in params:
+            del params['class']
 
 
 def _fix_tagging(value, params):
@@ -4775,26 +5275,28 @@ def _fix_tagging(value, params):
         An Asn1Value that is properly tagged
     """
 
-    if 'tag_type' in params:
-        required_tag_type = params['tag_type']
-        retag = False
+    _tag_type_to_explicit_implicit(params)
 
-        if required_tag_type != value.tag_type:
+    retag = False
+    if 'implicit' not in params:
+        if value.implicit is not False:
+            retag = True
+    else:
+        if isinstance(params['implicit'], tuple):
+            class_, tag = params['implicit']
+        else:
+            tag = params['implicit']
+            class_ = 'context'
+        if value.implicit is False:
+            retag = True
+        elif value.class_ != CLASS_NAME_TO_NUM_MAP[class_] or value.tag != tag:
             retag = True
 
-        elif required_tag_type == 'explicit' and value.explicit_tag != params['tag']:
-            retag = True
+    if params.get('explicit') != value.explicit:
+        retag = True
 
-        elif required_tag_type == 'implicit' and value.tag != params['tag']:
-            retag = True
-
-        if retag:
-            return value.retag(params['tag_type'], params['tag'])
-        return value
-
-    if value.tag_type:
-        return value.untag()
-
+    if retag:
+        return value.retag(params)
     return value
 
 
@@ -4813,21 +5315,58 @@ def _build_id_tuple(params, spec):
         A 2-element integer tuple in the form (class_, tag)
     """
 
-    # Handle situations where the the spec is not known at setup time
+    # Handle situations where the spec is not known at setup time
     if spec is None:
         return (None, None)
 
     required_class = spec.class_
     required_tag = spec.tag
 
-    tag_type = params.get('tag_type', spec.tag_type)
-    if tag_type is not None:
-        required_class = 2
+    _tag_type_to_explicit_implicit(params)
+
+    if 'explicit' in params:
+        if isinstance(params['explicit'], tuple):
+            required_class, required_tag = params['explicit']
+        else:
+            required_class = 2
+            required_tag = params['explicit']
+    elif 'implicit' in params:
+        if isinstance(params['implicit'], tuple):
+            required_class, required_tag = params['implicit']
+        else:
+            required_class = 2
+            required_tag = params['implicit']
+    if required_class is not None and not isinstance(required_class, int_types):
+        required_class = CLASS_NAME_TO_NUM_MAP[required_class]
 
     required_class = params.get('class_', required_class)
     required_tag = params.get('tag', required_tag)
 
     return (required_class, required_tag)
+
+
+def _int_to_bit_tuple(value, bits):
+    """
+    Format value as a tuple of 1s and 0s.
+
+    :param value:
+        A non-negative integer to format
+
+    :param bits:
+        Number of bits in the output
+
+    :return:
+        A tuple of 1s and 0s with bits members.
+    """
+
+    if not value and not bits:
+        return ()
+
+    result = tuple(map(int, format(value, '0{0}b'.format(bits))))
+    if len(result) != bits:
+        raise ValueError('Result too large: {0} > {1}'.format(len(result), bits))
+
+    return result
 
 
 _UNIVERSAL_SPECS = {
@@ -4903,6 +5442,9 @@ def _build(class_, method, tag, header, contents, trailer, spec=None, spec_param
         An object of the type spec, or if not specified, a child of Asn1Value
     """
 
+    if spec_params is not None:
+        _tag_type_to_explicit_implicit(spec_params)
+
     if header is None:
         return VOID
 
@@ -4910,116 +5452,147 @@ def _build(class_, method, tag, header, contents, trailer, spec=None, spec_param
 
     # If an explicit specification was passed in, make sure it matches
     if spec is not None:
-        if spec_params:
-            value = spec(contents=contents, **spec_params)
-        else:
-            value = spec(contents=contents)
-
-        if spec is Any:
-            pass
-
-        elif value.tag_type == 'explicit':
-            if class_ != value.explicit_class:
-                raise ValueError(unwrap(
-                    '''
-                    Error parsing %s - explicitly-tagged class should have been
-                    %s, but %s was found
-                    ''',
-                    type_name(value),
-                    CLASS_NUM_TO_NAME_MAP.get(value.explicit_class),
-                    CLASS_NUM_TO_NAME_MAP.get(class_, class_)
-                ))
-            if method != 1:
-                raise ValueError(unwrap(
-                    '''
-                    Error parsing %s - explicitly-tagged method should have
-                    been %s, but %s was found
-                    ''',
-                    type_name(value),
-                    METHOD_NUM_TO_NAME_MAP.get(1),
-                    METHOD_NUM_TO_NAME_MAP.get(method, method)
-                ))
-            if tag != value.explicit_tag:
-                raise ValueError(unwrap(
-                    '''
-                    Error parsing %s - explicitly-tagged tag should have been
-                    %s, but %s was found
-                    ''',
-                    type_name(value),
-                    value.explicit_tag,
-                    tag
-                ))
-            original_value = value
-            info, _ = _parse(contents, len(contents))
-            value = _build(*info, spec=spec)
-            value._header = header + value._header
-            value._trailer += trailer or b''
-            value.tag_type = 'explicit'
-            value.explicit_class = original_value.explicit_class
-            value.explicit_tag = original_value.explicit_tag
-            header_set = True
-
-        elif isinstance(value, Choice):
-            value.validate(class_, tag, contents)
-            try:
-                # Force parsing the Choice now
-                value.contents = header + value.contents
-                header = b''
-                value.parse()
-            except (ValueError, TypeError) as e:
-                args = e.args[1:]
-                e.args = (e.args[0] + '\n    while parsing %s' % type_name(value),) + args
-                raise e
-
-        else:
-            if class_ != value.class_:
-                raise ValueError(unwrap(
-                    '''
-                    Error parsing %s - class should have been %s, but %s was
-                    found
-                    ''',
-                    type_name(value),
-                    CLASS_NUM_TO_NAME_MAP.get(value.class_),
-                    CLASS_NUM_TO_NAME_MAP.get(class_, class_)
-                ))
-            if method != value.method:
-                # Allow parsing a primitive method as constructed if the value
-                # is indefinite length. This is to allow parsing BER.
-                ber_indef = method == 1 and value.method == 0 and trailer == b'\x00\x00'
-                if not ber_indef or not isinstance(value, Constructable):
+        # If there is explicit tagging and contents, we have to split
+        # the header and trailer off before we do the parsing
+        no_explicit = spec_params and 'no_explicit' in spec_params
+        if not no_explicit and (spec.explicit or (spec_params and 'explicit' in spec_params)):
+            if spec_params:
+                value = spec(**spec_params)
+            else:
+                value = spec()
+            original_explicit = value.explicit
+            explicit_info = reversed(original_explicit)
+            parsed_class = class_
+            parsed_method = method
+            parsed_tag = tag
+            to_parse = contents
+            explicit_header = header
+            explicit_trailer = trailer or b''
+            for expected_class, expected_tag in explicit_info:
+                if parsed_class != expected_class:
                     raise ValueError(unwrap(
                         '''
-                        Error parsing %s - method should have been %s, but %s was found
+                        Error parsing %s - explicitly-tagged class should have been
+                        %s, but %s was found
                         ''',
                         type_name(value),
-                        METHOD_NUM_TO_NAME_MAP.get(value.method),
-                        METHOD_NUM_TO_NAME_MAP.get(method, method)
+                        CLASS_NUM_TO_NAME_MAP.get(expected_class),
+                        CLASS_NUM_TO_NAME_MAP.get(parsed_class, parsed_class)
                     ))
-                else:
-                    value.method = method
-                    value._indefinite = True
-            if tag != value.tag and tag != value._bad_tag:
-                raise ValueError(unwrap(
-                    '''
-                    Error parsing %s - tag should have been %s, but %s was found
-                    ''',
-                    type_name(value),
-                    value.tag,
-                    tag
-                ))
+                if parsed_method != 1:
+                    raise ValueError(unwrap(
+                        '''
+                        Error parsing %s - explicitly-tagged method should have
+                        been %s, but %s was found
+                        ''',
+                        type_name(value),
+                        METHOD_NUM_TO_NAME_MAP.get(1),
+                        METHOD_NUM_TO_NAME_MAP.get(parsed_method, parsed_method)
+                    ))
+                if parsed_tag != expected_tag:
+                    raise ValueError(unwrap(
+                        '''
+                        Error parsing %s - explicitly-tagged tag should have been
+                        %s, but %s was found
+                        ''',
+                        type_name(value),
+                        expected_tag,
+                        parsed_tag
+                    ))
+                info, _ = _parse(to_parse, len(to_parse))
+                parsed_class, parsed_method, parsed_tag, parsed_header, to_parse, parsed_trailer = info
+
+                if not isinstance(value, Choice):
+                    explicit_header += parsed_header
+                    explicit_trailer = parsed_trailer + explicit_trailer
+
+            value = _build(*info, spec=spec, spec_params={'no_explicit': True})
+            value._header = explicit_header
+            value._trailer = explicit_trailer
+            value.explicit = original_explicit
+            header_set = True
+        else:
+            if spec_params:
+                value = spec(contents=contents, **spec_params)
+            else:
+                value = spec(contents=contents)
+
+            if spec is Any:
+                pass
+
+            elif isinstance(value, Choice):
+                value.validate(class_, tag, contents)
+                try:
+                    # Force parsing the Choice now
+                    value.contents = header + value.contents
+                    header = b''
+                    value.parse()
+                except (ValueError, TypeError) as e:
+                    args = e.args[1:]
+                    e.args = (e.args[0] + '\n    while parsing %s' % type_name(value),) + args
+                    raise e
+
+            else:
+                if class_ != value.class_:
+                    raise ValueError(unwrap(
+                        '''
+                        Error parsing %s - class should have been %s, but %s was
+                        found
+                        ''',
+                        type_name(value),
+                        CLASS_NUM_TO_NAME_MAP.get(value.class_),
+                        CLASS_NUM_TO_NAME_MAP.get(class_, class_)
+                    ))
+                if method != value.method:
+                    # Allow parsing a primitive method as constructed if the value
+                    # is indefinite length. This is to allow parsing BER.
+                    ber_indef = method == 1 and value.method == 0 and trailer == b'\x00\x00'
+                    if not ber_indef or not isinstance(value, Constructable):
+                        raise ValueError(unwrap(
+                            '''
+                            Error parsing %s - method should have been %s, but %s was found
+                            ''',
+                            type_name(value),
+                            METHOD_NUM_TO_NAME_MAP.get(value.method),
+                            METHOD_NUM_TO_NAME_MAP.get(method, method)
+                        ))
+                    else:
+                        value.method = method
+                        value._indefinite = True
+                if tag != value.tag:
+                    if isinstance(value._bad_tag, tuple):
+                        is_bad_tag = tag in value._bad_tag
+                    else:
+                        is_bad_tag = tag == value._bad_tag
+                    if not is_bad_tag:
+                        raise ValueError(unwrap(
+                            '''
+                            Error parsing %s - tag should have been %s, but %s was found
+                            ''',
+                            type_name(value),
+                            value.tag,
+                            tag
+                        ))
 
     # For explicitly tagged, un-speced parsings, we use a generic container
     # since we will be parsing the contents and discarding the outer object
     # anyway a little further on
-    elif spec_params and 'tag_type' in spec_params and spec_params['tag_type'] == 'explicit':
+    elif spec_params and 'explicit' in spec_params:
         original_value = Asn1Value(contents=contents, **spec_params)
-        info, _ = _parse(contents, len(contents))
-        value = _build(*info, spec=spec)
+        original_explicit = original_value.explicit
+
+        to_parse = contents
+        explicit_header = header
+        explicit_trailer = trailer or b''
+        for expected_class, expected_tag in reversed(original_explicit):
+            info, _ = _parse(to_parse, len(to_parse))
+            _, _, _, parsed_header, to_parse, parsed_trailer = info
+            explicit_header += parsed_header
+            explicit_trailer = parsed_trailer + explicit_trailer
+        value = _build(*info, spec=spec, spec_params={'no_explicit': True})
         value._header = header + value._header
         value._trailer += trailer or b''
-        value.tag_type = 'explicit'
-        value.explicit_class = original_value.explicit_class
-        value.explicit_tag = original_value.explicit_tag
+        value.explicit = original_explicit
         header_set = True
 
     # If no spec was specified, allow anything and just process what

@@ -1,4 +1,5 @@
 import json
+import threading
 
 import sublime
 
@@ -70,6 +71,9 @@ class PackageDisabler():
             A list of package names that were disabled
         """
 
+        if not isinstance(threading.current_thread(), threading._MainThread):
+            raise RuntimeError('disable_packages called on a background thread')
+
         global events
 
         if events is None:
@@ -124,7 +128,8 @@ class PackageDisabler():
                     # Handle view-specific color_scheme settings not already taken care
                     # of by resetting the global color_scheme above
                     scheme = view_settings.get('color_scheme')
-                    if scheme is not None and scheme != global_color_scheme and scheme.find('Packages/' + package + '/') != -1:
+                    if scheme is not None and scheme != global_color_scheme \
+                            and scheme.find('Packages/' + package + '/') != -1:
                         if package not in PackageDisabler.old_color_schemes:
                             PackageDisabler.old_color_schemes[package] = []
                         PackageDisabler.old_color_schemes[package].append([view, scheme])
@@ -160,6 +165,9 @@ class PackageDisabler():
              - "enable"
              - "loader"
         """
+
+        if not isinstance(threading.current_thread(), threading._MainThread):
+            raise RuntimeError('reenable_package called on a background thread')
 
         global events
 

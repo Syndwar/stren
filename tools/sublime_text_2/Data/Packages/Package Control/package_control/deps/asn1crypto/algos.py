@@ -5,6 +5,7 @@ ASN.1 type classes for various algorithms using in various aspects of public
 key cryptography. Exports the following items:
 
  - AlgorithmIdentifier()
+ - AnyAlgorithmIdentifier()
  - DigestAlgorithm()
  - DigestInfo()
  - DSASignature()
@@ -113,6 +114,10 @@ class HmacAlgorithmId(ObjectIdentifier):
         '1.2.840.113549.2.11': 'sha512',
         '1.2.840.113549.2.12': 'sha512_224',
         '1.2.840.113549.2.13': 'sha512_256',
+        '2.16.840.1.101.3.4.2.13': 'sha3_224',
+        '2.16.840.1.101.3.4.2.14': 'sha3_256',
+        '2.16.840.1.101.3.4.2.15': 'sha3_384',
+        '2.16.840.1.101.3.4.2.16': 'sha3_512',
     }
 
 
@@ -134,6 +139,14 @@ class DigestAlgorithmId(ObjectIdentifier):
         '2.16.840.1.101.3.4.2.3': 'sha512',
         '2.16.840.1.101.3.4.2.5': 'sha512_224',
         '2.16.840.1.101.3.4.2.6': 'sha512_256',
+        '2.16.840.1.101.3.4.2.7': 'sha3_224',
+        '2.16.840.1.101.3.4.2.8': 'sha3_256',
+        '2.16.840.1.101.3.4.2.9': 'sha3_384',
+        '2.16.840.1.101.3.4.2.10': 'sha3_512',
+        '2.16.840.1.101.3.4.2.11': 'shake128',
+        '2.16.840.1.101.3.4.2.12': 'shake256',
+        '2.16.840.1.101.3.4.2.17': 'shake128_len',
+        '2.16.840.1.101.3.4.2.18': 'shake256_len',
     }
 
 
@@ -182,8 +195,7 @@ class RSASSAPSSParams(Sequence):
             'hash_algorithm',
             DigestAlgorithm,
             {
-                'tag_type': 'explicit',
-                'tag': 0,
+                'explicit': 0,
                 'default': {'algorithm': 'sha1'},
             }
         ),
@@ -191,8 +203,7 @@ class RSASSAPSSParams(Sequence):
             'mask_gen_algorithm',
             MaskGenAlgorithm,
             {
-                'tag_type': 'explicit',
-                'tag': 1,
+                'explicit': 1,
                 'default': {
                     'algorithm': 'mgf1',
                     'parameters': {'algorithm': 'sha1'},
@@ -203,8 +214,7 @@ class RSASSAPSSParams(Sequence):
             'salt_length',
             Integer,
             {
-                'tag_type': 'explicit',
-                'tag': 2,
+                'explicit': 2,
                 'default': 20,
             }
         ),
@@ -212,8 +222,7 @@ class RSASSAPSSParams(Sequence):
             'trailer_field',
             TrailerField,
             {
-                'tag_type': 'explicit',
-                'tag': 3,
+                'explicit': 3,
                 'default': 'trailer_field_bc',
             }
         ),
@@ -243,6 +252,10 @@ class SignedDigestAlgorithmId(ObjectIdentifier):
         '1.2.840.10045.4.3.2': 'sha256_ecdsa',
         '1.2.840.10045.4.3.3': 'sha384_ecdsa',
         '1.2.840.10045.4.3.4': 'sha512_ecdsa',
+        '2.16.840.1.101.3.4.3.9': 'sha3_224_ecdsa',
+        '2.16.840.1.101.3.4.3.10': 'sha3_256_ecdsa',
+        '2.16.840.1.101.3.4.3.11': 'sha3_384_ecdsa',
+        '2.16.840.1.101.3.4.3.12': 'sha3_512_ecdsa',
         # For when the digest is specified elsewhere in a Sequence
         '1.2.840.113549.1.1.1': 'rsassa_pkcs1v15',
         '1.2.840.10040.4.1': 'dsa',
@@ -269,6 +282,10 @@ class SignedDigestAlgorithmId(ObjectIdentifier):
         'sha384_rsa': '1.2.840.113549.1.1.12',
         'sha512_ecdsa': '1.2.840.10045.4.3.4',
         'sha512_rsa': '1.2.840.113549.1.1.13',
+        'sha3_224_ecdsa': '2.16.840.1.101.3.4.3.9',
+        'sha3_256_ecdsa': '2.16.840.1.101.3.4.3.10',
+        'sha3_384_ecdsa': '2.16.840.1.101.3.4.3.11',
+        'sha3_512_ecdsa': '2.16.840.1.101.3.4.3.12',
     }
 
 
@@ -312,6 +329,10 @@ class SignedDigestAlgorithm(_ForceNullParameters, Sequence):
             'sha256_ecdsa': 'ecdsa',
             'sha384_ecdsa': 'ecdsa',
             'sha512_ecdsa': 'ecdsa',
+            'sha3_224_ecdsa': 'ecdsa',
+            'sha3_256_ecdsa': 'ecdsa',
+            'sha3_384_ecdsa': 'ecdsa',
+            'sha3_512_ecdsa': 'ecdsa',
             'ecdsa': 'ecdsa',
         }
         if algorithm in algo_map:
@@ -457,6 +478,15 @@ class Pbes1Params(Sequence):
     ]
 
 
+class CcmParams(Sequence):
+    # https://tools.ietf.org/html/rfc5084
+    # aes_ICVlen: 4 | 6 | 8 | 10 | 12 | 14 | 16
+    _fields = [
+        ('aes_nonce', OctetString),
+        ('aes_icvlen', Integer),
+    ]
+
+
 class PSourceAlgorithmId(ObjectIdentifier):
     _map = {
         '1.2.840.113549.1.1.9': 'p_specified',
@@ -481,8 +511,7 @@ class RSAESOAEPParams(Sequence):
             'hash_algorithm',
             DigestAlgorithm,
             {
-                'tag_type': 'explicit',
-                'tag': 0,
+                'explicit': 0,
                 'default': {'algorithm': 'sha1'}
             }
         ),
@@ -490,8 +519,7 @@ class RSAESOAEPParams(Sequence):
             'mask_gen_algorithm',
             MaskGenAlgorithm,
             {
-                'tag_type': 'explicit',
-                'tag': 1,
+                'explicit': 1,
                 'default': {
                     'algorithm': 'mgf1',
                     'parameters': {'algorithm': 'sha1'}
@@ -502,8 +530,7 @@ class RSAESOAEPParams(Sequence):
             'p_source_algorithm',
             PSourceAlgorithm,
             {
-                'tag_type': 'explicit',
-                'tag': 2,
+                'explicit': 2,
                 'default': {
                     'algorithm': 'p_specified',
                     'parameters': b''
@@ -569,6 +596,7 @@ class EncryptionAlgorithmId(ObjectIdentifier):
         '1.3.14.3.2.7': 'des',
         '1.2.840.113549.3.7': 'tripledes_3key',
         '1.2.840.113549.3.2': 'rc2',
+        '1.2.840.113549.3.4': 'rc4',
         '1.2.840.113549.3.9': 'rc5',
         # From http://csrc.nist.gov/groups/ST/crypto_apps_infra/csor/algorithms.html#AES
         '2.16.840.1.101.3.4.1.1': 'aes128_ecb',
@@ -634,6 +662,10 @@ class EncryptionAlgorithm(_ForceNullParameters, Sequence):
         'aes128_ofb': OctetString,
         'aes192_ofb': OctetString,
         'aes256_ofb': OctetString,
+        # From RFC5084
+        'aes128_ccm': CcmParams,
+        'aes192_ccm': CcmParams,
+        'aes256_ccm': CcmParams,
         # From PKCS#5
         'pbes1_md2_des': Pbes1Params,
         'pbes1_md5_des': Pbes1Params,
@@ -1120,3 +1152,30 @@ class Pkcs5MacAlgorithm(Sequence):
 
 
 EncryptionAlgorithm._oid_specs['pbes2'] = Pbes2Params
+
+
+class AnyAlgorithmId(ObjectIdentifier):
+    _map = {}
+
+    def _setup(self):
+        _map = self.__class__._map
+        for other_cls in (EncryptionAlgorithmId, SignedDigestAlgorithmId, DigestAlgorithmId):
+            for oid, name in other_cls._map.items():
+                _map[oid] = name
+
+
+class AnyAlgorithmIdentifier(_ForceNullParameters, Sequence):
+    _fields = [
+        ('algorithm', AnyAlgorithmId),
+        ('parameters', Any, {'optional': True}),
+    ]
+
+    _oid_pair = ('algorithm', 'parameters')
+    _oid_specs = {}
+
+    def _setup(self):
+        Sequence._setup(self)
+        specs = self.__class__._oid_specs
+        for other_cls in (EncryptionAlgorithm, SignedDigestAlgorithm):
+            for oid, spec in other_cls._oid_specs.items():
+                specs[oid] = spec

@@ -161,7 +161,7 @@ class WgetDownloader(CliDownloader, DecodingDownloader, LimitingDownloader, Cach
 
                 return result
 
-            except (NonCleanExitError) as e:
+            except (NonCleanExitError):
 
                 try:
                     general, headers = self.parse_output(False)
@@ -210,6 +210,16 @@ class WgetDownloader(CliDownloader, DecodingDownloader, LimitingDownloader, Cach
 
         :return:
             If the object supports HTTPS requests
+        """
+
+        return True
+
+    def supports_plaintext(self):
+        """
+        Indicates if the object can handle non-secure HTTP requests
+
+        :return:
+            If the object supports non-secure HTTP requests
         """
 
         return True
@@ -317,26 +327,26 @@ class WgetDownloader(CliDownloader, DecodingDownloader, LimitingDownloader, Cach
         """
 
         # Skip date lines
-        if re.match('--\d{4}-\d{2}-\d{2}', line):
+        if re.match(r'--\d{4}-\d{2}-\d{2}', line):
             return True
-        if re.match('\d{4}-\d{2}-\d{2}', line):
+        if re.match(r'\d{4}-\d{2}-\d{2}', line):
             return True
         # Skip HTTP status code lines since we already have that info
-        if re.match('\d{3} ', line):
+        if re.match(r'\d{3} ', line):
             return True
         # Skip Saving to and progress lines
-        if re.match('(Saving to:|\s*\d+K)', line):
+        if re.match(r'(Saving to:|\s*\d+K)', line):
             return True
         # Skip notice about ignoring body on HTTP error
-        if re.match('Skipping \d+ byte', line):
+        if re.match(r'Skipping \d+ byte', line):
             return True
 
-    def parse_headers(self, output=None):
+    def parse_headers(self, output):
         """
         Parses HTTP headers into two dict objects
 
         :param output:
-            An array of header lines, if None, loads from temp output file
+            An array of header lines
 
         :return:
             A tuple of (general, headers) where general is a dict with the keys:
@@ -346,11 +356,6 @@ class WgetDownloader(CliDownloader, DecodingDownloader, LimitingDownloader, Cach
             And headers is a dict with the keys being lower-case version of the
             HTTP header names.
         """
-
-        if not output:
-            with open_compat(self.tmp_file, 'r') as f:
-                output = read_compat(f).splitlines()
-            self.clean_tmp_file()
 
         general = {
             'version': '0.9',
@@ -364,12 +369,16 @@ class WgetDownloader(CliDownloader, DecodingDownloader, LimitingDownloader, Cach
             # a safe operation to perform
             line = line.lstrip()
             if line.find('HTTP/') == 0:
-                match = re.match('HTTP/(\d\.\d)\s+(\d+)(?:\s+(.*))?$', line)
+                match = re.match(r'HTTP/(\d\.\d)\s+(\d+)(?:\s+(.*))?$', line)
                 general['version'] = match.group(1)
                 general['status'] = int(match.group(2))
                 general['message'] = match.group(3) or ''
             else:
                 name, value = line.split(':', 1)
-                headers[name.lower()] = value.strip()
+                name = name.lower()
+                if name in headers:
+                    headers[name] += ', %s' % value.strip()
+                else:
+                    headers[name] = value.strip()
 
         return (general, headers)

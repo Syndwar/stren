@@ -125,7 +125,6 @@ class WinINetDownloader(DecodingDownloader, LimitingDownloader, CachingDownloade
         422: "Unprocessable Entity",
         423: "Locked",
         424: "Failed Dependency",
-        424: "Method Failure",
         425: "Unordered Collection",
         426: "Upgrade Required",
         428: "Precondition Required",
@@ -269,6 +268,9 @@ class WinINetDownloader(DecodingDownloader, LimitingDownloader, CachingDownloade
         if url_info.query:
             path += '?' + url_info.query
 
+        username = url_info.username
+        password = url_info.password
+
         request_headers = {
             'Accept-Encoding': self.supported_encodings()
         }
@@ -352,8 +354,8 @@ class WinINetDownloader(DecodingDownloader, LimitingDownloader, CachingDownloade
                 self.network_connection,
                 hostname,
                 port,
-                None,
-                None,
+                username,
+                password,
                 self.INTERNET_SERVICE_HTTP,
                 tcp_flags,
                 0
@@ -745,6 +747,16 @@ class WinINetDownloader(DecodingDownloader, LimitingDownloader, CachingDownloade
 
         return True
 
+    def supports_plaintext(self):
+        """
+        Indicates if the object can handle non-secure HTTP requests
+
+        :return:
+            If the object supports non-secure HTTP requests
+        """
+
+        return True
+
     def cache_proxy_info(self):
         proxy_struct = self.read_option(self.network_connection, self.INTERNET_OPTION_PROXY)
         if proxy_struct.lpszProxy:
@@ -843,14 +855,14 @@ class WinINetDownloader(DecodingDownloader, LimitingDownloader, CachingDownloade
         for line in output:
             line = line.lstrip()
             if line.find('HTTP/') == 0:
-                match = re.match('HTTP/(\d\.\d)\s+(\d+)\s+(.*)$', line)
+                match = re.match(r'HTTP/(\d\.\d)\s+(\d+)\s+(.*)$', line)
                 if match:
                     general['version'] = match.group(1)
                     general['status'] = int(match.group(2))
                     general['message'] = match.group(3)
                 # The user's proxy is sending bad HTTP headers :-(
                 else:
-                    match = re.match('HTTP/(\d\.\d)\s+(\d+)$', line)
+                    match = re.match(r'HTTP/(\d\.\d)\s+(\d+)$', line)
                     general['version'] = match.group(1)
                     general['status'] = int(match.group(2))
                     # Since the header didn't include the message, use our copy
@@ -858,7 +870,11 @@ class WinINetDownloader(DecodingDownloader, LimitingDownloader, CachingDownloade
                     general['message'] = message
             else:
                 name, value = line.split(':', 1)
-                headers[name.lower()] = value.strip()
+                name = name.lower()
+                if name in headers:
+                    headers[name] += ', %s' % value.strip()
+                else:
+                    headers[name] = value.strip()
 
         return (general, headers)
 
