@@ -23,7 +23,7 @@ public:
     ///
     /// switch current screen to the specific screen
     ///
-    void switchToScreen(const ScreenId & id);
+    void switchToScreen(void * screen);
     ///
     /// update screens
     ///

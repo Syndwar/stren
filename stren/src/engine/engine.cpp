@@ -54,70 +54,90 @@ void Engine::process()
 
 void Engine::postRender()
 {
-    m_screenSelector.update();
 }
 
 bool Engine::init()
 {
-    bool isSuccess{ false };
+    initScripts();
+
+    const bool isSuccess = initRenderer();
+    if (isSuccess)
+    {
+        initFonts();
+        initTexts();
+        initSprites();
+        initTextures();
+        initSound();
+        initTools();
+
+        Logger("green") << "[Engine] Everything initialized successfully, start main loop";
+        m_status = Status::Running;
+    }
+
+    return isSuccess;
+}
+
+bool Engine::initRenderer()
+{
+    Logger("green") << "[Engine] Initialize SDL";
+    bool isSuccess = 0 == SDL_Init(SDL_INIT_EVERYTHING);
+    if (isSuccess)
+    {
+        Logger("green") << "[Engine] Create application window";
+        AppWindowConfig appWindowConfig;
+        appWindowConfig.title = m_config.getTitle();
+        appWindowConfig.screenWidth = m_config.getScreenWidth();
+        appWindowConfig.screenHeight = m_config.getScreenHeight();
+        appWindowConfig.isFullscreen = m_config.isFullscreen();
+        appWindowConfig.isBorderless = m_config.isBorderless();
+        isSuccess = m_appWindow.initialize(appWindowConfig);
+        isSuccess = isSuccess && createRenderer();
+    }
+    return isSuccess;
+}
+
+void Engine::initFonts()
+{
+    m_fontsRepo.initialize();
+}
+
+void Engine::initTexts()
+{
+    Logger("green") << "[Engine] Initialize texts repository";
+    m_textsRepo.initialize();
+}
+
+void Engine::initSprites()
+{
+    Logger("green") << "[Engine] Initialize sprites repository";
+    m_spritesRepo.initialize();
+}
+
+void Engine::initTextures()
+{
+    Logger("green") << "[Engine] Initialize textures repository";
+    m_texturesRepo.initialize();
+}
+
+void Engine::initSound()
+{
+    Logger("green") << "[Engine] Initialize sounds system";
+    m_soundSystem.initialize();
+}
+
+void Engine::initTools()
+{
+    Logger("green") << "[Engine] Initialize system tools";
+    m_systemTools.initialize();
+}
+
+void Engine::initScripts()
+{
+    lua::bindWithVM();
 
     Logger("green") << "[Engine] Initialize Lua";
     lua::Stack stack;
     stack.loadScript("base/scripts/main.lua");
-    lua::Function("main").call();
-
-    Logger("green") << "[Engine] Deserialize save data";
-    deserialize();
-
-    Logger("green") << "[Engine] Create config";
-    m_config.initialize(m_saveData);
-    Logger("green") << "[Engine] Load config settings";
-    loadConfig();
-
-    Logger("green") << "[Engine] Initialize SDL";
-    isSuccess = 0 == SDL_Init(SDL_INIT_EVERYTHING);
-    if (!isSuccess) return false;
-
-    const int screenWidth = m_config.getScreenWidth();
-    const int screenHeight = m_config.getScreenHeight();
-    Logger("green") << "[Engine] Create application window";
-    AppWindowConfig appWindowConfig;
-    appWindowConfig.title = m_config.getTitle();
-    appWindowConfig.screenWidth = screenWidth;
-    appWindowConfig.screenHeight = screenHeight;
-    appWindowConfig.isFullscreen = m_config.isFullscreen();
-    appWindowConfig.isBorderless = m_config.isBorderless();
-    isSuccess = m_appWindow.initialize(appWindowConfig);
-    if (!isSuccess) return false;
-
-    isSuccess = createRenderer();
-    if (!isSuccess) return false;
-
-    m_fontsRepo.initialize();
-
-    Logger("green") << "[Engine] Initialize texts repository";
-    m_textsRepo.initialize();
-
-    Logger("green") << "[Engine] Initialize sprites repository";
-    m_spritesRepo.initialize();
-
-    Logger("green") << "[Engine] Initialize textures repository";
-    m_texturesRepo.initialize();
-
-    Logger("green") << "[Engine] Initialize sounds system";
-    m_soundSystem.initialize();
-
-    Logger("green") << "[Engine] Initilize main camera";
-    m_camera.moveTo(0, 0);
-    m_camera.resize(screenWidth, screenHeight);
-    
-    Logger("green") << "[Engine] Initialize system tools";
-    m_systemTools.initialize();
-
-    Logger("green") << "[Engine] Everything initialized successfully, start main loop";
-    m_status = Status::Running;
-
-    return true;
 }
 
 void Engine::consoleLog(const std::string & message)
@@ -125,24 +145,34 @@ void Engine::consoleLog(const std::string & message)
     m_systemTools.log(message);
 }
 
-void Engine::createGame()
+void * Engine::createGame()
 {
-    lua::bindWithVM();
-    switchScreen(ScreenId::StartScreen);
     if (!m_game)
     {
         m_game = new Game();
     }
+    return m_game;
 }
 
-void Engine::switchScreen(const ScreenId id)
+void Engine::switchScreen(void * game, void * screen)
 {
-    m_screenSelector.switchToScreen(id);
+    if (game)
+    {
+        Game * p_game = (Game *)game;
+        if (p_game)
+        {
+            p_game->switchScreen(screen);
+        }
+    }
 }
 
 Screen * Engine::getCurrentScreen()
 {
-    return m_screenSelector.getCurrentScreen();
+    if (m_game)
+    {
+        return m_game->getCurrentScreen();
+    }
+    return nullptr;
 }
 
 const Point & Engine::getMousePos()
@@ -150,12 +180,11 @@ const Point & Engine::getMousePos()
     return m_eventProcessor.getMousePos();
 }
 
-void Engine::goToScreen(Widget * screen)
+void Engine::initConfig()
 {
-}
-
-void Engine::loadConfig()
-{
+    Logger("green") << "[Engine] Create config";
+    m_config.initialize(m_saveData);
+    Logger("green") << "[Engine] Apply config settings";
     m_fpsLimit = m_config.getFpsLimit();
     if (m_fpsLimit > 0)
     {
@@ -205,9 +234,9 @@ void Engine::render()
     Renderer::setRenderColour(colourData);
     Renderer::clear();
 
-    if (Screen * currentScreen = m_screenSelector.getCurrentScreen())
+    if (m_game)
     {
-        m_camera.render(currentScreen);
+        m_game->render();
     }
     m_systemTools.render();
 
@@ -219,11 +248,6 @@ void Engine::update(const size_t dt)
     if (m_game)
     {
         m_game->update(dt);
-    }
-
-    if (Screen * currentScreen = m_screenSelector.getCurrentScreen())
-    {
-        currentScreen->update(dt);
     }
     m_systemTools.update(dt);
 }
@@ -253,9 +277,9 @@ void Engine::processEvents()
 
         m_systemTools.processEvent(event, isEventCaptured);
 
-        if (Screen * currentScreen = m_screenSelector.getCurrentScreen())
+        if (m_game)
         {
-            currentScreen->processEvent(event, isEventCaptured);
+            m_game->processEvent(event, isEventCaptured);
         }
     }
 }
@@ -263,7 +287,11 @@ void Engine::processEvents()
 void Engine::clean()
 {
     // Destroy all widgets before textures repo
-    m_screenSelector.release();
+    if (m_game)
+    {
+        delete m_game;
+        m_game = nullptr;
+    }
     m_systemTools.release();
     // Destroy sprites repo before textures repo
     m_spritesRepo.release();
@@ -326,6 +354,8 @@ void Engine::serialize()
 
 void Engine::deserialize()
 {
+    Logger("green") << "[Engine] Deserialize save data";
     m_saveData.deserialize();
+    initConfig();
 }
 } // stren

@@ -1,20 +1,23 @@
 #ifndef STREN_GAME_H
 #define STREN_GAME_H
 
-#include <vector>
+#include "screens/screen_selector.h"
+#include "camera.h"
 
 namespace stren
 {
-
-struct UnitStats;
-class Unit;
+class Event;
 ///
 /// class Game
 ///
 class Game
 {
 private:
+    Camera          m_camera;            ///< @todo
+    ScreenSelector  m_screenSelector;    ///< @todo
+/*
     std::vector<Unit> m_units;
+*/
 public:
     ///
     /// Constructor
@@ -24,6 +27,27 @@ public:
     /// Destructor
     ///
     ~Game();
+    ///
+    /// @todo
+    ///
+    Screen * getCurrentScreen();
+    ///
+    /// @todo
+    ///
+    void update(const size_t dt);
+    ///
+    /// @todo
+    ///
+    void processEvent(const Event & event, bool & isEventCaptured);
+    ///
+    /// @todo
+    ///
+    void render();
+    ///
+    /// @todo
+    ///
+    void switchScreen(void * screen);
+    /*
     ///
     /// @todo
     ///
@@ -52,6 +76,7 @@ public:
     /// @todo
     ///
     void addUnit(const UnitStats & stats);
+    */
 };
 } // stren
 

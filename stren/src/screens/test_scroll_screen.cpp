@@ -148,7 +148,7 @@ TestScrollScreen::~TestScrollScreen()
 
 void TestScrollScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestScrollScreen::onJumpBtnClick()

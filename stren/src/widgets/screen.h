@@ -18,6 +18,10 @@ public:
     /// Destructor
     ///
     virtual ~Screen();
+    ///
+    /// @todo
+    ///
+    static void bind();
 };
 } // stren
 

@@ -30,7 +30,7 @@ TestBattleFieldScreen::~TestBattleFieldScreen()
 
 void TestBattleFieldScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 } // stren

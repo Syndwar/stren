@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "app_window.h"
-#include "camera.h"
 #include "colour.h"
 #include "config.h"
 #include "event_processor.h"
@@ -16,8 +15,7 @@
 #include "texts_repository.h"
 #include "textures_repository.h"
 #include "system_tools.h"
-
-#include "screens/screen_selector.h"
+#include "screens/screen_ids.h"
 
 struct SDL_Window;
 
@@ -46,13 +44,11 @@ private:
     size_t                  m_frameTimeLimit;    ///< @todo
     size_t                  m_lastFrameTime;     ///< @todo
     size_t                  m_frameIndex;        ///< @todo
-    Camera                  m_camera;            ///< @todo
 
     std::vector<size_t>     m_frameTimeHistory;  ///< @todo
 
     AppWindow               m_appWindow;         ///< @todo
     Config                  m_config;            ///< @todo
-    ScreenSelector          m_screenSelector;    ///< @todo
     SpritesRepository       m_spritesRepo;       ///< @todo
     TextsRepository         m_textsRepo;         ///< @todo
     TexturesRepository      m_texturesRepo;      ///< @todo
@@ -123,13 +119,13 @@ public:
     ///
     /// @todo
     ///
-    void createGame();
+    void * createGame();
     ///
     /// switch current screen with the new one defined by id
     ///
-    void switchScreen(const ScreenId id);
+    void switchScreen(void * game, void * screen);
     ///
-    ///< @todo delete
+    /// @todo
     ///
     Screen * getCurrentScreen();
     ///
@@ -147,20 +143,56 @@ public:
     ///
     /// @todo
     ///
-    void goToScreen(Widget * screen);
-    ///
-    /// @todo
-    ///
     void consoleLog(const std::string & message);
     ///
     /// returns reference to the save data
     ///
     SaveData * getSaveData() { return &m_saveData; }
+    ///
+    /// @todo
+    ///
+    void deserialize();
+    ///
+    /// @todo
+    ///
+    void serialize();
 private:
     ///
     /// @todo
     ///
-    void loadConfig();
+    void initScripts();
+    ///
+    /// @todo
+    ///
+    void initConfig();
+    ///
+    /// @todo
+    ///
+    bool initRenderer();
+    ///
+    /// @todo
+    ///
+    void initFonts();
+    ///
+    /// @todo
+    ///
+    void initTexts();
+    ///
+    /// @todo
+    ///
+    void initSprites();
+    ///
+    /// @todo
+    ///
+    void initTextures();
+    ///
+    /// @todo
+    ///
+    void initSound();
+    ///
+    /// @todo
+    ///
+    void initTools();
     ///
     /// @todo
     ///
@@ -185,14 +217,6 @@ private:
     /// @todo
     ///
     bool createRenderer();
-    ///
-    /// @todo
-    ///
-    void serialize();
-    ///
-    /// @todo
-    ///
-    void deserialize();
 };
 
 } // stren

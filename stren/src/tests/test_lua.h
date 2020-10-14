@@ -222,7 +222,7 @@ private:
     void LuaVirtualMachine::testLuaAPI()
     {
         Stack stack;
-        stack.loadScript("base/scripts/main.lua");
+        stack.loadScript("base/scripts/usersave.lua");
 
         Table tbl("UserSaveData");
         stren::assertMessage(tbl.isValid(), "Error");

@@ -99,7 +99,7 @@ TestFaderScreen::~TestFaderScreen()
 
 void TestFaderScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestFaderScreen::onFadeSpeedUpBtnClick()

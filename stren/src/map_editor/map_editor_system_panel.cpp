@@ -70,7 +70,7 @@ void MapEditorSystemPanel::onLoadBtnClick()
 
 void MapEditorSystemPanel::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void MapEditorSystemPanel::onGridBtnClick(Widget * sender)

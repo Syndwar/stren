@@ -1,1 +1,0 @@
-require("base/scripts/utils/table_ext")

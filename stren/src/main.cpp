@@ -40,11 +40,7 @@ bool createEngine()
     bool created = EngineHandler::create();
     if (created)
     {
-        if (EngineHandler::init())
-        {
-            EngineHandler::createGame();
-        }
-        else
+        if (!EngineHandler::init())
         {
             EngineHandler::stop();
             created = false;

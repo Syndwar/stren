@@ -61,7 +61,7 @@ void TestFontScreen::setFont(const std::string & fontId)
 
 void TestFontScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestFontScreen::onChangeFontBtnClick()

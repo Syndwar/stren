@@ -216,7 +216,7 @@ TestWidgetsScreen::~TestWidgetsScreen()
 
 void TestWidgetsScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestWidgetsScreen::onLockBtnClick()

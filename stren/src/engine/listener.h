@@ -87,7 +87,15 @@ public:
     ///
     /// add specific callback
     ///
+    void addCallback(const std::string & type, const std::string & callback);
+    ///
+    /// add specific callback
+    ///
     void addCallback(const EventType & type, const std::string & callback);
+    ///
+    /// delete specific callback
+    ///
+    void removeCallback(const std::string & type);
     ///
     /// delete specific callback
     ///

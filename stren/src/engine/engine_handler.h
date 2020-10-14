@@ -72,7 +72,7 @@ public:
     ///
     /// @todo
     ///
-    static void createGame();
+    static void * createGame();
     ///
     /// @todo
     ///
@@ -81,10 +81,6 @@ public:
     /// @todo
     ///
     static Screen * getCurrentScreen();
-    ///
-    /// @todo
-    ///
-    static void goToScreen(Widget * screen);
     ///
     /// stop engine
     ///
@@ -112,11 +108,19 @@ public:
     ///
     /// switch current screen with the new one defined by id
     ///
-    static void switchScreen(const ScreenId & id);
+    static void switchScreen(void * game, void * screen);
     ///
     /// returns reference to the engine save data
     ///
     static SaveData * getSaveData();
+    ///
+    /// @todo
+    ///
+    static void deserialize();
+    ///
+    /// @todo
+    ///
+    static void serialize();
 };
 
 } // stren

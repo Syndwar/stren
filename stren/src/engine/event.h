@@ -34,8 +34,6 @@ class Event
 {
 public:
 
-    static std::vector<std::string> kEventTypes;    ///< string values for the event types
-
     enum class KeyMod
     {
         None = 0,
@@ -81,6 +79,10 @@ public:
     /// clears event, makes it invalid
     ///
     void clear();
+    ///
+    /// convert string event name to EventType
+    ///
+    static EventType strToType(const std::string & type);
 };
 
 } // stren

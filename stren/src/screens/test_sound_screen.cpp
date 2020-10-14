@@ -57,7 +57,7 @@ TestSoundScreen::~TestSoundScreen()
 
 void TestSoundScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestSoundScreen::onPlayMusicBtnClick()

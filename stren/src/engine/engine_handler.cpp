@@ -40,12 +40,13 @@ bool EngineHandler::init()
     return false;
 }
 
-void EngineHandler::createGame()
+void * EngineHandler::createGame()
 {
     if (m_engine)
     {
-        m_engine->createGame();
+        return m_engine->createGame();
     }
+    return nullptr;
 }
 
 void EngineHandler::stop()
@@ -99,14 +100,6 @@ SoundSystem * EngineHandler::getSoundSystem()
     return m_engine ? m_engine->getSoundsSystem() : nullptr;
 }
 
-void EngineHandler::goToScreen(Widget * screen)
-{
-    if (m_engine && screen)
-    {
-        m_engine->goToScreen(screen);
-    }
-}
-
 Screen * EngineHandler::getCurrentScreen()
 {
     return m_engine ? m_engine->getCurrentScreen() : nullptr;
@@ -151,11 +144,11 @@ void EngineHandler::consoleLog(const std::string & message)
     }
 }
 
-void EngineHandler::switchScreen(const ScreenId & id)
+void EngineHandler::switchScreen(void * game, void * screen)
 {
     if (m_engine)
     {
-        m_engine->switchScreen(id);
+        m_engine->switchScreen(game, screen);
     }
 }
 
@@ -164,4 +157,19 @@ SaveData * EngineHandler::getSaveData()
     return m_engine ? m_engine->getSaveData() : nullptr;
 }
 
+void EngineHandler::deserialize()
+{
+    if (m_engine)
+    {
+        m_engine->deserialize();
+    }
+}
+
+void EngineHandler::serialize()
+{
+    if (m_engine)
+    {
+        m_engine->serialize();
+    }
+}
 } // stren

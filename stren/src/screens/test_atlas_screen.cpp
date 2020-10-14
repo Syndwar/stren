@@ -48,6 +48,6 @@ TestAtlasScreen::~TestAtlasScreen()
 
 void TestAtlasScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 } // stren

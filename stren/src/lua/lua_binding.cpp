@@ -5,27 +5,10 @@
 #include "engine_handler.h"
 #include "sound_system.h"
 
-#include "action.h"
-#include "event.h"
-#include "utils.h"
-
-#include "battlefield.h"
-#include "listener.h"
 #include "logger.h"
-#include "transform.h"
 
-#include "widgets/area.h"
-#include "widgets/button.h"
-#include "widgets/container.h"
-#include "widgets/dialog.h"
-#include "widgets/fader.h"
-#include "widgets/image.h"
-#include "widgets/label.h"
-#include "widgets/primitive.h"
-#include "widgets/progressbar.h"
 #include "widgets/screen.h"
-#include "widgets/scroll_container.h"
-#include "widgets/timer.h"
+#include "widgets/button.h"
 
 using namespace stren;
 
@@ -54,7 +37,8 @@ int playSound(lua_State *L)
         stack.clear();
         soundSystem->playSound(soundId, loop, channel);
     }
-    return stack.getSize();
+    stack.clear();
+    return 0;
 }
 
 int playMusic(lua_State *L)
@@ -72,17 +56,17 @@ int playMusic(lua_State *L)
         stack.clear();
         soundSystem->playMusic(trackId, loop);
     }
-    return stack.getSize();
+    stack.clear();
+    return 0;
 }
 
 int stopMusic(lua_State *L)
 {
-    lua::Stack stack(0);
     if (SoundSystem * soundSystem = EngineHandler::getSoundSystem())
     {
         soundSystem->stopMusic();
     }
-    return stack.getSize();
+    return 0;
 }
 
 int getScreenWidth(lua_State * L)
@@ -110,16 +94,14 @@ int getMousePos(lua_State * L)
 
 int shutdown(lua_State *L)
 {
-    lua::Stack stack(0);
     EngineHandler::shutdown();
-    return stack.getSize();
+    return 0;
 }
 
 int restart(lua_State *L)
 {
-    lua::Stack stack(0);
     EngineHandler::restart();
-    return stack.getSize();
+    return 0;
 }
 
 int log(lua_State *L)
@@ -128,7 +110,7 @@ int log(lua_State *L)
     const std::string value = stack.get(1).getString();
     stren::Logger("blue") << value;
 
-    return stack.getSize();
+    return 0;
 }
 
 int consoleLog(lua_State *L)
@@ -136,10 +118,41 @@ int consoleLog(lua_State *L)
     lua::Stack stack(1);
     const std::string value = stack.get(1).getString();
     EngineHandler::consoleLog(value);
+    return 0;
+}
 
+int deserialize(lua_State * L)
+{
+    EngineHandler::deserialize();
+    return 0;
+}
+
+int serialize(lua_State * L)
+{
+    EngineHandler::serialize();
+    return 0;
+}
+
+int createGame(lua_State * L)
+{
+    lua::Stack stack(0);
+    void * game = EngineHandler::createGame();
+    stack.push(game);
     return stack.getSize();
 }
 } // engine
+
+namespace game
+{
+int changeScreen(lua_State * L)
+{
+    lua::Stack stack(2);
+    void * game = stack.get(1).getUserData();
+    void * screen = stack.get(2).getUserData();
+    EngineHandler::switchScreen(game, screen);
+    return 0;
+}
+} // game
 
 void bindWithVM()
 {
@@ -157,9 +170,24 @@ void bindWithVM()
             { "restart", engine::restart },
             { "log", engine::log },
             { "consoleLog", engine::consoleLog },
+            { "deserialize", engine::deserialize },
+            { "serialize", engine::serialize },
+            { "createGame", engine::createGame },
             { NULL, NULL }
         };
         stack.loadLibs("Engine", functions);
     }
+    {
+        const luaL_reg functions[] =
+        {
+            { "changeScreen", game::changeScreen},
+            { NULL, NULL }
+        };
+        stack.loadLibs("Game", functions);
+    }
+    Widget::bind();
+    Button::bind();
+    Container::bind();
+    Screen::bind();
 }
 } // lua

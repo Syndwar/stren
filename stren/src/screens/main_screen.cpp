@@ -78,7 +78,7 @@ MainScreen::~MainScreen()
 
 void MainScreen::onTestBtnClicked()
 {
-    EngineHandler::switchScreen(ScreenId::TestScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void MainScreen::onNewGameBtnClicked()
@@ -91,12 +91,12 @@ void MainScreen::onLoadGameBtnClick()
 
 void MainScreen::onOptionsBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::OptionsScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void MainScreen::onMapEditorBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MapEditorScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void MainScreen::onExitBtnClick()

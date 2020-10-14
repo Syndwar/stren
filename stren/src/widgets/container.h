@@ -14,8 +14,8 @@ namespace stren
 class Container : public Widget
 {
 private:
-    std::vector<Widget *>            attached_; ///< @todo
-    std::map<std::string, Widget *>  map_;      ///< @todo
+    std::vector<Widget *>            m_attached; ///< @todo
+    std::map<std::string, Widget *>  m_map;      ///< @todo
 
 public:
     ///
@@ -40,8 +40,8 @@ public:
         {
             if (!parent)
             {
-                auto it = map_.find(value);
-                if (it != map_.end())
+                auto it = m_map.find(value);
+                if (it != m_map.end())
                 {
                     if (it->second)
                     {
@@ -80,7 +80,11 @@ public:
     ///
     /// returns attached widgets list
     ///
-    const std::vector<Widget *> & debugGetAttached() { return attached_; }
+    const std::vector<Widget *> & debugGetAttached() { return m_attached; }
+    ///
+    /// @todo
+    ///
+    static void bind();
 protected:
     ///
     /// custom code that should be called in the child widget during the rendering

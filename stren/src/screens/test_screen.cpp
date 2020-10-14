@@ -107,46 +107,46 @@ TestScreen::~TestScreen()
 
 void TestScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestScreen::toTestPrimitiveScreen()
 {
-    EngineHandler::switchScreen(ScreenId::TestPrimitiveScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestScreen::toTestFaderScreen()
 {
-    EngineHandler::switchScreen(ScreenId::TestFaderScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestScreen::toTestSoundScreen()
 {
-    EngineHandler::switchScreen(ScreenId::TestSoundScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestScreen::toTestWidgetsScreen()
 {
-    EngineHandler::switchScreen(ScreenId::TestWidgetsScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestScreen::toTestScrollScreen()
 {
-    EngineHandler::switchScreen(ScreenId::TestScrollScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestScreen::toTestFontScreen()
 {
-    EngineHandler::switchScreen(ScreenId::TestFontScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestScreen::toAtlasScreen()
 {
-    EngineHandler::switchScreen(ScreenId::TestAtlasScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void TestScreen::toBattlefield()
 {
-    EngineHandler::switchScreen(ScreenId::TestBattlefieldScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 } // stren

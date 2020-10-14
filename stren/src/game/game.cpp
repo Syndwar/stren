@@ -1,11 +1,12 @@
 #include "game/game.h"
-
-#include "string_ext.h"
-#include <map>
+#include "widgets/screen.h"
+#include "engine_handler.h"
+#include "logger.h"
+#include "event.h"
 
 namespace stren
 {
-
+/*
 enum class Faction
 {
     Operatives = 0,
@@ -245,20 +246,63 @@ public:
     {
     }
 };
-
+*/
 Game::Game()
 {
+    /*
     createBoard();
     createTerrain();
     createObjects();
     createUnits();
     createItems();
+    */
+
+    Logger("green") << "[Game] Initilize main camera";
+    m_camera.moveTo(0, 0);
+    m_camera.resize(EngineHandler::getScreenWidth(), EngineHandler::getScreenHeight());
 }
 
 Game::~Game()
 {
+    m_screenSelector.release();
 }
 
+void Game::update(const size_t dt)
+{
+    m_screenSelector.update();
+    if (Screen * currentScreen = getCurrentScreen())
+    {
+        currentScreen->update(dt);
+    }
+}
+
+Screen * Game::getCurrentScreen()
+{
+    return m_screenSelector.getCurrentScreen();
+}
+
+void Game::processEvent(const Event & event, bool & isEventCaptured)
+{
+    if (Screen * currentScreen = getCurrentScreen())
+    {
+        currentScreen->processEvent(event, isEventCaptured);
+    }
+}
+
+void Game::render()
+{
+    if (Screen * currentScreen = getCurrentScreen())
+    {
+        m_camera.render(currentScreen);
+    }
+}
+
+void Game::switchScreen(void * screen)
+{
+    m_screenSelector.switchToScreen(screen);
+}
+
+/*
 void Game::update(const size_t dt)
 {
 }
@@ -550,4 +594,5 @@ void Game::addUnit(const UnitStats & stats)
 void Game::createItems()
 {
 }
+*/
 } // stren

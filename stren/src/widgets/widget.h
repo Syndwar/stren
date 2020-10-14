@@ -162,6 +162,10 @@ public:
     /// returns if debug view is enabled
     ///
     virtual bool isDebugView() const { return m_debugView; }
+    ///
+    /// @todo
+    ///
+    static void bind();
 protected:
     ///
     /// @todo

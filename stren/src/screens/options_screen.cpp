@@ -135,7 +135,7 @@ OptionsScreen::~OptionsScreen()
 
 void OptionsScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 
 void OptionsScreen::onVsyncBtnClick()

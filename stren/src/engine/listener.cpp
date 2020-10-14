@@ -1,6 +1,7 @@
 #include "listener.h"
 
 #include "lua_wrapper.h"
+#include "event.h"
 
 namespace stren
 {
@@ -10,14 +11,24 @@ void VmCallback::call(const EventType & type, Widget * sender)
     if (!m_callback.empty())
     {
         lua::Function func(m_callback);
-        std::vector<lua::Value> values = { static_cast<int>(type), static_cast<void *>(sender) };
+        std::vector<lua::Value> values = { static_cast<void *>(sender) };
         func.call(values);
     }
+}
+
+void Listener::addCallback(const std::string & type, const std::string & callback)
+{
+    addCallback(Event::strToType(type), callback);
 }
 
 void Listener::addCallback(const EventType & type, const std::string & callback)
 {
     m_callbacks[type] = std::make_unique<VmCallback>(callback);
+}
+
+void Listener::removeCallback(const std::string & type)
+{
+    removeCallback(Event::strToType(type));
 }
 
 void Listener::removeCallback(const EventType & type)

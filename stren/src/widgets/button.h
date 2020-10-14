@@ -95,6 +95,10 @@ public:
     /// process incoming system events
     ///
     virtual void processEvent(const Event & event, bool & isEventCaptured) override;
+    ///
+    /// @todo
+    ///
+    static void bind();
 private:
     ///
     /// @todo

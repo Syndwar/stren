@@ -3,6 +3,8 @@
 #include "engine_handler.h"
 #include "logger.h"
 #include "event_listener.h"
+#include "lua_stack.h"
+#include "lua_value.h"
 
 namespace stren
 {
@@ -27,7 +29,7 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
     if (isOpened())
     {
         bool result(false);
-        for (auto it = attached_.rbegin(); it != attached_.rend(); ++it)
+        for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
         {
             Widget * widget = *it;
             if (widget && !widget->isClosed())
@@ -40,7 +42,7 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
 
 void Container::doRender()
 {
-    for (Widget * widget : attached_)
+    for (Widget * widget : m_attached)
     {
         if (widget && !widget->isClosed())
         {
@@ -58,16 +60,16 @@ void Container::attach(Widget * widget)
     {
         addUpdateState(UpdateState::Update);
 
-        attached_.push_back(widget);
+        m_attached.push_back(widget);
         widget->setParent(this);
 
         const std::string & id = widget->getId();
         if (!id.empty())
         {
-            auto it = map_.find(id);
-            if (it == map_.end())
+            auto it = m_map.find(id);
+            if (it == m_map.end())
             {
-                map_[id] = widget;
+                m_map[id] = widget;
             }
             else
             {
@@ -80,26 +82,26 @@ void Container::attach(Widget * widget)
 
 void Container::detachAll()
 {
-    map_.clear();
-    for (Widget * widget : attached_)
+    m_map.clear();
+    for (Widget * widget : m_attached)
     {
         if (widget)
         {
             delete widget;
         }
     }
-    attached_.clear();
+    m_attached.clear();
 }
 
 void Container::sortChildren()
 {
-    for (size_t i = 0, iEnd = attached_.size(); i < iEnd; ++i)
+    for (size_t i = 0, iEnd = m_attached.size(); i < iEnd; ++i)
     {
         size_t minIndex = i;
-        size_t minimumOrder = attached_[i]->getOrder();
-        for (size_t j = i + 1, jEnd = attached_.size(); j < jEnd; ++j)
+        size_t minimumOrder = m_attached[i]->getOrder();
+        for (size_t j = i + 1, jEnd = m_attached.size(); j < jEnd; ++j)
         {
-            const size_t currentOrder = attached_[j]->getOrder();
+            const size_t currentOrder = m_attached[j]->getOrder();
             if (currentOrder < minimumOrder)
             {
                 minimumOrder = currentOrder;
@@ -109,16 +111,16 @@ void Container::sortChildren()
         // swamp minimum with current item
         if (i != minIndex)
         {
-            Widget * tmp = attached_[i];
-            attached_[i] = attached_[minIndex];
-            attached_[minIndex] = tmp;
+            Widget * tmp = m_attached[i];
+            m_attached[i] = m_attached[minIndex];
+            m_attached[minIndex] = tmp;
         }
     }
 }
 
 void Container::moveByChildren(const int dx, const int dy)
 {
-    for (Widget * widget : attached_)
+    for (Widget * widget : m_attached)
     {
         if (widget)
         {
@@ -135,7 +137,7 @@ void Container::doUpdate(const size_t dt)
         removeUpdateState(UpdateState::Update);
     }
 
-    for (auto it = attached_.rbegin(); it != attached_.rend(); ++it)
+    for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
     {
         Widget * widget = *it;
         if (widget && !widget->isClosed())
@@ -148,7 +150,7 @@ void Container::doUpdate(const size_t dt)
 
 void Container::setDebugView(const bool value)
 {
-    for (Widget * widget : attached_)
+    for (Widget * widget : m_attached)
     {
         if (widget)
         {
@@ -158,5 +160,38 @@ void Container::setDebugView(const bool value)
     Widget::setDebugView(value);
 }
 
+int createContainer(lua_State * L)
+{
+    lua::Stack stack(1);
+    const std::string id = stack.get(1).getString();
+    Container * cnt = new Container(id);
+    stack.clear();
+    stack.push((void *)cnt);
+    return stack.getSize();
+}
 
+int attachToContainer(lua_State * L)
+{
+    lua::Stack stack(2);
+    Container * cnt = (Container *)stack.get(1).getUserData();
+    if (cnt)
+    {
+        Widget * widget = (Widget *)stack.get(2).getUserData();
+        cnt->attach(widget);
+    }
+    stack.clear();
+    return 0;
+}
+
+void Container::bind()
+{
+    lua::Stack stack;
+    const luaL_reg functions[] =
+    {
+        { "new", createContainer },
+        { "attach", attachToContainer },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Container", functions);
+}
 } // stren

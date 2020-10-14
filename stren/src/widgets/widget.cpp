@@ -266,4 +266,66 @@ void Widget::attachTransform(const EventType eventType, const Transform & transf
     m_transform.setTransform(eventType, transform);
 }
 
+int setWidgetRect(lua_State *L)
+{
+    lua::Stack stack(5);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        widget->setRect(stack.get(2).getInt(), stack.get(3).getInt(), stack.get(4).getInt(), stack.get(5).getInt());
+    }
+    return 0;
+}
+
+int openWidget(lua_State *L)
+{
+    lua::Stack stack(1);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        widget->open();
+    }
+    return 0;
+}
+
+int closeWidget(lua_State *L)
+{
+    lua::Stack stack(1);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        widget->close();
+    }
+    return 0;
+}
+
+int setWidgetAlignment(lua_State * L)
+{
+    lua::Stack stack(2);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        const std::string textAlign = stack.get(2).getString();
+        const int dx = stack.get(3).getInt();
+        const int dy = stack.get(4).getInt();
+        widget->setAlignment(textAlign, dx, dy);
+    }
+    stack.clear();
+    return 0;
+}
+
+void Widget::bind()
+{
+    lua::Stack stack;
+    const luaL_reg functions[] =
+    {
+        { "setRect", setWidgetRect },
+        { "setAlignment", setWidgetAlignment },
+        { "open", openWidget },
+        { "close", closeWidget },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Widget", functions);
+}
+
 } // stren

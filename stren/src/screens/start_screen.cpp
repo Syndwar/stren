@@ -42,6 +42,6 @@ StartScreen::~StartScreen()
 
 void StartScreen::switchToNextScreen()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 } // stren

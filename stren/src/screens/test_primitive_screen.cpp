@@ -82,6 +82,6 @@ TestPrimitiveScreen::~TestPrimitiveScreen()
 
 void TestPrimitiveScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(ScreenId::MainScreen);
+    EngineHandler::switchScreen(nullptr, nullptr);
 }
 } // stren
