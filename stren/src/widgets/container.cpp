@@ -160,17 +160,20 @@ void Container::setDebugView(const bool value)
     Widget::setDebugView(value);
 }
 
-int createContainer(lua_State * L)
+namespace lua_container
 {
-    lua::Stack stack(1);
-    const std::string id = stack.get(1).getString();
+
+int create(lua_State * L)
+{
+    lua::Stack stack(0);
+    const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Container * cnt = new Container(id);
     stack.clear();
     stack.push((void *)cnt);
     return stack.getSize();
 }
 
-int attachToContainer(lua_State * L)
+int attach(lua_State * L)
 {
     lua::Stack stack(2);
     Container * cnt = (Container *)stack.get(1).getUserData();
@@ -182,14 +185,15 @@ int attachToContainer(lua_State * L)
     stack.clear();
     return 0;
 }
+} // lua_container
 
 void Container::bind()
 {
     lua::Stack stack;
     const luaL_reg functions[] =
     {
-        { "new", createContainer },
-        { "attach", attachToContainer },
+        { "new", lua_container::create },
+        { "attach", lua_container::attach },
         { NULL, NULL }
     };
     stack.loadLibs("Container", functions);

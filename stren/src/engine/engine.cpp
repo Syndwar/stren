@@ -145,24 +145,19 @@ void Engine::consoleLog(const std::string & message)
     m_systemTools.log(message);
 }
 
-void * Engine::createGame()
+void Engine::createGame()
 {
     if (!m_game)
     {
         m_game = new Game();
     }
-    return m_game;
 }
 
-void Engine::switchScreen(void * game, void * screen)
+void Engine::switchScreen(void * screen)
 {
-    if (game)
+    if (m_game)
     {
-        Game * p_game = (Game *)game;
-        if (p_game)
-        {
-            p_game->switchScreen(screen);
-        }
+        m_game->switchScreen(screen);
     }
 }
 

@@ -54,6 +54,10 @@ public:
     /// @todo
     ///
     virtual void doPostMove(const int dx, const int dy) override;
+    ///
+    /// @todo
+    ///
+    static void bind();
 private:
     ///
     /// @todo

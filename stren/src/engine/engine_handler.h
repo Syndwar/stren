@@ -72,7 +72,7 @@ public:
     ///
     /// @todo
     ///
-    static void * createGame();
+    static void createGame();
     ///
     /// @todo
     ///
@@ -108,7 +108,7 @@ public:
     ///
     /// switch current screen with the new one defined by id
     ///
-    static void switchScreen(void * game, void * screen);
+    static void switchScreen(void * screen);
     ///
     /// returns reference to the engine save data
     ///

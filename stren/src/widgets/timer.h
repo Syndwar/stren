@@ -135,6 +135,10 @@ public:
     /// attach transform to the widget, takes ownership of the transform
     ///
     virtual void attachTransform(const EventType eventType, const Transform & transform) override {}
+    ///
+    /// @todo
+    ///
+    static void bind();
 };
 } // stren
 #endif // STREN_TIMER_H

@@ -8,7 +8,6 @@
 #include "widgets/progressbar.h"
 #include "widgets/scroll_container.h"
 #include "widgets/label.h"
-#include "screen_ids.h"
 
 namespace stren
 {
@@ -216,7 +215,7 @@ TestWidgetsScreen::~TestWidgetsScreen()
 
 void TestWidgetsScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestWidgetsScreen::onLockBtnClick()

@@ -5,7 +5,6 @@
 #include "widgets/button.h"
 #include "widgets/image.h"
 #include "widgets/scroll_container.h"
-#include "screen_ids.h"
 
 namespace
 {
@@ -148,7 +147,7 @@ TestScrollScreen::~TestScrollScreen()
 
 void TestScrollScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestScrollScreen::onJumpBtnClick()

@@ -5,6 +5,8 @@
 #include "point.h"
 #include "renderer.h"
 #include "glyph.h"
+#include "lua_stack.h"
+#include "lua_value.h"
 
 namespace stren
 {
@@ -66,6 +68,87 @@ void Label::doRender()
     }
 
     label_.render();
+}
+
+namespace lua_label
+{
+int create(lua_State * L)
+{
+    lua::Stack stack(0);
+    const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
+    Label * lbl = new Label(id);
+    stack.clear();
+    stack.push((void *)lbl);
+    return stack.getSize();
+}
+
+int setText(lua_State * L)
+{
+    lua::Stack stack(2);
+    Label * lbl = (Label *)stack.get(1).getUserData();
+    if (lbl)
+    {
+        const std::string text = stack.get(2).getString();
+        lbl->setText(text);
+    }
+
+    stack.clear();
+    return 0;
+}
+
+int setFont(lua_State * L)
+{
+    lua::Stack stack(2);
+    Label * lbl = (Label *)stack.get(1).getUserData();
+    if (lbl)
+    {
+        const std::string font = stack.get(2).getString();
+        lbl->setFont(font);
+    }
+    stack.clear();
+    return 0;
+}
+
+int setColour(lua_State * L)
+{
+    lua::Stack stack(2);
+    Label * lbl = (Label *)stack.get(1).getUserData();
+    if (lbl)
+    {
+        const std::string colorStr = stack.get(2).getString();
+        lbl->setColour(colorStr);
+    }
+    stack.clear();
+    return 0;
+}
+
+int setTextAlignment(lua_State * L)
+{
+    lua::Stack stack(2);
+    Label * lbl = (Label *)stack.get(1).getUserData();
+    if (lbl)
+    {
+        const std::string textAlign = stack.get(2).getString();
+        lbl->setTextAlignment(textAlign);
+    }
+    stack.clear();
+    return 0;
+}
+}
+
+void Label::bind()
+{
+    lua::Stack stack;
+    const luaL_reg functions[] =
+    {
+        { "new", lua_label::create },
+        { "setText", lua_label::setText },
+        { "setFont", lua_label::setFont },
+        { "setColour", lua_label::setColour },
+        { "setTextAlignment", lua_label::setTextAlignment },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Label", functions);
 }
 
 } // stren

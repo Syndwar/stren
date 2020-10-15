@@ -40,13 +40,12 @@ bool EngineHandler::init()
     return false;
 }
 
-void * EngineHandler::createGame()
+void EngineHandler::createGame()
 {
     if (m_engine)
     {
-        return m_engine->createGame();
+        m_engine->createGame();
     }
-    return nullptr;
 }
 
 void EngineHandler::stop()
@@ -144,11 +143,11 @@ void EngineHandler::consoleLog(const std::string & message)
     }
 }
 
-void EngineHandler::switchScreen(void * game, void * screen)
+void EngineHandler::switchScreen(void * screen)
 {
     if (m_engine)
     {
-        m_engine->switchScreen(game, screen);
+        m_engine->switchScreen(screen);
     }
 }
 

@@ -147,17 +147,19 @@ void Button::processEvent(const Event & event, bool & isEventCaptured)
     }
 }
 
-int createButton(lua_State * L)
+namespace lua_button
 {
-    lua::Stack stack(1);
-    const std::string id = stack.get(1).getString();
+int create(lua_State * L)
+{
+    lua::Stack stack(0);
+    const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Button * btn = new Button(id);
     stack.clear();
     stack.push((void *)btn);
     return stack.getSize();
 }
 
-int setButtonText(lua_State * L)
+int setText(lua_State * L)
 {
     lua::Stack stack(2);
     Button * btn = (Button *)stack.get(1).getUserData();
@@ -171,7 +173,7 @@ int setButtonText(lua_State * L)
     return 0;
 }
 
-int setButtonFont(lua_State * L)
+int setFont(lua_State * L)
 {
     lua::Stack stack(2);
     Button * btn = (Button *)stack.get(1).getUserData();
@@ -184,7 +186,7 @@ int setButtonFont(lua_State * L)
     return 0;
 }
 
-int setButtonTextColor(lua_State * L)
+int setTextColour(lua_State * L)
 {
     lua::Stack stack(2);
     Button * btn = (Button *)stack.get(1).getUserData();
@@ -197,7 +199,7 @@ int setButtonTextColor(lua_State * L)
     return 0;
 }
 
-int setButtonTextAlignment(lua_State * L)
+int setTextAlignment(lua_State * L)
 {
     lua::Stack stack(2);
     Button * btn = (Button *)stack.get(1).getUserData();
@@ -210,7 +212,7 @@ int setButtonTextAlignment(lua_State * L)
     return 0;
 }
 
-int setButtonSprites(lua_State * L)
+int setSprites(lua_State * L)
 {
     lua::Stack stack(4);
     Button * btn = (Button *)stack.get(1).getUserData();
@@ -226,7 +228,7 @@ int setButtonSprites(lua_State * L)
     return 0;
 }
 
-int addButtonCallback(lua_State * L)
+int addCallback(lua_State * L)
 {
     lua::Stack stack(3);
     Button * btn = (Button *)stack.get(1).getUserData();
@@ -238,19 +240,20 @@ int addButtonCallback(lua_State * L)
     }
     return 0;
 }
+} // lua_button
 
 void Button::bind()
 {
     lua::Stack stack;
     const luaL_reg functions[] =
     {
-        { "new", createButton },
-        { "setText", setButtonText },
-        { "setFont", setButtonFont },
-        { "setColour", setButtonTextColor },
-        { "setTextAlignment", setButtonTextAlignment },
-        { "setSprites", setButtonSprites },
-        { "addCallback", addButtonCallback },
+        { "new", lua_button::create },
+        { "setText", lua_button::setText },
+        { "setFont", lua_button::setFont },
+        { "setColour", lua_button::setTextColour },
+        { "setTextAlignment", lua_button::setTextAlignment },
+        { "setSprites", lua_button::setSprites },
+        { "addCallback", lua_button::addCallback },
         { NULL, NULL }
     };
     stack.loadLibs("Button", functions);

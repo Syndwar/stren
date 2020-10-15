@@ -2,7 +2,6 @@
 
 #include "widgets/button.h"
 #include "engine_handler.h"
-#include "screen_ids.h"
 
 namespace stren
 {
@@ -30,7 +29,7 @@ TestBattleFieldScreen::~TestBattleFieldScreen()
 
 void TestBattleFieldScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 } // stren

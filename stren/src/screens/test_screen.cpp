@@ -2,7 +2,6 @@
 
 #include "widgets/button.h"
 #include "engine_handler.h"
-#include "screen_ids.h"
 
 namespace stren
 {
@@ -107,46 +106,46 @@ TestScreen::~TestScreen()
 
 void TestScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestScreen::toTestPrimitiveScreen()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestScreen::toTestFaderScreen()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestScreen::toTestSoundScreen()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestScreen::toTestWidgetsScreen()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestScreen::toTestScrollScreen()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestScreen::toTestFontScreen()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestScreen::toAtlasScreen()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestScreen::toBattlefield()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 } // stren

@@ -5,7 +5,6 @@
 #include "widgets/image.h"
 #include "lua_wrapper.h"
 #include "utils.h"
-#include "screen_ids.h"
 
 namespace stren
 {
@@ -48,6 +47,6 @@ TestAtlasScreen::~TestAtlasScreen()
 
 void TestAtlasScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 } // stren

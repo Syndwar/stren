@@ -5,7 +5,6 @@
 #include "widgets/fader.h"
 #include "widgets/label.h"
 #include "widgets/primitive.h"
-#include "screen_ids.h"
 
 namespace stren
 {
@@ -99,7 +98,7 @@ TestFaderScreen::~TestFaderScreen()
 
 void TestFaderScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestFaderScreen::onFadeSpeedUpBtnClick()

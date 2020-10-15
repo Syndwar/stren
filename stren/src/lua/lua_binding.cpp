@@ -8,7 +8,10 @@
 #include "logger.h"
 
 #include "widgets/screen.h"
+#include "widgets/label.h"
 #include "widgets/button.h"
+#include "widgets/timer.h"
+#include "widgets/primitive.h"
 
 using namespace stren;
 
@@ -135,10 +138,8 @@ int serialize(lua_State * L)
 
 int createGame(lua_State * L)
 {
-    lua::Stack stack(0);
-    void * game = EngineHandler::createGame();
-    stack.push(game);
-    return stack.getSize();
+    EngineHandler::createGame();
+    return 0;
 }
 } // engine
 
@@ -146,10 +147,12 @@ namespace game
 {
 int changeScreen(lua_State * L)
 {
-    lua::Stack stack(2);
-    void * game = stack.get(1).getUserData();
-    void * screen = stack.get(2).getUserData();
-    EngineHandler::switchScreen(game, screen);
+    lua::Stack stack(1);
+    void * screen = stack.get(1).getUserData();
+    if (screen)
+    {
+        EngineHandler::switchScreen(screen);
+    }
     return 0;
 }
 } // game
@@ -186,7 +189,10 @@ void bindWithVM()
         stack.loadLibs("Game", functions);
     }
     Widget::bind();
+    Primitive::bind();
+    Timer::bind();
     Button::bind();
+    Label::bind();
     Container::bind();
     Screen::bind();
 }

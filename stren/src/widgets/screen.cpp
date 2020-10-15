@@ -15,23 +15,25 @@ Screen::~Screen()
 {
 }
 
-
-int createScreen(lua_State * L)
+namespace lua_screen
 {
-    lua::Stack stack(1);
-    const std::string id = stack.get(1).getString();
+int create(lua_State * L)
+{
+    lua::Stack stack(0);
+    const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Screen * screen = new Screen(id);
     stack.clear();
     stack.push((void *)screen);
     return stack.getSize();
 }
+} // lua_screen
 
 void Screen::bind()
 {
     lua::Stack stack;
     const luaL_reg functions[] =
     {
-        { "new", createScreen },
+        { "new", lua_screen::create },
         { NULL, NULL }
     };
     stack.loadLibs("Screen", functions);

@@ -266,7 +266,9 @@ void Widget::attachTransform(const EventType eventType, const Transform & transf
     m_transform.setTransform(eventType, transform);
 }
 
-int setWidgetRect(lua_State *L)
+namespace lua_widget
+{
+int setRect(lua_State *L)
 {
     lua::Stack stack(5);
     Widget * widget = (Widget *)stack.get(1).getUserData();
@@ -277,7 +279,19 @@ int setWidgetRect(lua_State *L)
     return 0;
 }
 
-int openWidget(lua_State *L)
+int setOrder(lua_State * L)
+{
+    lua::Stack stack(2);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        const int order = stack.get(2).getInt();
+        widget->setOrder(order);
+    }
+    return 0;
+}
+
+int open(lua_State *L)
 {
     lua::Stack stack(1);
     Widget * widget = (Widget *)stack.get(1).getUserData();
@@ -288,7 +302,7 @@ int openWidget(lua_State *L)
     return 0;
 }
 
-int closeWidget(lua_State *L)
+int close(lua_State *L)
 {
     lua::Stack stack(1);
     Widget * widget = (Widget *)stack.get(1).getUserData();
@@ -299,7 +313,19 @@ int closeWidget(lua_State *L)
     return 0;
 }
 
-int setWidgetAlignment(lua_State * L)
+int view(lua_State *L)
+{
+    lua::Stack stack(2);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        const bool isOpen = stack.get(2).getBool();
+        widget->view(isOpen);
+    }
+    return 0;
+}
+
+int setAlignment(lua_State * L)
 {
     lua::Stack stack(2);
     Widget * widget = (Widget *)stack.get(1).getUserData();
@@ -313,16 +339,19 @@ int setWidgetAlignment(lua_State * L)
     stack.clear();
     return 0;
 }
+} // lua_widget
 
 void Widget::bind()
 {
     lua::Stack stack;
     const luaL_reg functions[] =
     {
-        { "setRect", setWidgetRect },
-        { "setAlignment", setWidgetAlignment },
-        { "open", openWidget },
-        { "close", closeWidget },
+        { "setRect", lua_widget::setRect },
+        { "setAlignment", lua_widget::setAlignment },
+        { "setOrder", lua_widget::setOrder },
+        { "open", lua_widget::open },
+        { "close", lua_widget::close },
+        { "view", lua_widget::view },
         { NULL, NULL }
     };
     stack.loadLibs("Widget", functions);

@@ -3,7 +3,6 @@
 #include "engine_handler.h"
 #include "sound_system.h"
 #include "widgets/button.h"
-#include "screen_ids.h"
 
 namespace stren
 {
@@ -57,7 +56,7 @@ TestSoundScreen::~TestSoundScreen()
 
 void TestSoundScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestSoundScreen::onPlayMusicBtnClick()

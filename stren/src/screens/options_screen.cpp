@@ -3,7 +3,6 @@
 #include "save_data.h"
 #include "widgets/button.h"
 #include "engine_handler.h"
-#include "screen_ids.h"
 
 namespace
 {
@@ -135,7 +134,7 @@ OptionsScreen::~OptionsScreen()
 
 void OptionsScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void OptionsScreen::onVsyncBtnClick()

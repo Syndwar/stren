@@ -68,6 +68,10 @@ public:
     /// render primitive figure
     ///
     virtual void doRender() override;
+    ///
+    /// @todo
+    ///
+    static void bind();
 };
 } // stren
 

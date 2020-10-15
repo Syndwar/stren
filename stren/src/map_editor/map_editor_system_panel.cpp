@@ -2,7 +2,6 @@
 
 #include "widgets/button.h"
 #include "engine_handler.h"
-#include "screens/screen_ids.h"
 #include "screens/map_editor_screen.h"
 
 namespace stren
@@ -70,7 +69,7 @@ void MapEditorSystemPanel::onLoadBtnClick()
 
 void MapEditorSystemPanel::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void MapEditorSystemPanel::onGridBtnClick(Widget * sender)

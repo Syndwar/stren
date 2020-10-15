@@ -15,7 +15,6 @@
 #include "texts_repository.h"
 #include "textures_repository.h"
 #include "system_tools.h"
-#include "screens/screen_ids.h"
 
 struct SDL_Window;
 
@@ -119,11 +118,11 @@ public:
     ///
     /// @todo
     ///
-    void * createGame();
+    void createGame();
     ///
     /// switch current screen with the new one defined by id
     ///
-    void switchScreen(void * game, void * screen);
+    void switchScreen(void * screen);
     ///
     /// @todo
     ///

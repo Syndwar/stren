@@ -1,6 +1,9 @@
 #include "primitive.h"
 
 #include "primitive_figures.h"
+#include "lua_stack.h"
+#include "lua_value.h"
+#include "lua_table.h"
 
 namespace stren
 {
@@ -71,5 +74,156 @@ void Primitive::moveBy(const int dx, const int dy)
     {
         m_figure->moveBy(dx, dy);
     }
+}
+
+namespace lua_primitive
+{
+int create(lua_State * L)
+{
+    lua::Stack stack(0);
+    const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
+    Primitive * primitive = new Primitive(id);
+    stack.clear();
+    stack.push((void *)primitive);
+    return stack.getSize();
+}
+
+int setColour(lua_State *L)
+{
+    lua::Stack stack(2);
+    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    if (primitive)
+    {
+        const std::string colorStr = stack.get(2).getString();
+        primitive->setColour(colorStr);
+    }
+    stack.clear();
+    return 0;
+}
+
+int createCircle(lua_State * L)
+{
+    lua::Stack stack(4);
+    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    if (primitive)
+    {
+        const int x = stack.get(2).getInt();
+        const int y = stack.get(3).getInt();
+        const int r = stack.get(4).getInt();
+        primitive->createCircle(x, y, r);
+    }
+    return 0;
+}
+
+int createPoint(lua_State * L)
+{
+    lua::Stack stack(3);
+    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    if (primitive)
+    {
+        const int x = stack.get(2).getInt();
+        const int y = stack.get(3).getInt();
+        primitive->createPoint(Point(x, y));
+    }
+    return 0;
+}
+
+int createRect(lua_State * L)
+{
+    lua::Stack stack(6);
+    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    if (primitive)
+    {
+        const int x = stack.get(2).getInt();
+        const int y = stack.get(3).getInt();
+        const int w = stack.get(4).getInt();
+        const int h = stack.get(5).getInt();
+        const bool fill = stack.get(6).getBool();
+        primitive->createRect(Rect(x, y, w, h), fill);
+    }
+    return 0;
+}
+
+int creatLines(lua_State * L)
+{
+    lua::Stack stack(2);
+    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    if (primitive)
+    {
+        lua::Table tbl(stack.get(2));
+        std::vector<lua::Value> pointsTbl;
+        tbl.fill(pointsTbl);
+        std::vector<Point> points;
+        for (const lua::Value & value : pointsTbl)
+        {
+            lua::Table pointTbl(value);
+            const Point point(pointTbl.get(1).getInt(), pointTbl.get(2).getInt());
+            points.push_back(point);
+        }
+        primitive->createLines(points);
+    }
+    return 0;
+}
+
+int createPoints(lua_State * L)
+{
+    lua::Stack stack(2);
+    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    if (primitive)
+    {
+        lua::Table tbl(stack.get(2));
+        std::vector<lua::Value> pointsTbl;
+        tbl.fill(pointsTbl);
+        std::vector<Point> points;
+        for (const lua::Value & value : pointsTbl)
+        {
+            lua::Table pointTbl(value);
+            const Point point(pointTbl.get(1).getInt(), pointTbl.get(2).getInt());
+            points.push_back(point);
+        }
+        primitive->createPoints(points);
+    }
+    return 0;
+}
+
+int createRects(lua_State * L)
+{
+    lua::Stack stack(2);
+    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    if (primitive)
+    {
+        lua::Table tbl(stack.get(2));
+        const bool fill = stack.get(3).getBool();
+        std::vector<lua::Value> rectsTbl;
+        tbl.fill(rectsTbl);
+        std::vector<Rect> rects;
+        for (const lua::Value & value : rectsTbl)
+        {
+            lua::Table pointTbl(value);
+            const Rect rect(pointTbl.get(1).getInt(), pointTbl.get(2).getInt(), pointTbl.get(3).getInt(), pointTbl.get(4).getInt());
+            rects.push_back(rect);
+        }
+        primitive->createRects(rects, fill);
+    }
+    return 0;
+}
+} // primitive_bind
+
+void Primitive::bind()
+{
+    lua::Stack stack;
+    const luaL_reg functions[] =
+    {
+        { "new", lua_primitive::create },
+        { "setColour", lua_primitive::setColour },
+        { "createCircle", lua_primitive::createCircle },
+        { "createPoint", lua_primitive::createPoint },
+        { "createRect", lua_primitive::createRect },
+        { "createLines", lua_primitive::creatLines },
+        { "createPoints", lua_primitive::createPoints },
+        { "createRects", lua_primitive::createRects },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Primitive", functions);
 }
 } // stren

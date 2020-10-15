@@ -5,7 +5,6 @@
 #include "itexture.h"
 #include "sprite.h"
 #include "lua_wrapper.h"
-#include "screen_ids.h"
 
 namespace stren
 {
@@ -61,7 +60,7 @@ void TestFontScreen::setFont(const std::string & fontId)
 
 void TestFontScreen::onBackBtnClick()
 {
-    EngineHandler::switchScreen(nullptr, nullptr);
+    EngineHandler::switchScreen(nullptr);
 }
 
 void TestFontScreen::onChangeFontBtnClick()

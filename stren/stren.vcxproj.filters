@@ -237,13 +237,7 @@
     <ClInclude Include="src\engine\console.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\screens\start_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
     <ClInclude Include="src\screens\screen_selector.h">
-      <Filter>screens</Filter>
-    </ClInclude>
-    <ClInclude Include="src\screens\main_screen.h">
       <Filter>screens</Filter>
     </ClInclude>
     <ClInclude Include="src\screens\test_screen.h">
@@ -267,9 +261,6 @@
     <ClInclude Include="src\screens\test_font_screen.h">
       <Filter>screens</Filter>
     </ClInclude>
-    <ClInclude Include="src\screens\test_primitive_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
     <ClInclude Include="src\screens\test_scroll_screen.h">
       <Filter>screens</Filter>
     </ClInclude>
@@ -287,9 +278,6 @@
     </ClInclude>
     <ClInclude Include="src\engine\system\debug_panel.h">
       <Filter>engine\system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\screens\screen_ids.h">
-      <Filter>screens</Filter>
     </ClInclude>
     <ClInclude Include="src\tests\test_widgets.h">
       <Filter>tests</Filter>
@@ -480,13 +468,7 @@
     <ClCompile Include="src\engine\console.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\screens\start_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
     <ClCompile Include="src\screens\screen_selector.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\main_screen.cpp">
       <Filter>screens</Filter>
     </ClCompile>
     <ClCompile Include="src\screens\test_screen.cpp">
@@ -508,9 +490,6 @@
       <Filter>screens</Filter>
     </ClCompile>
     <ClCompile Include="src\screens\test_font_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\test_primitive_screen.cpp">
       <Filter>screens</Filter>
     </ClCompile>
     <ClCompile Include="src\screens\test_scroll_screen.cpp">
