@@ -185,6 +185,24 @@ int attach(lua_State * L)
     stack.clear();
     return 0;
 }
+
+int findWidget(lua_State * L)
+{
+    lua::Stack stack(2);
+    Container * cnt = (Container *)stack.get(1).getUserData();
+    const std::string id = stack.get(2).getString();
+    stack.clear();
+    if (cnt)
+    {
+        Widget * widget = cnt->findWidget<Widget>(id);
+        stack.push((void *)widget);
+    }
+    else
+    {
+        stack.push();
+    }
+    return stack.getSize();
+}
 } // lua_container
 
 void Container::bind()
@@ -194,6 +212,7 @@ void Container::bind()
     {
         { "new", lua_container::create },
         { "attach", lua_container::attach },
+        { "findWidget", lua_container::findWidget },
         { NULL, NULL }
     };
     stack.loadLibs("Container", functions);

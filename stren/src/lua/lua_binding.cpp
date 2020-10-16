@@ -12,6 +12,7 @@
 #include "widgets/button.h"
 #include "widgets/timer.h"
 #include "widgets/primitive.h"
+#include "widgets/fader.h"
 
 using namespace stren;
 
@@ -190,6 +191,7 @@ void bindWithVM()
     }
     Widget::bind();
     Primitive::bind();
+    Fader::bind();
     Timer::bind();
     Button::bind();
     Label::bind();

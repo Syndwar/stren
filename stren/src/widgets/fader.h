@@ -61,6 +61,10 @@ public:
     /// fully hide the screen
     ///
     void fadeIn();
+    ///
+    /// @todo
+    ///
+    static void bind();
 private:
     ///
     /// @todo

@@ -255,12 +255,6 @@
     <ClInclude Include="src\screens\options_screen.h">
       <Filter>screens</Filter>
     </ClInclude>
-    <ClInclude Include="src\screens\test_fader_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
-    <ClInclude Include="src\screens\test_font_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
     <ClInclude Include="src\screens\test_scroll_screen.h">
       <Filter>screens</Filter>
     </ClInclude>
@@ -484,12 +478,6 @@
       <Filter>screens</Filter>
     </ClCompile>
     <ClCompile Include="src\screens\options_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\test_fader_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\test_font_screen.cpp">
       <Filter>screens</Filter>
     </ClCompile>
     <ClCompile Include="src\screens\test_scroll_screen.cpp">

@@ -339,6 +339,23 @@ int setAlignment(lua_State * L)
     stack.clear();
     return 0;
 }
+
+int getParent(lua_State * L)
+{
+    lua::Stack stack(1);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    stack.clear();
+    if (widget)
+    {
+        Widget * parent = widget->getParent();
+        stack.push((void *)parent);
+    }
+    else
+    {
+        stack.push();
+    }
+    return stack.getSize();
+}
 } // lua_widget
 
 void Widget::bind()
@@ -352,6 +369,7 @@ void Widget::bind()
         { "open", lua_widget::open },
         { "close", lua_widget::close },
         { "view", lua_widget::view },
+        { "getParent", lua_widget::getParent },
         { NULL, NULL }
     };
     stack.loadLibs("Widget", functions);
