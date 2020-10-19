@@ -11,8 +11,8 @@ namespace stren
 ///
 PrimitiveRect::PrimitiveRect(const Rect & rect, const bool fill)
     : PrimitiveFigure()
-    , fill_(fill)
-    , rect_(rect)
+    , m_fill(fill)
+    , m_rect(rect)
 {
 }
 
@@ -27,16 +27,16 @@ void PrimitiveRect::render(const Colour & colour)
         const Rect & clippingRect = Renderer::getClippingRect();
         const Point & offset = Renderer::getOffset();
         // check if any rect is inside the clipping area
-        const int x = rect_.getX() - offset.getX();
-        const int y = rect_.getY() - offset.getY();
-        const int w = rect_.getWidth();
-        const int h = rect_.getHeight();
+        const int x = m_rect.getX() - offset.getX();
+        const int y = m_rect.getY() - offset.getY();
+        const int w = m_rect.getWidth();
+        const int h = m_rect.getHeight();
         if (clippingRect.hasCommon(x, y, w, h))
         {
             const Colour oldColour = Renderer::getRenderColour();
             Renderer::setRenderColour(colour);
             SDL_Rect rect = { x, y, w, h };
-            if (fill_)
+            if (m_fill)
             {
                 SDL_RenderFillRect(renderer, &rect);
             }
@@ -51,12 +51,12 @@ void PrimitiveRect::render(const Colour & colour)
 
 void PrimitiveRect::moveTo(const int x, const int y)
 {
-    rect_.moveTo(x, y);
+    m_rect.moveTo(x, y);
 }
 
 void PrimitiveRect::moveBy(const int dx, const int dy)
 {
-    rect_.moveBy(dx, dy);
+    m_rect.moveBy(dx, dy);
 }
 ///
 /// PrimitiveRects

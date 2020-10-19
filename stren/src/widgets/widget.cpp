@@ -26,7 +26,6 @@ Widget::Widget(const std::string & id)
 Widget::~Widget()
 {
     callBack(EventType::WidgetDelete, this);
-    EngineHandler::consoleLog(m_id);
 }
 
 void Widget::moveTo(const int x, const int y)
@@ -212,6 +211,14 @@ void Widget::doDebugRender()
         if (!rect.isEmpty())
         {
             static const Colour colour(Colour::Type::Green);
+            if (m_debugRect)
+            {
+                if (m_debugRect->getRect() != rect)
+                {
+                    m_debugRect.reset();
+                }
+            }
+
             if (!m_debugRect)
             {
                 m_debugRect = std::make_unique<PrimitiveRect>(rect, false);
@@ -356,6 +363,34 @@ int getParent(lua_State * L)
     }
     return stack.getSize();
 }
+
+int isOpened(lua_State * L)
+{
+    lua::Stack stack(1);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    stack.clear();
+    bool isOpened(false);
+    if (widget)
+    {
+        isOpened = widget->isOpened();
+    }
+    stack.push(isOpened);
+    return stack.getSize();
+}
+
+int moveTo(lua_State * L)
+{
+    lua::Stack stack(3);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        const int x = stack.get(2).getInt();
+        const int y = stack.get(3).getInt();
+        widget->moveTo(x, y);
+    }
+    stack.clear();
+    return 0;
+}
 } // lua_widget
 
 void Widget::bind()
@@ -370,6 +405,8 @@ void Widget::bind()
         { "close", lua_widget::close },
         { "view", lua_widget::view },
         { "getParent", lua_widget::getParent },
+        { "isOpened", lua_widget::isOpened },
+        { "moveTo", lua_widget::moveTo },
         { NULL, NULL }
     };
     stack.loadLibs("Widget", functions);

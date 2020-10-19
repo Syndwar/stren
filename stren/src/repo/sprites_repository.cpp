@@ -22,6 +22,7 @@ bool SpritesRepository::initialize()
             lua::Table spriteTbl(tbl.get(i));
             const std::string textureId = spriteTbl.get("texture").getString();
             const std::string id = spriteTbl.get("id").getString();
+            const std::string colour = spriteTbl.get("colour").getString();
 
             const lua::Table rectTable(spriteTbl.get("rect"));
             if (rectTable.isValid())
@@ -29,9 +30,9 @@ bool SpritesRepository::initialize()
                 Rect rect;
                 if (4 == rectTable.getSize())
                 {
-                    tableToRect(rectTable, rect);
+                    lua::tableToRect(rectTable, rect);
                 }
-                m_sprites[id] = Sprite(textureId, rect);
+                m_sprites[id] = Sprite(textureId, rect, colour);
             }
         }
         m_isReady = true;

@@ -5,5 +5,6 @@
 #include "lua_value.h"
 #include "lua_table.h"
 #include "lua_function.h"
+#include "lua_utils.h"
 
 #endif // STREN_LUA_WRAPPER_H

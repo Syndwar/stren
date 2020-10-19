@@ -6,7 +6,7 @@ Value::Value()
     : m_type(Type::Nil)
     , m_iValue(0)
     , m_dValue(0.f)
-    , m_strValue("nil")
+    , m_strValue("")
     , m_userData(nullptr)
 {
 }

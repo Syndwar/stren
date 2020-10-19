@@ -19,6 +19,10 @@ public:
     /// Destructor
     ///
     virtual ~Dialog();
+    ///
+    /// @todo
+    ///
+    static void bind();
 };
 
 } // stren

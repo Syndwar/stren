@@ -240,15 +240,6 @@
     <ClInclude Include="src\screens\screen_selector.h">
       <Filter>screens</Filter>
     </ClInclude>
-    <ClInclude Include="src\screens\test_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
-    <ClInclude Include="src\screens\test_sound_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
-    <ClInclude Include="src\screens\test_widgets_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
     <ClInclude Include="src\screens\map_editor_screen.h">
       <Filter>screens</Filter>
     </ClInclude>
@@ -260,9 +251,6 @@
     </ClInclude>
     <ClInclude Include="src\engine\save_data.h">
       <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\screens\test_atlas_screen.h">
-      <Filter>screens</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\system_tools.h">
       <Filter>engine</Filter>
@@ -282,9 +270,6 @@
     <ClInclude Include="src\game\unit.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="src\screens\test_battle_field_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
     <ClInclude Include="src\game\game.h">
       <Filter>game</Filter>
     </ClInclude>
@@ -299,6 +284,9 @@
     </ClInclude>
     <ClInclude Include="src\map_editor\map_editor_filters_panel.h">
       <Filter>map_editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua_utils.h">
+      <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -465,15 +453,6 @@
     <ClCompile Include="src\screens\screen_selector.cpp">
       <Filter>screens</Filter>
     </ClCompile>
-    <ClCompile Include="src\screens\test_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\test_sound_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\test_widgets_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
     <ClCompile Include="src\screens\map_editor_screen.cpp">
       <Filter>screens</Filter>
     </ClCompile>
@@ -486,9 +465,6 @@
     <ClCompile Include="src\engine\save_data.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\screens\test_atlas_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\system_tools.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -500,9 +476,6 @@
     </ClCompile>
     <ClCompile Include="src\widgets\mods\widget_transform_mod.cpp">
       <Filter>widgets\mods</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\test_battle_field_screen.cpp">
-      <Filter>screens</Filter>
     </ClCompile>
     <ClCompile Include="src\game\game.cpp">
       <Filter>game</Filter>
@@ -518,6 +491,9 @@
     </ClCompile>
     <ClCompile Include="src\map_editor\map_data.cpp">
       <Filter>map_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lua_utils.cpp">
+      <Filter>lua</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

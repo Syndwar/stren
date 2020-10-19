@@ -56,7 +56,7 @@ Colour::Type Colour::stringToType(const std::string & colour)
     else if ("blue" == colour)      { return Blue; }
     else if ("yellow" == colour)    { return Yellow; }
     else if ("grey" == colour)      { return Grey; }
-    return White;
+    return Black;
 }
 
 } // stren

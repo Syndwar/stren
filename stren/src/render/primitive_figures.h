@@ -40,8 +40,8 @@ public:
 class PrimitiveRect : public PrimitiveFigure
 {
 private:
-    Rect rect_; ///< @todo
-    bool fill_; ///< @todo
+    Rect m_rect; ///< @todo
+    bool m_fill; ///< @todo
 
 public:
     ///
@@ -64,7 +64,10 @@ public:
     /// move primitive using offset dx, dy
     ///
     virtual void moveBy(const int dx, const int dy) override;
-
+    ///
+    /// returns primitive rectangle
+    ///
+    const Rect & getRect() const { return m_rect; }
 };
 ///
 /// class PrimitiveRects

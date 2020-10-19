@@ -8,11 +8,15 @@
 #include "logger.h"
 
 #include "widgets/screen.h"
+#include "widgets/dialog.h"
 #include "widgets/label.h"
 #include "widgets/button.h"
 #include "widgets/timer.h"
 #include "widgets/primitive.h"
 #include "widgets/fader.h"
+#include "widgets/image.h"
+
+#include "texture.h"
 
 using namespace stren;
 
@@ -142,6 +146,22 @@ int createGame(lua_State * L)
     EngineHandler::createGame();
     return 0;
 }
+
+int getTextureSize(lua_State * L)
+{
+    lua::Stack stack(1);
+    const std::string textureId = stack.get(1).getString();
+    stack.clear();
+    if (!textureId.empty())
+    {
+        if (ITexture * texture = EngineHandler::getTexture(textureId))
+        {
+            stack.push(texture->getWidth());
+            stack.push(texture->getHeight());
+        }
+    }
+    return stack.getSize();
+}
 } // engine
 
 namespace game
@@ -177,6 +197,7 @@ void bindWithVM()
             { "deserialize", engine::deserialize },
             { "serialize", engine::serialize },
             { "createGame", engine::createGame },
+            { "getTextureSize", engine::getTextureSize },
             { NULL, NULL }
         };
         stack.loadLibs("Engine", functions);
@@ -190,12 +211,14 @@ void bindWithVM()
         stack.loadLibs("Game", functions);
     }
     Widget::bind();
+    Image::bind();
     Primitive::bind();
     Fader::bind();
     Timer::bind();
     Button::bind();
     Label::bind();
     Container::bind();
+    Dialog::bind();
     Screen::bind();
 }
 } // lua

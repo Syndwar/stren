@@ -13,8 +13,8 @@ namespace stren
 {
 Image::Image(const std::string & id)
     : Widget(id)
-    , angle_(0)
-    , flip_(Sprite::Flip::None)
+    , m_angle(0)
+    , m_flip(Sprite::Flip::None)
 {
 }
 
@@ -38,17 +38,17 @@ void Image::setFlip(const bool flipv, const bool fliph)
 
 void Image::setSprite(const std::string & spriteId)
 {
-    spriteId_ = spriteId;
+    m_spriteId = spriteId;
     addUpdateState(UpdateState::Update);
 }
 
 void Image::loadSprite()
 {
-    if (!spriteId_.empty())
+    if (!m_spriteId.empty())
     {
-        if (Sprite * sprite = EngineHandler::getSprite(spriteId_))
+        if (Sprite * sprite = EngineHandler::getSprite(m_spriteId))
         {
-            sprite_ = *sprite;
+            m_sprite = *sprite;
         }
     }
 }
@@ -60,12 +60,12 @@ void Image::doRender()
         loadSprite();
         removeUpdateState(UpdateState::Update);
     }
-    sprite_.render(getRect(), angle_, flip_, center_);
+    m_sprite.render(getRect(), m_angle, m_flip, m_center);
 }
 
 void Image::setCenter(const int x, const int y)
 {
-    center_.moveTo(x, y);
+    m_center.moveTo(x, y);
 }
 
 void Image::processEvent(const Event & event, bool & isEventCaptured)
@@ -87,6 +87,73 @@ void Image::processEvent(const Event & event, bool & isEventCaptured)
             break;
         }
     }
+}
+
+namespace lua_image
+{
+int create(lua_State * L)
+{
+    lua::Stack stack(0);
+    const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
+    Image * btn = new Image(id);
+    stack.clear();
+    stack.push((void *)btn);
+    return stack.getSize();
+}
+
+int setSprite(lua_State * L)
+{
+    lua::Stack stack(2);
+    Image * img = (Image *)stack.get(1).getUserData();
+    if (img)
+    {
+        const std::string spr = stack.get(2).getString();
+        img->setSprite(spr);
+    }
+    stack.clear();
+    return 0;
+}
+
+int setAngle(lua_State * L)
+{
+    lua::Stack stack(2);
+    Image * img = (Image *)stack.get(1).getUserData();
+    if (img)
+    {
+        const int angle = stack.get(2).getInt();
+        img->setAngle(angle);
+    }
+    stack.clear();
+    return 0;
+}
+
+int setFlip(lua_State * L)
+{
+    lua::Stack stack(3);
+    Image * img = (Image *)stack.get(1).getUserData();
+    if (img)
+    {
+        const bool flipv = stack.get(2).getBool();
+        const bool fliph = stack.get(3).getBool();
+        img->setFlip(flipv, fliph);
+    }
+    stack.clear();
+    return 0;
+}
+} // lua_image
+
+void Image::bind()
+{
+    lua::Stack stack;
+    const luaL_reg functions[] =
+    {
+        { "new", lua_image::create },
+        { "setSprite", lua_image::setSprite },
+        { "setAngle", lua_image::setAngle },
+        { "setFlip", lua_image::setFlip },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Image", functions);
 }
 
 } // stren

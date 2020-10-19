@@ -1,9 +1,7 @@
 #include "primitive.h"
 
 #include "primitive_figures.h"
-#include "lua_stack.h"
-#include "lua_value.h"
-#include "lua_table.h"
+#include "lua_wrapper.h"
 
 namespace stren
 {
@@ -151,15 +149,8 @@ int creatLines(lua_State * L)
     if (primitive)
     {
         lua::Table tbl(stack.get(2));
-        std::vector<lua::Value> pointsTbl;
-        tbl.fill(pointsTbl);
         std::vector<Point> points;
-        for (const lua::Value & value : pointsTbl)
-        {
-            lua::Table pointTbl(value);
-            const Point point(pointTbl.get(1).getInt(), pointTbl.get(2).getInt());
-            points.push_back(point);
-        }
+        lua::tableToPointsVector(tbl, points);
         primitive->createLines(points);
     }
     return 0;
@@ -172,15 +163,8 @@ int createPoints(lua_State * L)
     if (primitive)
     {
         lua::Table tbl(stack.get(2));
-        std::vector<lua::Value> pointsTbl;
-        tbl.fill(pointsTbl);
         std::vector<Point> points;
-        for (const lua::Value & value : pointsTbl)
-        {
-            lua::Table pointTbl(value);
-            const Point point(pointTbl.get(1).getInt(), pointTbl.get(2).getInt());
-            points.push_back(point);
-        }
+        lua::tableToPointsVector(tbl, points);
         primitive->createPoints(points);
     }
     return 0;
@@ -194,15 +178,8 @@ int createRects(lua_State * L)
     {
         lua::Table tbl(stack.get(2));
         const bool fill = stack.get(3).getBool();
-        std::vector<lua::Value> rectsTbl;
-        tbl.fill(rectsTbl);
         std::vector<Rect> rects;
-        for (const lua::Value & value : rectsTbl)
-        {
-            lua::Table pointTbl(value);
-            const Rect rect(pointTbl.get(1).getInt(), pointTbl.get(2).getInt(), pointTbl.get(3).getInt(), pointTbl.get(4).getInt());
-            rects.push_back(rect);
-        }
+        lua::tableToRectsVector(tbl, rects);
         primitive->createRects(rects, fill);
     }
     return 0;

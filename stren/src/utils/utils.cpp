@@ -7,50 +7,6 @@
 
 namespace stren
 {
-void tableToPoint(const lua::Table & tbl, Point & point)
-{
-    if (tbl.isValid())
-    {
-        point.set(tbl.get(1).getInt(), tbl.get(2).getInt());
-    }
-}
-
-void tableToRect(const lua::Table & tbl, Rect & rect)
-{
-    if (tbl.isValid())
-    {
-        rect.set(tbl.get(1).getInt(), tbl.get(2).getInt(), tbl.get(3).getInt(), tbl.get(4).getInt());
-    }
-}
-
-void tableToPointsVector(const lua::Table & tbl, std::vector<Point> & points)
-{
-    points.clear();
-    if (tbl.isValid())
-    {
-        points.resize(tbl.getSize());
-        for (size_t i = 1, iEnd = points.size(); i <= iEnd; ++i)
-        {
-            lua::Table pointTbl(tbl.get(i));
-            tableToPoint(pointTbl, points[i - 1]);
-        }
-    }
-}
-
-void tableToRectsVector(const lua::Table & tbl, std::vector<Rect> & rects)
-{
-    rects.clear();
-    if (tbl.isValid())
-    {
-        rects.resize(tbl.getSize());
-        for (size_t i = 1, iEnd = rects.size(); i <= iEnd; ++i)
-        {
-            lua::Table pointTbl(tbl.get(i));
-            tableToRect(pointTbl, rects[i - 1]);
-        }
-    }
-}
-
 void tokenize(const char * input, std::vector<std::string>& output, const char * splitSymbol)
 {
     enum { BufferSize = 512 };

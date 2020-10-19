@@ -125,6 +125,14 @@ public:
     /// aligns given rect on itself using selected method of alignment
     ///
     void align(Rect & rect, const int alignment) const;
+    ///
+    /// compare if equal
+    ///
+    bool operator==(const Rect & rect) const { return m_x == rect.m_x && m_y == rect.m_y && m_w == rect.m_w && m_h == rect.m_h; }
+    ///
+    /// compare if not equal
+    ///
+    bool operator!=(const Rect & rect) const { return m_x != rect.m_x || m_y != rect.m_y || m_w != rect.m_w || m_h != rect.m_h; }
 };
 
 } // stren

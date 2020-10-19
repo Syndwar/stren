@@ -13,11 +13,11 @@ namespace stren
 class Image : public Widget
 {
 private:
-    std::string     spriteId_;      ///< @todo
-    Point           center_;        ///< @todo
-    double          angle_;         ///< @todo
-    int             flip_;          ///< @todo
-    Sprite          sprite_;        ///< @todo
+    std::string     m_spriteId;      ///< @todo
+    Point           m_center;        ///< @todo
+    double          m_angle;         ///< @todo
+    int             m_flip;          ///< @todo
+    Sprite          m_sprite;        ///< @todo
 public:
     ///
     /// Constructor
@@ -30,17 +30,18 @@ public:
     ///
     /// @todo
     ///
-    inline void setAngle(const double angle) { angle_ = angle; }
+    inline void setAngle(const double angle) { m_angle = angle; }
     ///
     /// @todo
     ///
-    inline void setFlip(const int flip) { flip_ = flip; }
+    inline void setFlip(const int flip) { m_flip = flip; }
     ///
     /// @todo
     ///
     void setFlip(const bool flipv, const bool fliph);
-
-    /// WRITEME
+    ///
+    /// @todo
+    ///
     void setSprite(const std::string & spriteId);
     ///
     /// @todo
@@ -50,6 +51,10 @@ public:
     /// process incoming system events, returns true if the event was processed, otherwise - returns false to let other widget to process it
     ///
     virtual void processEvent(const Event & event, bool & isEventCaptured) override;
+    ///
+    /// @todo
+    ///
+    static void bind();
 private:
     ///
     /// @todo

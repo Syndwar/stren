@@ -3,6 +3,7 @@
 
 #include "rect.h"
 #include "string_ext.h"
+#include "colour.h"
 
 namespace stren
 {
@@ -25,6 +26,7 @@ private:
     ITexture *      m_texture;           ///< @todo
     Rect            m_rect;              ///< @todo
     std::string     m_textureId;         ///< @todo
+    Colour          m_colour;            ///< @todo
 public:
     ///
     /// Default Constructor
@@ -33,7 +35,7 @@ public:
     ///
     /// Constructor
     ///
-    Sprite(const std::string & textureId, const Rect & rect);
+    Sprite(const std::string & textureId, const Rect & rect, const Colour & colour);
     ///
     /// @todo
     ///

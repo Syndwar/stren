@@ -4,31 +4,8 @@
 #include <vector>
 #include "string_ext.h"
 
-namespace lua 
-{
-class Table;
-} // lua
-
 namespace stren
 {
-class Point;
-class Rect;
-///
-/// convert lua::Table to the Point
-///
-void tableToPoint(const lua::Table & tbl, Point & point);
-///
-/// convert lua::Table to the vector with Points
-///
-void tableToPointsVector(const lua::Table & tbl, std::vector<Point> & points);
-///
-/// convert lua::Table to the rect
-///
-void tableToRect(const lua::Table & tbl, Rect & rect);
-///
-/// convert lua::Table to the vector with Rects
-///
-void tableToRectsVector(const lua::Table & tbl, std::vector<Rect> & rects);
 ///
 /// Splits "input" char string into pieces using "split_symbol" as an anchor.
 /// Puts resulting parts into "output" vector.

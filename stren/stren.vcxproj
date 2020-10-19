@@ -43,6 +43,7 @@
     <ClInclude Include="src\lua\lua_function.h" />
     <ClInclude Include="src\lua\lua_stack.h" />
     <ClInclude Include="src\lua\lua_table.h" />
+    <ClInclude Include="src\lua\lua_utils.h" />
     <ClInclude Include="src\lua\lua_value.h" />
     <ClInclude Include="src\lua\lua_wrapper.h" />
     <ClInclude Include="src\map_editor\map_data.h" />
@@ -70,12 +71,7 @@
     <ClInclude Include="src\screens\map_editor_screen.h" />
     <ClInclude Include="src\screens\options_screen.h" />
     <ClInclude Include="src\screens\screen_selector.h" />
-    <ClInclude Include="src\screens\test_atlas_screen.h" />
-    <ClInclude Include="src\screens\test_battle_field_screen.h" />
-    <ClInclude Include="src\screens\test_screen.h" />
     <ClInclude Include="src\screens\test_scroll_screen.h" />
-    <ClInclude Include="src\screens\test_sound_screen.h" />
-    <ClInclude Include="src\screens\test_widgets_screen.h" />
     <ClInclude Include="src\tests\test_color.h" />
     <ClInclude Include="src\tests\test_lua.h" />
     <ClInclude Include="src\tests\test_observer.h" />
@@ -125,6 +121,7 @@
     <ClCompile Include="src\lua\lua_function.cpp" />
     <ClCompile Include="src\lua\lua_stack.cpp" />
     <ClCompile Include="src\lua\lua_table.cpp" />
+    <ClCompile Include="src\lua\lua_utils.cpp" />
     <ClCompile Include="src\lua\lua_value.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\map_editor\map_data.cpp" />
@@ -150,12 +147,7 @@
     <ClCompile Include="src\screens\map_editor_screen.cpp" />
     <ClCompile Include="src\screens\options_screen.cpp" />
     <ClCompile Include="src\screens\screen_selector.cpp" />
-    <ClCompile Include="src\screens\test_atlas_screen.cpp" />
-    <ClCompile Include="src\screens\test_battle_field_screen.cpp" />
-    <ClCompile Include="src\screens\test_screen.cpp" />
     <ClCompile Include="src\screens\test_scroll_screen.cpp" />
-    <ClCompile Include="src\screens\test_sound_screen.cpp" />
-    <ClCompile Include="src\screens\test_widgets_screen.cpp" />
     <ClCompile Include="src\utils\utils.cpp" />
     <ClCompile Include="src\widgets\area.cpp" />
     <ClCompile Include="src\widgets\button.cpp" />
