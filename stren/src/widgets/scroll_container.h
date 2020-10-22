@@ -24,19 +24,17 @@ public:
         Down = 0x008,
     };                                        ///< scroll directions list enum
 
-    static const std::map<ScrollDirection, std::string> kScrollDirections;    ///< scroll directions list in strings
-                                      
 private:
-    int             direction_;                ///< scroll direction
-    size_t          updateInterval_;           ///< update scroll container interval in milliseconds
-    int             speed_;                    ///< scrolling speed
-    int             wheelSpeed_;               ///< mouse wheel scrolling speed
-    Rect            contentRect_;              ///< rectangle that incorporates all widgets in the scroll container
-    Point           maxOffset_;                ///< maximum objects offset (depends on scroll container rect and content rect)
-    Point           offset_;                   ///< current objects offset
-    Point           target_;                   ///< position where scroll container should move
-    Timer           timer_;                    ///< update timer
-    Camera          camera_;                   ///< camera that is used to move objects and limit their visibility
+    int             m_direction;                ///< scroll direction
+    size_t          m_updateInterval;           ///< update scroll container interval in milliseconds
+    int             m_speed;                    ///< scrolling speed
+    int             m_wheelSpeed;               ///< mouse wheel scrolling speed
+    Rect            m_contentRect;              ///< rectangle that incorporates all widgets in the scroll container
+    Point           m_maxOffset;                ///< maximum objects offset (depends on scroll container rect and content rect)
+    Point           m_offset;                   ///< current objects offset
+    Point           m_target;                   ///< position where scroll container should move
+    Timer           m_timer;                    ///< update timer
+    Camera          m_camera;                   ///< camera that is used to move objects and limit their visibility
 public:
     ///
     /// Constructor
@@ -69,7 +67,7 @@ public:
     ///
     /// set scrolling speed
     ///
-    inline int scrollSpeed() const { return speed_; }
+    inline int scrollSpeed() const { return m_speed; }
     ///
     /// @todo
     ///
@@ -81,6 +79,10 @@ public:
     ///
     /// creates action, caller must take ownership
     ///
+    IAction * createAction(const std::string & actionId);
+    ///
+    /// creates action, caller must take ownership
+    ///
     IAction * createAction(const int direction);
     ///
     /// convert screen coordinate to scroll coordinate
@@ -89,7 +91,11 @@ public:
     ///
     /// returns scrolling direction
     ///
-    int getScrollDirection() const { return direction_; }
+    int getScrollDirection() const { return m_direction; }
+    ///
+    /// @todo
+    ///
+    static void bind();
 protected:
     ///
     /// is called when widget position has changed

@@ -1,6 +1,8 @@
 #include "transform.h"
 
 #include "renderer.h"
+#include "lua_wrapper.h"
+#include <memory>
 
 #define TransformPointsLimit 100
 
@@ -14,6 +16,11 @@ Transform::Transform()
     , m_time(0)
     , m_preTransformAlpha(0)
 {
+}
+
+void Transform::free()
+{
+    m_values.clear();
 }
 
 void Transform::apply()
@@ -138,6 +145,61 @@ void Transform::add(const int start, const int end, const size_t time)
         m_values.push_back(TransformStep(start, lastTime));
     }
     m_values.push_back(TransformStep(end, lastTime + time));
+}
+
+namespace lua_transform 
+{
+int create(lua_State * L)
+{
+    lua::Stack stack(0); // __call pushes tbl on the stack, so stack size is 1
+    const size_t size = sizeof(Transform *);
+    Transform ** transform = (Transform **)stack.createNewFullDataWitMetatable(size, "luaL_Transform");
+    *transform = new Transform();
+    return 1;
+}
+
+int free(lua_State *L)
+{
+    lua::Stack stack(1);
+    Transform ** transform = (Transform **)stack.get(1).getUserData();
+    if (transform && *transform)
+    {
+        delete (*transform);
+        (*transform) = nullptr;
+    }
+    return 0;
+}
+
+int add(lua_State * L)
+{
+    lua::Stack stack(4);
+    Transform ** transform = (Transform **)stack.get(1).getUserData();
+    if (transform && *transform)
+    {
+        const int start = stack.get(2).getInt();
+        const int end = stack.get(3).getInt();
+        const size_t time = (size_t)stack.get(4).getInt();
+        (*transform)->add(start, end, time);
+    }
+    return 0;
+}
+} //lua_transform
+
+void Transform::bind()
+{
+    luaL_Reg functions[] =
+    {
+        { "add", lua_transform::add },
+        { "__gc", lua_transform::free },
+        { NULL, NULL }
+    };
+    luaL_Reg metafunctions[] =
+    {
+        { "__call", lua_transform::create },
+        { NULL, NULL }
+    };
+    lua::Stack stack;
+    stack.createNewMetatable("luaL_Transform", "Transform", functions, metafunctions);
 }
 
 } // stren

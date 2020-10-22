@@ -420,6 +420,36 @@ int Stack::createReference(const char * path)
     return reference;
 }
 
+void * Stack::createNewFullDataWitMetatable(const size_t size, const std::string & privateId)
+{
+    if (m_luaState)
+    {
+        void * userdata = lua_newuserdata(m_luaState, size);
+        luaL_getmetatable(L, privateId.c_str());
+        lua_setmetatable(L, -2);
+        return userdata;
+    }
+    return nullptr;
+}
+
+void Stack::createNewMetatable(const std::string & privateId, const std::string & publicId, const luaL_Reg * funcs, const luaL_Reg * metafuncs)
+{
+    if (m_luaState)
+    {
+        int i = getSize();
+        luaL_newmetatable(m_luaState, privateId.c_str());
+        luaL_register(m_luaState, nullptr, funcs);
+        lua_pushvalue(m_luaState, -1);
+        lua_setfield(m_luaState, -1, "__index");
+        lua_setglobal(m_luaState, publicId.c_str());
+        lua_getglobal(m_luaState, publicId.c_str());
+        lua_newtable(m_luaState);
+        luaL_register(m_luaState, nullptr, metafuncs);
+        lua_setmetatable(L, -2);
+        lua_pop(m_luaState, 1);
+    }
+}
+
 void Stack::getTableKeys(const int reference, ValueVector & keys)
 {
     lua_getref(m_luaState, reference);

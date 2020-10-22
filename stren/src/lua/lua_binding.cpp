@@ -15,6 +15,9 @@
 #include "widgets/primitive.h"
 #include "widgets/fader.h"
 #include "widgets/image.h"
+#include "widgets/area.h"
+#include "widgets/scroll_container.h"
+#include "widgets/progressbar.h"
 
 #include "texture.h"
 
@@ -219,6 +222,10 @@ void bindWithVM()
     Label::bind();
     Container::bind();
     Dialog::bind();
+    ScrollContainer::bind();
     Screen::bind();
+    Area::bind();
+    ProgressBar::bind();
+    Transform::bind();
 }
 } // lua

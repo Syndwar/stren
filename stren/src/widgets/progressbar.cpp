@@ -1,19 +1,20 @@
 #include "progressbar.h"
 
 #include "engine_handler.h"
+#include "lua_wrapper.h"
 
 namespace stren
 {
 
 ProgressBar::ProgressBar(const std::string & id)
     : Widget(id)
-    , type_(Type::Horizontal)
-    , currentValue_(0)
-    , maxValue_(100)
-    , fillSpeed_(1)
-    , updateInterval_(1000)
-    , targetValue_(0)
-    , camera_(getRect())
+    , m_type(Type::Horizontal)
+    , m_currentValue(0)
+    , m_maxValue(100)
+    , m_fillSpeed(1)
+    , m_updateInterval(1000)
+    , m_targetValue(0)
+    , m_camera(getRect())
 {
 }
 
@@ -28,30 +29,30 @@ void ProgressBar::setVertical(const bool value)
 
 void ProgressBar::setCurrentValue(const int value)
 {
-    if (value <= maxValue_)
+    if (value <= m_maxValue)
     {
-        currentValue_ = value;
+        m_currentValue = value;
     }
 }
 
 void ProgressBar::setFillSpeed(const int speed)
 {
-    fillSpeed_ = speed;
-    updateInterval_ = 1000 / speed;
+    m_fillSpeed = speed;
+    m_updateInterval = 1000 / speed;
 }
 
 void ProgressBar::windTo(const int value)
 {
-    if (value <= maxValue_)
+    if (value <= m_maxValue)
     {
-        targetValue_ = value;
-        timer_.restart(updateInterval_);
+        m_targetValue = value;
+        m_timer.restart(m_updateInterval);
     }
 }
 
 bool ProgressBar::isWinding() const
 {
-    return targetValue_ != currentValue_;
+    return m_targetValue != m_currentValue;
 }
 
 void ProgressBar::doRender()
@@ -68,56 +69,179 @@ void ProgressBar::doRender()
     int width(rect.getWidth());
     int height(rect.getHeight());
 
-    if (Type::Horizontal == type_)
+    if (Type::Horizontal == m_type)
     {
-        width = width * currentValue_ / maxValue_;
+        width = width * m_currentValue / m_maxValue;
     }
-    else if (Type::Vertical == type_)
+    else if (Type::Vertical == m_type)
     {
         const int oldHeight(height);
-        height = height * currentValue_ / maxValue_;
+        height = height * m_currentValue / m_maxValue;
         top = top + oldHeight - height;
     }
 
-    camera_.moveTo(left, top);
-    camera_.resize(width, height);
-    camera_.place();
-    sprite_.render(rect, Sprite::Flip::None, 0, center_);
-    camera_.restore();
+    m_camera.moveTo(left, top);
+    m_camera.resize(width, height);
+    m_camera.place();
+    m_sprite.render(rect, Sprite::Flip::None, 0, m_center);
+    m_camera.restore();
 }
 
 void ProgressBar::doUpdate(const size_t dt)
 {
-    timer_.update(dt);
+    m_timer.update(dt);
 
-    if (timer_.isElapsed())
+    if (m_timer.isElapsed())
     {
-        if (currentValue_ < targetValue_)
+        if (m_currentValue < m_targetValue)
         {
-            ++currentValue_;
-            timer_.restart(updateInterval_);
+            ++m_currentValue;
+            m_timer.restart(m_updateInterval);
         }
-        else if (currentValue_ > targetValue_)
+        else if (m_currentValue > m_targetValue)
         {
-            --currentValue_;
-            timer_.restart(updateInterval_);
+            --m_currentValue;
+            m_timer.restart(m_updateInterval);
         }
         else
         {
-            timer_.stop();
+            m_timer.stop();
         }
     }
 }
 
 void ProgressBar::loadSprite()
 {
-    if (!spriteId_.empty())
+    if (!m_spriteId.empty())
     {
-        if (Sprite * sprite = EngineHandler::getSprite(spriteId_))
+        if (Sprite * sprite = EngineHandler::getSprite(m_spriteId))
         {
-            sprite_ = *sprite;
+            m_sprite = *sprite;
         }
     }
+}
+
+namespace lua_progressbar
+{
+int create(lua_State * L)
+{
+    lua::Stack stack(0);
+    const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
+    ProgressBar * pb = new ProgressBar(id);
+    stack.clear();
+    stack.push((void *)pb);
+    return stack.getSize();
+}
+
+int setSprite(lua_State * L)
+{
+    lua::Stack stack(2);
+    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    if (pb)
+    {
+        const std::string spr = stack.get(2).getString();
+        pb->setSprite(spr);
+    }
+    stack.clear();
+    return 0;
+}
+
+int setCurrentValue(lua_State * L)
+{
+    lua::Stack stack(2);
+    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    if (pb)
+    {
+        const int value = stack.get(2).getInt();
+        pb->setCurrentValue(value);
+    }
+    stack.clear();
+    return 0;
+}
+
+int setMaxValue(lua_State * L)
+{
+    lua::Stack stack(2);
+    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    if (pb)
+    {
+        const int value = stack.get(2).getInt();
+        pb->setMaxValue(value);
+    }
+    stack.clear();
+    return 0;
+}
+
+int setFillSpeed(lua_State * L)
+{
+    lua::Stack stack(2);
+    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    if (pb)
+    {
+        const int speed = stack.get(2).getInt();
+        pb->setFillSpeed(speed);
+    }
+    stack.clear();
+    return 0;
+}
+
+int setVertical(lua_State * L)
+{
+    lua::Stack stack(2);
+    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    if (pb)
+    {
+        const bool isVertical = stack.get(2).getBool();
+        pb->setVertical(isVertical);
+    }
+    stack.clear();
+    return 0;
+}
+
+int windTo(lua_State * L)
+{
+    lua::Stack stack(2);
+    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    if (pb)
+    {
+        const int value = stack.get(2).getInt();
+        pb->windTo(value);
+    }
+    stack.clear();
+    return 0;
+}
+
+int getCurrentValue(lua_State * L)
+{
+    lua::Stack stack(1);
+    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    stack.clear();
+    int value(0);
+    if (pb)
+    {
+        value = pb->getCurrentValue();
+    }
+    stack.push(value);
+    return stack.getSize();
+}
+} // lua_progressbar
+
+void ProgressBar::bind()
+{
+    lua::Stack stack;
+    const luaL_reg functions[] =
+    {
+        { "new", lua_progressbar::create },
+        { "setSprite", lua_progressbar::setSprite },
+        { "setCurrentValue", lua_progressbar::setCurrentValue },
+        { "setMaxValue", lua_progressbar::setMaxValue },
+        { "setFillSpeed", lua_progressbar::setFillSpeed },
+        { "setVertical", lua_progressbar::setVertical },
+        { "getCurrentValue", lua_progressbar::getCurrentValue },
+        { "windTo", lua_progressbar::windTo },
+        { NULL, NULL }
+    };
+    stack.loadLibs("ProgressBar", functions);
 }
 
 } // stren

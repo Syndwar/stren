@@ -55,6 +55,14 @@ public:
     ///
     int createReference(const char * path);
     ///
+    /// create new full user data with metatable
+    ///
+    void * createNewFullDataWitMetatable(const size_t size, const std::string & privateId);
+    ///
+    /// create new metatable
+    ///
+    void createNewMetatable(const std::string & privateId, const std::string & publicId, const luaL_Reg * funcs, const luaL_Reg * metafuncs);
+    ///
     /// get value from stack
     ///
     Value get(const int index);

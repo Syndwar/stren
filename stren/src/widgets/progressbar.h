@@ -17,20 +17,20 @@ public:
     enum Type {
         Vertical,
         Horizontal
-    };                                       ///< @todo
+    };                                        ///< @todo
 private:
-    int          currentValue_;              ///< @todo
-    int          maxValue_;                  ///< @todo
-    int          fillSpeed_;                 ///< @todo
-    int          updateInterval_;            ///< @todo
-    int          targetValue_;               ///< @todo
-    Type         type_;                      ///< @todo
-    Sprite       sprite_;                    ///< @todo
+    int          m_currentValue;              ///< @todo
+    int          m_maxValue;                  ///< @todo
+    int          m_fillSpeed;                 ///< @todo
+    int          m_updateInterval;            ///< @todo
+    int          m_targetValue;               ///< @todo
+    Type         m_type;                      ///< @todo
+    Sprite       m_sprite;                    ///< @todo
 
-    std::string  spriteId_;                  ///< @todo
-    Point        center_;                    ///< center of the texture
-    Timer        timer_;                     ///< @todo
-    Camera       camera_;                    ///< @todo
+    std::string  m_spriteId;                  ///< @todo
+    Point        m_center;                    ///< center of the texture
+    Timer        m_timer;                     ///< @todo
+    Camera       m_camera;                    ///< @todo
 public:
     ///
     /// Constructor
@@ -43,7 +43,7 @@ public:
     ///
     /// @todo
     ///
-    inline void setType(Type type) { type_ = type; }
+    inline void setType(Type type) { m_type = type; }
     ///
     /// @todo
     ///
@@ -51,11 +51,11 @@ public:
     ///
     /// @todo
     ///
-    inline void setSprite(const std::string & spriteId) { spriteId_ = spriteId; }
+    inline void setSprite(const std::string & spriteId) { m_spriteId = spriteId; }
     ///
     /// @todo
     ///
-    inline void setMaxValue(const int value) { maxValue_ = value; }
+    inline void setMaxValue(const int value) { m_maxValue = value; }
     ///
     /// @todo
     ///
@@ -67,11 +67,11 @@ public:
     ///
     /// @todo
     ///
-    inline int getMaxValue() const { return maxValue_; }
+    inline int getMaxValue() const { return m_maxValue; }
     ///
     /// @todo
     ///
-    inline int getCurrentValue() const { return currentValue_; }
+    inline int getCurrentValue() const { return m_currentValue; }
     ///
     /// @todo
     ///
@@ -80,6 +80,10 @@ public:
     /// @todo
     ///
     bool isWinding() const;
+    ///
+    /// @todo
+    ///
+    static void bind();
 private:
     ///
     /// @todo

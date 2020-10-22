@@ -391,6 +391,23 @@ int moveTo(lua_State * L)
     stack.clear();
     return 0;
 }
+
+int attachTransform(lua_State * L)
+{
+    lua::Stack stack(3);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        const std::string eventType = stack.get(2).getString();
+        Transform ** transform = (Transform **)stack.get(3).getUserData();
+        if (transform && *transform)
+        {
+            widget->attachTransform(Event::strToType(eventType), **transform);
+        }
+    }
+    stack.clear();
+    return 0;
+}
 } // lua_widget
 
 void Widget::bind()
@@ -407,6 +424,7 @@ void Widget::bind()
         { "getParent", lua_widget::getParent },
         { "isOpened", lua_widget::isOpened },
         { "moveTo", lua_widget::moveTo },
+        { "attachTransform", lua_widget::attachTransform },
         { NULL, NULL }
     };
     stack.loadLibs("Widget", functions);

@@ -22,9 +22,9 @@ private:
         Over,
     };
 
-    MouseState               mouseState_;         ///< @todo
-    std::unique_ptr<IAction> action_;             ///< @todo
-    EventType                actionEvent_;        ///< @todo
+    MouseState               m_mouseState;         ///< @todo
+    std::unique_ptr<IAction> m_action;             ///< @todo
+    EventType                m_actionEvent;        ///< @todo
 
 public:
     ///
@@ -43,6 +43,10 @@ public:
     /// process incoming system events, mark isEventCaptured true if the event was processed, otherwise - mark false to let other widget to process it
     ///
     virtual void processEvent(const Event & event, bool & isEventCaptured) override;
+    ///
+    /// @todo
+    ///
+    static void bind();
 private:
     ///
     /// @todo

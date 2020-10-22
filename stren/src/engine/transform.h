@@ -10,40 +10,40 @@ namespace stren
 class TransformStep
 {
 private:
-    int     value_; ///< @todo
-    size_t  time_;  ///< @todo
+    int     m_value; ///< @todo
+    size_t  m_time;  ///< @todo
 public:
     ///
     /// Constructor
     ///
     TransformStep()
-        : value_(0)
-        , time_(0)
+        : m_value(0)
+        , m_time(0)
     {
     }
     ///
     /// Constructor
     ///
     TransformStep(const int value, const size_t time)
-        : value_(value)
-        , time_(time)
+        : m_value(value)
+        , m_time(time)
     {
     }
     ///
     /// @todo
     ///
-    inline int getValue() const { return value_; }
+    inline int getValue() const { return m_value; }
     ///
     /// @todo
     ///
-    inline size_t getTime() const { return time_; }
+    inline size_t getTime() const { return m_time; }
     ///
     /// @todo
     ///
     inline void set(const int value, const size_t time)
     {
-        value_ = value;
-        time_ = time;
+        m_value = value;
+        m_time = time;
     }
 };
 ///
@@ -107,6 +107,14 @@ public:
     /// stop transformation
     ///
     void stop();
+    ///
+    /// free transform resources
+    ///
+    void free();
+    ///
+    /// @todo
+    ///
+    static void bind();
 };
 } // stren
 
