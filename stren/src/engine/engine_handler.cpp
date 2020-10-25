@@ -2,7 +2,6 @@
 
 #include "engine.h"
 #include "point.h"
-#include "save_data.h"
 
 namespace stren
 {
@@ -149,11 +148,6 @@ void EngineHandler::switchScreen(void * screen)
     {
         m_engine->switchScreen(screen);
     }
-}
-
-SaveData * EngineHandler::getSaveData()
-{
-    return m_engine ? m_engine->getSaveData() : nullptr;
 }
 
 void EngineHandler::deserialize()

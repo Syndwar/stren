@@ -34,7 +34,6 @@
     <ClInclude Include="src\engine\system\widget_tree.h" />
     <ClInclude Include="src\engine\system_tools.h" />
     <ClInclude Include="src\engine\transform.h" />
-    <ClInclude Include="src\engine\save_data.h" />
     <ClInclude Include="src\game\battlefield.h" />
     <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\game\unit.h" />
@@ -69,9 +68,7 @@
     <ClInclude Include="src\repo\texts_repository.h" />
     <ClInclude Include="src\repo\textures_repository.h" />
     <ClInclude Include="src\screens\map_editor_screen.h" />
-    <ClInclude Include="src\screens\options_screen.h" />
     <ClInclude Include="src\screens\screen_selector.h" />
-    <ClInclude Include="src\screens\test_scroll_screen.h" />
     <ClInclude Include="src\tests\test_color.h" />
     <ClInclude Include="src\tests\test_lua.h" />
     <ClInclude Include="src\tests\test_observer.h" />
@@ -114,7 +111,6 @@
     <ClCompile Include="src\engine\system\widget_tree.cpp" />
     <ClCompile Include="src\engine\system_tools.cpp" />
     <ClCompile Include="src\engine\transform.cpp" />
-    <ClCompile Include="src\engine\save_data.cpp" />
     <ClCompile Include="src\game\battlefield.cpp" />
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\lua\lua_binding.cpp" />
@@ -145,9 +141,7 @@
     <ClCompile Include="src\repo\texts_repository.cpp" />
     <ClCompile Include="src\repo\textures_repository.cpp" />
     <ClCompile Include="src\screens\map_editor_screen.cpp" />
-    <ClCompile Include="src\screens\options_screen.cpp" />
     <ClCompile Include="src\screens\screen_selector.cpp" />
-    <ClCompile Include="src\screens\test_scroll_screen.cpp" />
     <ClCompile Include="src\utils\utils.cpp" />
     <ClCompile Include="src\widgets\area.cpp" />
     <ClCompile Include="src\widgets\button.cpp" />

@@ -243,15 +243,6 @@
     <ClInclude Include="src\screens\map_editor_screen.h">
       <Filter>screens</Filter>
     </ClInclude>
-    <ClInclude Include="src\screens\options_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
-    <ClInclude Include="src\screens\test_scroll_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\save_data.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\system_tools.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -455,15 +446,6 @@
     </ClCompile>
     <ClCompile Include="src\screens\map_editor_screen.cpp">
       <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\options_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\test_scroll_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\save_data.cpp">
-      <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\system_tools.cpp">
       <Filter>engine</Filter>

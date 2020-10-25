@@ -11,7 +11,6 @@ class Engine;
 class ITexture;
 class Point;
 class SoundSystem;
-class SaveData;
 class Screen;
 class Sprite;
 class Widget;
@@ -109,10 +108,6 @@ public:
     /// switch current screen with the new one defined by id
     ///
     static void switchScreen(void * screen);
-    ///
-    /// returns reference to the engine save data
-    ///
-    static SaveData * getSaveData();
     ///
     /// @todo
     ///

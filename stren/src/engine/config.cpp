@@ -1,6 +1,6 @@
 #include "config.h"
 
-#include "save_data.h"
+#include "lua_wrapper.h"
 
 namespace stren
 {
@@ -14,15 +14,20 @@ Config::Config()
 {
 }
 
-bool Config::initialize(const SaveData & data)
+bool Config::initialize()
 {
-    m_vsync = data.isVSync();
-    m_isFullscreen = data.isFullscreen();
-    m_screenWidth = data.getScreenWidth();
-    m_screenHeight = data.getScreenHeight();
-    m_fpsLimit = data.getFpsLimit();
-    m_borderless = data.isBorderless();
-    m_title = data.getTitle();
+    std::vector<lua::Value> results(1);
+    lua::Function func("UserSave.getConfig");
+    func.call(lua::Function::kEmptyParams, results);
+    lua::Table tbl(results[0]);
+
+    m_vsync = tbl.get("vsync").getBool();
+    m_borderless = tbl.get("borderless").getBool();
+    m_isFullscreen = tbl.get("fullscreen").getBool();
+    m_screenWidth = tbl.get("screen_width").getInt();
+    m_screenHeight = tbl.get("screen_height").getInt();
+    m_fpsLimit = tbl.get("fps_limit").getInt();
+    m_title = tbl.get("title").getString();
     return true;
 }
 

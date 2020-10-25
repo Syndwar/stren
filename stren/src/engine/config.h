@@ -6,7 +6,6 @@
 
 namespace stren
 {
-class SaveData;
 ///
 /// class Config
 ///
@@ -57,7 +56,7 @@ public:
     ///
     /// initialize config module
     ///
-    bool initialize(const SaveData & data);
+    bool initialize();
 };
 
 } // stren

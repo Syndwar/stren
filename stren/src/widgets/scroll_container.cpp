@@ -384,6 +384,45 @@ int setScrollSpeed(lua_State * L)
     return 0;
 }
 
+int jumpTo(lua_State * L)
+{
+    lua::Stack stack(3);
+    ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
+    if (cnt)
+    {
+        const int x = stack.get(2).getInt();
+        const int y = stack.get(3).getInt();
+        cnt->jumpTo(x, y);
+    }
+    return 0;
+}
+
+int scrollTo(lua_State * L)
+{
+    lua::Stack stack(3);
+    ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
+    if (cnt)
+    {
+        const int x = stack.get(2).getInt();
+        const int y = stack.get(3).getInt();
+        cnt->scrollTo(x, y);
+    }
+    return 0;
+}
+
+int isScrolling(lua_State * L)
+{
+    lua::Stack stack(1);
+    ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
+    bool isScrolling(false);
+    if (cnt)
+    {
+        isScrolling = cnt->isScrolling();
+    }
+    stack.push(isScrolling);
+    return 1;
+}
+
 int setContentRect(lua_State * L)
 {
     lua::Stack stack(5);
@@ -396,7 +435,6 @@ int setContentRect(lua_State * L)
         const int h = stack.get(5).getInt();
         cnt->setContentRect(x, y, w, h);
     }
-    stack.clear();
     return 0;
 }
 
@@ -429,6 +467,9 @@ void ScrollContainer::bind()
         { "setScrollSpeed", lua_scroll_container::setScrollSpeed },
         { "setContentRect", lua_scroll_container::setContentRect },
         { "createAction", lua_scroll_container::createAction },
+        { "jumpTo", lua_scroll_container::jumpTo },
+        { "scrollTo", lua_scroll_container::scrollTo },
+        { "isScrolling", lua_scroll_container::isScrolling },
         { NULL, NULL }
     };
     stack.loadLibs("ScrollContainer", functions);

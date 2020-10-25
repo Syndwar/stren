@@ -178,7 +178,7 @@ const Point & Engine::getMousePos()
 void Engine::initConfig()
 {
     Logger("green") << "[Engine] Create config";
-    m_config.initialize(m_saveData);
+    m_config.initialize();
     Logger("green") << "[Engine] Apply config settings";
     m_fpsLimit = m_config.getFpsLimit();
     if (m_fpsLimit > 0)
@@ -344,13 +344,11 @@ ITexture * Engine::getTexture(const std::string & textureId)
 
 void Engine::serialize()
 {
-    m_saveData.serialize();
 }
 
 void Engine::deserialize()
 {
     Logger("green") << "[Engine] Deserialize save data";
-    m_saveData.deserialize();
     initConfig();
 }
 } // stren

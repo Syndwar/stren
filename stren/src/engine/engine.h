@@ -8,7 +8,6 @@
 #include "config.h"
 #include "event_processor.h"
 #include "fonts_repository.h"
-#include "save_data.h"
 #include "sound_system.h"
 #include "string_ext.h"
 #include "sprites_repository.h"
@@ -54,7 +53,6 @@ private:
     FontsRepository         m_fontsRepo;         ///< @todo
     SoundSystem             m_soundSystem;       ///< @todo
     EventProcessor          m_eventProcessor;    ///< @todo
-    SaveData                m_saveData;          ///< @todo
     SystemTools             m_systemTools;       ///< @todo
     Game *                  m_game;              ///< @todo
 
@@ -143,10 +141,6 @@ public:
     /// @todo
     ///
     void consoleLog(const std::string & message);
-    ///
-    /// returns reference to the save data
-    ///
-    SaveData * getSaveData() { return &m_saveData; }
     ///
     /// @todo
     ///
