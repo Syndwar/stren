@@ -1,6 +1,6 @@
 #include "debug_panel.h"
 
-#include "engine_handler.h"
+#include "engine/engine_handler.h"
 
 #include "widgets/label.h"
 

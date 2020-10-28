@@ -1,5 +1,6 @@
 #include "camera.h"
-#include "renderer.h"
+
+#include "render/renderer.h"
 #include "widgets/widget.h"
 
 namespace stren

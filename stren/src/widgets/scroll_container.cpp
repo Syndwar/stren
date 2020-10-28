@@ -1,10 +1,10 @@
 #include "scroll_container.h"
 
-#include "engine_handler.h"
-#include "event.h"
-#include "renderer.h"
+#include "engine/engine_handler.h"
+#include "engine/event.h"
+#include "render/renderer.h"
 
-#include "lua_wrapper.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

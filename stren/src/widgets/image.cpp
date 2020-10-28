@@ -2,12 +2,12 @@
 
 #include "SDL.h"
 
-#include "engine_handler.h"
-#include "event.h"
-#include "point.h"
-#include "renderer.h"
-#include "sprite.h"
-#include "lua_wrapper.h"
+#include "common/point.h"
+#include "engine/engine_handler.h"
+#include "engine/event.h"
+#include "render/renderer.h"
+#include "render/sprite.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

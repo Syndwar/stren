@@ -1,12 +1,12 @@
 #include "widget.h"
 
-#include "colour.h"
-#include "engine_handler.h"
-#include "event.h"
-#include "lua_wrapper.h"
-#include "primitive_figures.h"
-#include "renderer.h"
-#include "transform.h"
+#include "common/colour.h"
+#include "engine/engine_handler.h"
+#include "engine/event.h"
+#include "engine/transform.h"
+#include "lua/lua_wrapper.h"
+#include "render/primitive_figures.h"
+#include "render/renderer.h"
 
 namespace stren
 {
@@ -275,6 +275,23 @@ void Widget::attachTransform(const EventType eventType, const Transform & transf
 
 namespace lua_widget
 {
+
+int getId(lua_State * L)
+{
+    lua::Stack stack(1);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        const std::string & id = widget->getId();
+        stack.push(id);
+    }
+    else
+    {
+        stack.push();
+    }
+    return 1;
+}
+
 int setRect(lua_State *L)
 {
     lua::Stack stack(5);
@@ -343,7 +360,6 @@ int setAlignment(lua_State * L)
         const int dy = stack.get(4).getInt();
         widget->setAlignment(textAlign, dx, dy);
     }
-    stack.clear();
     return 0;
 }
 
@@ -361,7 +377,7 @@ int getParent(lua_State * L)
     {
         stack.push();
     }
-    return stack.getSize();
+    return 1;
 }
 
 int isOpened(lua_State * L)
@@ -375,7 +391,7 @@ int isOpened(lua_State * L)
         isOpened = widget->isOpened();
     }
     stack.push(isOpened);
-    return stack.getSize();
+    return 1;
 }
 
 int moveTo(lua_State * L)
@@ -388,7 +404,6 @@ int moveTo(lua_State * L)
         const int y = stack.get(3).getInt();
         widget->moveTo(x, y);
     }
-    stack.clear();
     return 0;
 }
 
@@ -405,7 +420,6 @@ int attachTransform(lua_State * L)
             widget->attachTransform(Event::strToType(eventType), **transform);
         }
     }
-    stack.clear();
     return 0;
 }
 } // lua_widget
@@ -415,6 +429,7 @@ void Widget::bind()
     lua::Stack stack;
     const luaL_reg functions[] =
     {
+        { "getId", lua_widget::getId },
         { "setRect", lua_widget::setRect },
         { "setAlignment", lua_widget::setAlignment },
         { "setOrder", lua_widget::setOrder },

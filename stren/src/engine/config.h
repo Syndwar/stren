@@ -2,7 +2,7 @@
 #define STREN_CONFIG_H
 
 #include <map>
-#include "string_ext.h"
+#include "common/string_ext.h"
 
 namespace stren
 {

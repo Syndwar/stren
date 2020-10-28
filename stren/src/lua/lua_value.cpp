@@ -1,5 +1,7 @@
 #include "lua_value.h"
 
+#include "lua_table.h"
+
 namespace lua
 {
 Value::Value()
@@ -110,4 +112,12 @@ bool Value::operator<(const Value & other) const
         m_strValue < other.m_strValue;
 }
 
+Value::Value(const Table & tbl)
+    : m_type(Type::Table)
+    , m_iValue(tbl.getRef())
+    , m_dValue(0.f)
+    , m_strValue("table")
+    , m_userData(nullptr)
+{
+}
 } // lua

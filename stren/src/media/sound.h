@@ -1,7 +1,7 @@
 #ifndef STREN_SOUND_H
 #define STREN_SOUND_H
 
-#include "string_ext.h"
+#include "common/string_ext.h"
 
 struct Mix_Chunk;
 

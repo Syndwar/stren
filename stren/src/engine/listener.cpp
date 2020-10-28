@@ -1,7 +1,7 @@
 #include "listener.h"
 
-#include "lua_wrapper.h"
-#include "event.h"
+#include "lua/lua_wrapper.h"
+#include "engine/event.h"
 
 namespace stren
 {

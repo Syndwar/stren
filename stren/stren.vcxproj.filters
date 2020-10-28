@@ -31,17 +31,11 @@
     <Filter Include="game">
       <UniqueIdentifier>{72437340-0176-4964-84a3-3ae98d681888}</UniqueIdentifier>
     </Filter>
-    <Filter Include="screens">
-      <UniqueIdentifier>{21ed1ff4-f904-483c-876c-e901241526c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="engine\system">
       <UniqueIdentifier>{b4bb43ac-2387-40ae-a65f-e18d42d54853}</UniqueIdentifier>
     </Filter>
     <Filter Include="widgets\mods">
       <UniqueIdentifier>{8d1c4770-06d8-485d-922d-66dd79e7e63a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="map_editor">
-      <UniqueIdentifier>{082affb6-5d73-4fc2-8e37-ac3ee07baadb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -237,12 +231,6 @@
     <ClInclude Include="src\engine\console.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\screens\screen_selector.h">
-      <Filter>screens</Filter>
-    </ClInclude>
-    <ClInclude Include="src\screens\map_editor_screen.h">
-      <Filter>screens</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\system_tools.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -258,26 +246,14 @@
     <ClInclude Include="src\widgets\mods\widget_transform_mod.h">
       <Filter>widgets\mods</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\unit.h">
-      <Filter>game</Filter>
-    </ClInclude>
     <ClInclude Include="src\game\game.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="src\map_editor\map_data.h">
-      <Filter>map_editor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\map_editor\map_editor_items_panel.h">
-      <Filter>map_editor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\map_editor\map_editor_system_panel.h">
-      <Filter>map_editor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\map_editor\map_editor_filters_panel.h">
-      <Filter>map_editor</Filter>
-    </ClInclude>
     <ClInclude Include="src\lua\lua_utils.h">
       <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\screen_selector.h">
+      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -441,12 +417,6 @@
     <ClCompile Include="src\engine\console.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\screens\screen_selector.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screens\map_editor_screen.cpp">
-      <Filter>screens</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\system_tools.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -462,20 +432,11 @@
     <ClCompile Include="src\game\game.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="src\map_editor\map_editor_system_panel.cpp">
-      <Filter>map_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\map_editor\map_editor_items_panel.cpp">
-      <Filter>map_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\map_editor\map_editor_filters_panel.cpp">
-      <Filter>map_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\map_editor\map_data.cpp">
-      <Filter>map_editor</Filter>
-    </ClCompile>
     <ClCompile Include="src\lua\lua_utils.cpp">
       <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\screen_selector.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

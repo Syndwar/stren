@@ -1,9 +1,9 @@
 #include "clabel.h"
 
-#include "lua_wrapper.h"
-#include "engine_handler.h"
-#include "fonts_repository.h"
-#include "renderer.h"
+#include "lua/lua_wrapper.h"
+#include "engine/engine_handler.h"
+#include "repo/fonts_repository.h"
+#include "render/renderer.h"
 
 namespace stren
 {

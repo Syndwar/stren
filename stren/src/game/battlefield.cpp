@@ -1,6 +1,6 @@
 #include "battlefield.h"
 
-#include "event.h"
+#include "engine/event.h"
 
 namespace stren
 {

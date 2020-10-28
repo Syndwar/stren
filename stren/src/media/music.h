@@ -1,7 +1,7 @@
 #ifndef STREN_MUSIC_H
 #define STREN_MUSIC_H
 
-#include "string_ext.h"
+#include "common/string_ext.h"
 
 typedef struct _Mix_Music Mix_Music;
 

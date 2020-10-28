@@ -1,252 +1,12 @@
 #include "game/game.h"
+
+#include "engine/engine_handler.h"
+#include "engine/logger.h"
 #include "widgets/screen.h"
-#include "engine_handler.h"
-#include "logger.h"
-#include "event.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {
-/*
-enum class Faction
-{
-    Operatives = 0,
-    Raiders
-};
-
-const std::map<Faction, std::string> kFactionNames = {
-    {Faction::Operatives, "The operatives"},
-    {Faction::Raiders, "The raiders"},
-};
-
-std::string getMoraleStr(const size_t valueCur, const size_t valueMax)
-{
-    if (valueMax == valueCur)
-    {
-        return "Great";
-    }
-    return "Poor";
-}
-
-std::string getStaminaStr(const size_t valueCur, const size_t valueMax)
-{
-    if (valueMax == valueCur)
-    {
-        return "Great";
-    }
-    return "Poor";
-}
-
-///
-/// class Inventory
-///
-class Inventory
-{
-private:
-public:
-    Inventory()
-    {
-    }
-};
-
-///
-/// struct UnitStats
-///
-struct UnitStats
-{
-    std::string name;
-    Faction     faction;
-    size_t      moraleMax;
-    size_t      moraleCur;
-    size_t      staminaMax;
-    size_t      staminaCur;
-    size_t      healthMax;
-    size_t      healthCur;
-    size_t      armor;
-    size_t      protection;
-    size_t      weaponSkill;
-    size_t      actinPointsMax;
-    size_t      actinPointsCur;
-
-    UnitStats()
-        : moraleMax(1)
-        , moraleCur(1)
-        , staminaMax(1)
-        , staminaCur(1)
-        , healthMax(1)
-        , healthCur(1)
-        , armor(0)
-        , protection(0)
-        , weaponSkill(0)
-        , actinPointsMax(0)
-        , actinPointsCur(0)
-    {
-    }
-};
-
-///
-/// class Unit
-///
-class Unit
-{
-private:
-    UnitStats   m_stats;
-    Inventory   m_inventory;
-public:
-    ///
-    /// Constructor
-    ///
-    Unit()
-
-    {
-    }
-
-    void setName(const std::string & value)
-    {
-        m_stats.name = value;
-    }
-
-    const std::string & getName() const
-    {
-        return m_stats.name;
-    }
-
-    void setFaction(const Faction value)
-    {
-        m_stats.faction = value;
-    }
-
-    Faction getFaction() const
-    {
-        m_stats.faction;
-    }
-
-    void setMoraleMax(const size_t value)
-    {
-        m_stats.moraleMax = value;
-    }
-
-    size_t getMoraleMax() const
-    {
-        return m_stats.moraleMax;
-    }
-
-    void setMoraleCurrent(const size_t value)
-    {
-        m_stats.moraleCur = value;
-    }
-
-    size_t getMoraleCurrent() const
-    {
-        return m_stats.moraleCur;
-    }
-
-    void setStaminaMax(const size_t value)
-    {
-        m_stats.staminaMax = value;
-    }
-
-    size_t getStaminaMax() const
-    {
-        return m_stats.staminaMax;
-    }
-
-    void setStaminaCurrent(const size_t value)
-    {
-        m_stats.staminaCur = value;
-    }
-
-    size_t getStaminaCurrent() const
-    {
-        return m_stats.staminaCur;
-    }
-
-    void setHealthMax(const size_t value)
-    {
-        m_stats.healthMax = value;
-    }
-
-    size_t getHealthMax() const
-    {
-        return m_stats.healthMax;
-    }
-
-    void setHealthCurrent(const size_t value)
-    {
-        m_stats.healthCur = value;
-    }
-
-    size_t getHealthCurrent() const
-    {
-        return m_stats.healthCur;
-    }
-
-    void setArmor(const size_t value)
-    {
-        m_stats.armor = value;
-    }
-
-    size_t getArmor() const
-    {
-        return m_stats.armor;
-    }
-
-    void setProtection(const size_t value)
-    {
-        m_stats.protection = value;
-    }
-
-    size_t getProtection() const
-    {
-        return m_stats.protection;
-    }
-
-    void setWeaponSkill(const size_t value)
-    {
-        m_stats.weaponSkill = value;
-    }
-
-    size_t getWeaponSkill() const
-    {
-        return m_stats.weaponSkill;
-    }
-
-    void setActionPointsMax(const size_t value)
-    {
-        m_stats.actinPointsMax = value;
-    }
-
-    size_t getActionPointsMax() const
-    {
-        return m_stats.actinPointsMax;
-    }
-
-    void setActionPointsCurrent(const size_t value)
-    {
-        m_stats.actinPointsCur = value;
-    }
-
-    size_t getActionPointsCurrent() const
-    {
-        return m_stats.actinPointsCur;
-    }
-
-    void move()
-    {
-    }
-
-    void shoot()
-    {
-    }
-
-    void reload()
-    {
-    }
-
-    void pickup()
-    {
-    }
-};
-*/
 Game::Game()
 {
     /*
@@ -302,11 +62,274 @@ void Game::switchScreen(void * screen)
     m_screenSelector.switchToScreen(screen);
 }
 
+namespace lua_game
+{
+int changeScreen(lua_State * L)
+{
+    lua::Stack stack(1);
+    void * screen = stack.get(1).getUserData();
+    if (screen)
+    {
+        EngineHandler::switchScreen(screen);
+    }
+    return 0;
+}
+} // lua_game
+
+void Game::bind()
+{
+    lua::Stack stack;
+    const luaL_reg functions[] =
+    {
+        { "changeScreen", lua_game::changeScreen },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Game", functions);
+}
+
 /*
-void Game::update(const size_t dt)
+enum class Faction
+{
+Operatives = 0,
+Raiders
+};
+
+const std::map<Faction, std::string> kFactionNames = {
+{Faction::Operatives, "The operatives"},
+{Faction::Raiders, "The raiders"},
+};
+
+std::string getMoraleStr(const size_t valueCur, const size_t valueMax)
+{
+if (valueMax == valueCur)
+{
+return "Great";
+}
+return "Poor";
+}
+
+std::string getStaminaStr(const size_t valueCur, const size_t valueMax)
+{
+if (valueMax == valueCur)
+{
+return "Great";
+}
+return "Poor";
+}
+
+///
+/// class Inventory
+///
+class Inventory
+{
+private:
+public:
+Inventory()
+{
+}
+};
+
+///
+/// struct UnitStats
+///
+struct UnitStats
+{
+std::string name;
+Faction     faction;
+size_t      moraleMax;
+size_t      moraleCur;
+size_t      staminaMax;
+size_t      staminaCur;
+size_t      healthMax;
+size_t      healthCur;
+size_t      armor;
+size_t      protection;
+size_t      weaponSkill;
+size_t      actinPointsMax;
+size_t      actinPointsCur;
+
+UnitStats()
+: moraleMax(1)
+, moraleCur(1)
+, staminaMax(1)
+, staminaCur(1)
+, healthMax(1)
+, healthCur(1)
+, armor(0)
+, protection(0)
+, weaponSkill(0)
+, actinPointsMax(0)
+, actinPointsCur(0)
+{
+}
+};
+
+///
+/// class Unit
+///
+class Unit
+{
+private:
+UnitStats   m_stats;
+Inventory   m_inventory;
+public:
+///
+/// Constructor
+///
+Unit()
+
 {
 }
 
+void setName(const std::string & value)
+{
+m_stats.name = value;
+}
+
+const std::string & getName() const
+{
+return m_stats.name;
+}
+
+void setFaction(const Faction value)
+{
+m_stats.faction = value;
+}
+
+Faction getFaction() const
+{
+m_stats.faction;
+}
+
+void setMoraleMax(const size_t value)
+{
+m_stats.moraleMax = value;
+}
+
+size_t getMoraleMax() const
+{
+return m_stats.moraleMax;
+}
+
+void setMoraleCurrent(const size_t value)
+{
+m_stats.moraleCur = value;
+}
+
+size_t getMoraleCurrent() const
+{
+return m_stats.moraleCur;
+}
+
+void setStaminaMax(const size_t value)
+{
+m_stats.staminaMax = value;
+}
+
+size_t getStaminaMax() const
+{
+return m_stats.staminaMax;
+}
+
+void setStaminaCurrent(const size_t value)
+{
+m_stats.staminaCur = value;
+}
+
+size_t getStaminaCurrent() const
+{
+return m_stats.staminaCur;
+}
+
+void setHealthMax(const size_t value)
+{
+m_stats.healthMax = value;
+}
+
+size_t getHealthMax() const
+{
+return m_stats.healthMax;
+}
+
+void setHealthCurrent(const size_t value)
+{
+m_stats.healthCur = value;
+}
+
+size_t getHealthCurrent() const
+{
+return m_stats.healthCur;
+}
+
+void setArmor(const size_t value)
+{
+m_stats.armor = value;
+}
+
+size_t getArmor() const
+{
+return m_stats.armor;
+}
+
+void setProtection(const size_t value)
+{
+m_stats.protection = value;
+}
+
+size_t getProtection() const
+{
+return m_stats.protection;
+}
+
+void setWeaponSkill(const size_t value)
+{
+m_stats.weaponSkill = value;
+}
+
+size_t getWeaponSkill() const
+{
+return m_stats.weaponSkill;
+}
+
+void setActionPointsMax(const size_t value)
+{
+m_stats.actinPointsMax = value;
+}
+
+size_t getActionPointsMax() const
+{
+return m_stats.actinPointsMax;
+}
+
+void setActionPointsCurrent(const size_t value)
+{
+m_stats.actinPointsCur = value;
+}
+
+size_t getActionPointsCurrent() const
+{
+return m_stats.actinPointsCur;
+}
+
+void move()
+{
+}
+
+void shoot()
+{
+}
+
+void reload()
+{
+}
+
+void pickup()
+{
+}
+};
+*/
+
+/*
 void Game::createBoard()
 {
 }
@@ -594,5 +617,102 @@ void Game::addUnit(const UnitStats & stats)
 void Game::createItems()
 {
 }
+*/
+
+/*
+class Inventory
+{
+public:
+///
+/// Constructor
+///
+Inventory()
+{
+}
+///
+///
+///
+void removeItem() {}
+///
+///
+///
+void addItem() {}
+///
+///
+///
+};
+///
+/// class Unit
+///
+class Unit
+{
+private:
+std::string m_id;
+std::string m_name;
+std::string m_faction;
+int         m_weaponSkill;
+int         m_armour;
+int         m_protection;
+int         m_moraleCur;
+int         m_moraleMax;
+int         m_staminaCur;
+int         m_staminaMax;
+int         m_healthCur;
+int         m_healthMax;
+int         m_actionPointsCur;
+int         m_actionPointsMax;
+bool        m_isAi;
+Inventory   m_inventory;
+public:
+///
+/// Constructor
+///
+Unit()
+: m_weaponSkill(0)
+, m_armour(0)
+, m_protection(0)
+, m_moraleCur(0)
+, m_moraleMax(0)
+, m_staminaCur(0)
+, m_staminaMax(0)
+, m_healthCur(0)
+, m_healthMax(0)
+, m_actionPointsCur(0)
+, m_actionPointsMax(0)
+{
+}
+///
+/// @todo
+///
+void move() {}
+///
+/// @todo
+///
+void fire() {}
+///
+/// @todo
+///
+void changeFireMode() {}
+///
+/// @todo
+///
+void reload() {}
+///
+/// @todo
+///
+void dropItem()
+{
+m_inventory.removeItem();
+}
+///
+/// @todo
+///
+void pickupItem()
+{
+m_inventory.addItem();
+}
+};
+
+#endif //STREN_UNIT_H
 */
 } // stren

@@ -4,8 +4,8 @@
 #include <map>
 #include <vector>
 
-#include "itexture.h"
-#include "rect.h"
+#include "render/itexture.h"
+#include "common/rect.h"
 
 struct SDL_Texture;
 struct SDL_Surface;

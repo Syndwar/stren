@@ -2,11 +2,10 @@
 
 #include "SDL.h"
 
-#include "point.h"
-#include "renderer.h"
-#include "glyph.h"
-#include "lua_stack.h"
-#include "lua_value.h"
+#include "common/point.h"
+#include "render/renderer.h"
+#include "render/glyph.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

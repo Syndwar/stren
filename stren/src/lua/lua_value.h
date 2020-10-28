@@ -1,13 +1,14 @@
 #ifndef STREN_LUA_VALUE_H
 #define STREN_LUA_VALUE_H
 
-#include "string_ext.h"
+#include "common/string_ext.h"
 #include "assert.h"
 
-#include "lua_ext.h"
+#include "lua/lua_ext.h"
 
 namespace lua
 {
+class Table;
 ///
 /// class Value
 ///
@@ -49,29 +50,39 @@ public:
     ///
     Value(const int value, const bool isTable);
     ///
+    /// Create reference to the table
+    ///
+    Value(const Table & tbl);
+    ///
     /// Create number value
     ///
     Value(const size_t value);
-
+    ///
     /// Create number value
+    ///
     Value(const long value);
-
+    ///
     /// Create number value
+    ///
     Value(const double value);
-
+    ///
     /// Create number value
+    ///
     Value(const float value);
-
+    ///
     /// Create string value
     Value(const char * value);
-
+    ///
     /// Create string value
+    ///
     Value(const std::string & value);
-
+    ///
     /// Create value with user data
+    ///
     Value(void * userdata);
-
+    ///
     /// check if value is nil
+    ///
     inline bool isNil() const { return Type::Nil == m_type; }
 
     /// check if value is boolean

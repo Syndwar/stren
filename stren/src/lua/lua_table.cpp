@@ -1,8 +1,8 @@
 #include "lua_table.h"
-#include "lua_stack.h"
-#include "lua_value.h"
 
-#include "utils.h"
+#include "lua/lua_stack.h"
+#include "lua/lua_value.h"
+#include "utils/utils.h"
 
 #define kTablePathSeparator "."
 

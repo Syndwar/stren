@@ -4,8 +4,8 @@
 #include <map>
 #include <memory>
 
-#include "string_ext.h"
-#include "delegate.h"
+#include "common/string_ext.h"
+#include "common/delegate.h"
 
 namespace stren
 {

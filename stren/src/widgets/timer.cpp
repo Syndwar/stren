@@ -1,8 +1,7 @@
 #include "timer.h"
-#include "event.h"
 
-#include "lua_stack.h"
-#include "lua_value.h"
+#include "engine/event.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

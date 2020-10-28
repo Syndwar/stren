@@ -1,10 +1,10 @@
 #ifndef STREN_PROGRESSBAR_H
 #define STREN_PROGRESSBAR_H
 
-#include "widget.h"
-#include "sprite.h"
-#include "timer.h"
-#include "camera.h"
+#include "engine/camera.h"
+#include "widgets/widget.h"
+#include "widgets/timer.h"
+#include "render/sprite.h"
 
 namespace stren
 {

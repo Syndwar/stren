@@ -3,8 +3,8 @@
 
 #include "widget.h"
 
-#include "sprite.h"
-#include "timer.h"
+#include "render/sprite.h"
+#include "widgets/timer.h"
 
 namespace stren
 {
@@ -13,13 +13,13 @@ namespace stren
 ///
 class Fader : public Widget
 {
-    std::string spriteId_;              ///< @todo
-    int         currentAlpha_;          ///< @todo
-    int         targetAlpha_;           ///< @todo
-    int         fadeSpeed_;             ///< how many points of alpha will change in one second
-    size_t      updateInterval_;        ///< update fader interval in milliseconds
-    Timer       timer_;                 ///< update timer
-    Sprite      sprite_;                ///< @todo
+    std::string m_spriteId;              ///< @todo
+    int         m_currentAlpha;          ///< @todo
+    int         m_targetAlpha;           ///< @todo
+    int         m_fadeSpeed;             ///< how many points of alpha will change in one second
+    size_t      m_updateInterval;        ///< update fader interval in milliseconds
+    Timer       m_timer;                 ///< update timer
+    Sprite      m_sprite;                ///< @todo
 public:
     ///
     /// Constructor
@@ -32,11 +32,11 @@ public:
     ///
     /// @todo
     ///
-    inline bool isFading() const { return targetAlpha_ != currentAlpha_; }
+    inline bool isFading() const { return m_targetAlpha != m_currentAlpha; }
     ///
     /// @todo
     ///
-    inline int getFadeSpeed() const { return fadeSpeed_; }
+    inline int getFadeSpeed() const { return m_fadeSpeed; }
     ///
     /// set fading speed in points of alpha change in one second
     ///

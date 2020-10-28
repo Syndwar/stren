@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "string_ext.h"
-#include "point.h"
+#include "common/string_ext.h"
+#include "common/point.h"
 
 namespace stren
 {

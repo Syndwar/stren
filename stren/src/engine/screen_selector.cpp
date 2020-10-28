@@ -1,7 +1,7 @@
 #include "screen_selector.h"
 
-#include "lua_stack.h"
 #include "widgets/screen.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

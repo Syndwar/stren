@@ -1,8 +1,8 @@
 #ifndef EVENT_PROCESSOR_H
 #define EVENT_PROCESSOR_H
 
-#include "point.h"
-#include "event.h"
+#include "common/point.h"
+#include "engine/event.h"
 
 union SDL_Event;
 

@@ -3,11 +3,11 @@
 
 #include <memory>
 
-#include "alignment.h"
-#include "listener.h"
-#include "point.h"
-#include "rect.h"
-#include "mods/widget_transform_mod.h"
+#include "common/alignment.h"
+#include "common/point.h"
+#include "common/rect.h"
+#include "engine/listener.h"
+#include "widgets/mods/widget_transform_mod.h"
 
 namespace stren
 {

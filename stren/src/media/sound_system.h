@@ -1,9 +1,9 @@
 #ifndef STREN_SOUND_SYSTEM_H
 #define STREN_SOUND_SYSTEM_H
 
-#include "string_ext.h"
-#include "sounds_repository.h"
-#include "music_repository.h"
+#include "common/string_ext.h"
+#include "media/sounds_repository.h"
+#include "media/music_repository.h"
 
 namespace stren
 {

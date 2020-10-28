@@ -1,7 +1,7 @@
 #include "primitive.h"
 
-#include "primitive_figures.h"
-#include "lua_wrapper.h"
+#include "render/primitive_figures.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

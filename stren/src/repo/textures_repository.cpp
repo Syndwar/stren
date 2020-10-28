@@ -2,8 +2,8 @@
 
 #include "SDL.h"
 
-#include "lua_wrapper.h"
-#include "texture.h"
+#include "lua/lua_wrapper.h"
+#include "render/texture.h"
 
 namespace stren
 {

@@ -3,17 +3,17 @@
 
 #include <vector>
 
-#include "app_window.h"
-#include "colour.h"
-#include "config.h"
-#include "event_processor.h"
-#include "fonts_repository.h"
-#include "sound_system.h"
-#include "string_ext.h"
-#include "sprites_repository.h"
-#include "texts_repository.h"
-#include "textures_repository.h"
-#include "system_tools.h"
+#include "engine/app_window.h"
+#include "common/colour.h"
+#include "common/string_ext.h"
+#include "engine/config.h"
+#include "engine/event_processor.h"
+#include "engine/system_tools.h"
+#include "media/sound_system.h"
+#include "repo/fonts_repository.h"
+#include "repo/sprites_repository.h"
+#include "repo/texts_repository.h"
+#include "repo/textures_repository.h"
 
 struct SDL_Window;
 

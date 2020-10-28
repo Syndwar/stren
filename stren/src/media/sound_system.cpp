@@ -32,8 +32,8 @@ Mix_GetMusicHookData        Retrieve the Mix_HookMusic arguments
 
 #include "SDL_mixer.h"
 
-#include "logger.h"
-#include "lua_wrapper.h"
+#include "engine/logger.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

@@ -1,8 +1,8 @@
 #ifndef STREN_CAMERA_H
 #define STREN_CAMERA_H
 
-#include "rect.h"
-#include "point.h"
+#include "common/rect.h"
+#include "common/point.h"
 
 namespace stren
 {

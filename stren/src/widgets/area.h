@@ -1,8 +1,8 @@
 #ifndef STREN_AREA_H
 #define STREN_AREA_H
 
-#include "widget.h"
-#include "event.h"
+#include "engine/event.h"
+#include "widgets/widget.h"
 
 namespace stren
 {

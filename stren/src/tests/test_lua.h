@@ -226,7 +226,8 @@ private:
 
         Table tbl("UserSaveData");
         stren::assertMessage(tbl.isValid(), "Error");
-        Function("UserSave.init").call();
+        Table tbl2("UserSave");
+        Function("UserSave.init").call({ tbl2 });
         tbl = Table("UserSaveData");
         Value userName = tbl.get("user_name");
         stren::assertMessage(userName.isString(), "Error");

@@ -1,8 +1,8 @@
 #ifndef STREN_GLYPH_H
 #define STREN_GLYPH_H
 
-#include "rect.h"
-#include "colour.h"
+#include "common/rect.h"
+#include "common/colour.h"
 
 namespace stren {
 

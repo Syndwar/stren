@@ -1,7 +1,7 @@
 #ifndef STREN_SCREEN_SELECTOR_H
 #define STREN_SCREEN_SELECTOR_H
 
-#include "string_ext.h"
+#include "common/string_ext.h"
 
 namespace stren
 {

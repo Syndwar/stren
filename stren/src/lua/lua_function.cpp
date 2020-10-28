@@ -1,7 +1,7 @@
 #include "lua_function.h"
 
-#include "lua_wrapper.h"
-#include "utils.h"
+#include "lua/lua_wrapper.h"
+#include "utils/utils.h"
 
 namespace lua
 {

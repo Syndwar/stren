@@ -3,8 +3,8 @@
 
 #include <map>
 
-#include "string_ext.h"
-#include "sprite.h"
+#include "common/string_ext.h"
+#include "render/sprite.h"
 
 namespace stren
 {

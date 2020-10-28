@@ -1,8 +1,8 @@
 #ifndef STREN_GAME_H
 #define STREN_GAME_H
 
-#include "screens/screen_selector.h"
-#include "camera.h"
+#include "engine/screen_selector.h"
+#include "engine/camera.h"
 
 namespace stren
 {
@@ -47,6 +47,10 @@ public:
     /// @todo
     ///
     void switchScreen(void * screen);
+    ///
+    /// @todo
+    ///
+    static void bind();
     /*
     ///
     /// @todo

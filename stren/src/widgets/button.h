@@ -3,12 +3,12 @@
 
 #include <map>
 
-#include "colour.h"
-#include "delegate.h"
-#include "event.h"
-#include "point.h"
-#include "widget.h"
-#include "clabel.h"
+#include "common/colour.h"
+#include "common/delegate.h"
+#include "common/point.h"
+#include "engine/event.h"
+#include "widgets/widget.h"
+#include "render/clabel.h"
 
 namespace stren
 {

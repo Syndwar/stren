@@ -1,21 +1,20 @@
 #include "fader.h"
 
-#include "texture.h"
-#include "renderer.h"
-#include "point.h"
-#include "engine_handler.h"
-#include "lua_stack.h"
-#include "lua_value.h"
+#include "common/point.h"
+#include "engine/engine_handler.h"
+#include "render/texture.h"
+#include "render/renderer.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {
 
 Fader::Fader(const std::string & id /* = String::kEmpty */)
     : Widget(id)
-    , currentAlpha_(0)
-    , targetAlpha_(0)
-    , fadeSpeed_(255)
-    , updateInterval_(100)
+    , m_currentAlpha(0)
+    , m_targetAlpha(0)
+    , m_fadeSpeed(255)
+    , m_updateInterval(100)
 {
 }
 
@@ -25,25 +24,25 @@ Fader::~Fader()
 
 void Fader::setSprite(const std::string & id)
 {
-    spriteId_ = id;
+    m_spriteId = id;
     addUpdateState(UpdateState::Update);
 }
 
 void Fader::fadeIn()
 {
-    targetAlpha_ = 255;
+    m_targetAlpha = 255;
     startTimer();
 }
 
 void Fader::fadeOut()
 {
-    targetAlpha_ = 0;
+    m_targetAlpha = 0;
     startTimer();
 }
 
 void Fader::fadeTo(const int targetValue)
 {
-    targetAlpha_ = targetValue;
+    m_targetAlpha = targetValue;
     startTimer();
 }
 
@@ -51,55 +50,55 @@ void Fader::setFadeSpeed(const int speed)
 {
     if (speed > 0)
     {
-        fadeSpeed_ = speed;
-        updateInterval_ = 1000 / speed;
+        m_fadeSpeed = speed;
+        m_updateInterval = 1000 / speed;
     }
 }
 
 void Fader::fadeInstantTo(const int targetValue)
 {
-    targetAlpha_ = targetValue;
-    currentAlpha_ = targetValue;
+    m_targetAlpha = targetValue;
+    m_currentAlpha = targetValue;
 }
 
 void Fader::startTimer()
 {
-    timer_.restart(updateInterval_);
+    m_timer.restart(m_updateInterval);
 }
 
 void Fader::doUpdate(const size_t dt)
 {
-    timer_.update(dt);
+    m_timer.update(dt);
 
-    if (currentAlpha_ != targetAlpha_)
+    if (m_currentAlpha != m_targetAlpha)
     {
-        if (timer_.isElapsed())
+        if (m_timer.isElapsed())
         {
             // check if timer elapsed earlier than update was called
             // and compensate it
             int increment = 1;
-            if (dt > updateInterval_)
+            if (dt > m_updateInterval)
             {
-                increment = dt / updateInterval_;
+                increment = dt / m_updateInterval;
             }
 
-            if (currentAlpha_ < targetAlpha_)
+            if (m_currentAlpha < m_targetAlpha)
             {
-                currentAlpha_ += increment;
-                if (currentAlpha_ > targetAlpha_)
+                m_currentAlpha += increment;
+                if (m_currentAlpha > m_targetAlpha)
                 {
-                    currentAlpha_ = targetAlpha_;
+                    m_currentAlpha = m_targetAlpha;
                 }
-                timer_.restart(updateInterval_);
+                m_timer.restart(m_updateInterval);
             }
-            else if (currentAlpha_ > targetAlpha_)
+            else if (m_currentAlpha > m_targetAlpha)
             {
-                currentAlpha_ -= increment;
-                if (currentAlpha_ < targetAlpha_)
+                m_currentAlpha -= increment;
+                if (m_currentAlpha < m_targetAlpha)
                 {
-                    currentAlpha_ = targetAlpha_;
+                    m_currentAlpha = m_targetAlpha;
                 }
-                timer_.restart(updateInterval_);
+                m_timer.restart(m_updateInterval);
             }
         }
     }
@@ -107,11 +106,11 @@ void Fader::doUpdate(const size_t dt)
 
 void Fader::loadSprite()
 {
-    if (!spriteId_.empty())
+    if (!m_spriteId.empty())
     {
-        if (Sprite * sprite = EngineHandler::getSprite(spriteId_))
+        if (Sprite * sprite = EngineHandler::getSprite(m_spriteId))
         {
-            sprite_ = *sprite;
+            m_sprite = *sprite;
         }
     }
 }
@@ -124,8 +123,8 @@ void Fader::doRender()
         removeUpdateState(UpdateState::Update);
     }
     const int alpha = Renderer::getAlpha();
-    Renderer::setAlpha(currentAlpha_);
-    sprite_.render(getRect(), 0, Sprite::Flip::None, Point::getEmpty());
+    Renderer::setAlpha(m_currentAlpha);
+    m_sprite.render(getRect(), 0, Sprite::Flip::None, Point::getEmpty());
     Renderer::setAlpha(alpha);
 }
 

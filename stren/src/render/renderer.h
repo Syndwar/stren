@@ -1,8 +1,8 @@
 #ifndef STREN_RENDERER_H
 #define STREN_RENDERER_H
 
-#include "rect.h"
-#include "point.h"
+#include "common/rect.h"
+#include "common/point.h"
 
 struct SDL_Renderer;
 

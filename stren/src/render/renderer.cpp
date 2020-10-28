@@ -2,9 +2,9 @@
 
 #include "SDL.h"
 
-#include "app_window.h"
-#include "colour.h"
-#include "logger.h"
+#include "common/colour.h"
+#include "engine/app_window.h"
+#include "engine/logger.h"
 
 namespace stren
 {

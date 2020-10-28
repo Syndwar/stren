@@ -1,8 +1,8 @@
 #include "sprite.h"
 
-#include "colour.h"
-#include "engine_handler.h"
-#include "texture.h"
+#include "common/colour.h"
+#include "engine/engine_handler.h"
+#include "render/texture.h"
 
 namespace stren
 {

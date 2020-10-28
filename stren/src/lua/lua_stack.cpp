@@ -1,6 +1,7 @@
 #include "lua_stack.h"
-#include "lua_value.h"
-#include "utils.h"
+
+#include "lua/lua_value.h"
+#include "utils/utils.h"
 
 namespace lua
 {
@@ -164,7 +165,7 @@ void Stack::makeTableGlobal(const int reference, const char * name)
 
 void Stack::deleteReference(const int reference)
 {
-    if (m_luaState)
+    if (m_luaState && reference != LUA_NOREF)
     {
         lua_unref(m_luaState, reference);
     }
@@ -282,6 +283,14 @@ void Stack::push(const double value)
     }
 }
 
+void Stack::push(const int reference, const bool isTable)
+{
+    if (m_luaState && isTable)
+    {
+        lua_getref(m_luaState, reference);
+    }
+}
+
 void Stack::push(const Value & value)
 {
     if (!m_luaState) return;
@@ -305,6 +314,10 @@ void Stack::push(const Value & value)
     else if (value.isUserData())
     {
         push(value.getUserData());
+    }
+    else if (value.isTable())
+    {
+        push(value.getReference(), true);
     }
     else if (value.isNil())
     {

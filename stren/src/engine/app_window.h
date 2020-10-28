@@ -1,8 +1,8 @@
 #ifndef STREN_APP_WINDOW_H
 #define STREN_APP_WINDOW_H
 
-#include "string_ext.h"
 #include <vector>
+#include "common/string_ext.h"
 
 struct SDL_Window;
 struct SDL_Renderer;

@@ -2,8 +2,9 @@
 
 #include "SDL_ttf.h"
 
-#include "lua_wrapper.h"
-#include "logger.h"
+#include "engine/logger.h"
+#include "lua/lua_wrapper.h"
+
 namespace stren {
 
 FontsRepository::FontsRepository()

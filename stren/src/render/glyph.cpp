@@ -1,9 +1,9 @@
 #include "glyph.h"
 
-#include "engine_handler.h"
-#include "point.h"
-#include "sprite.h"
-#include "texture.h"
+#include "common/point.h"
+#include "engine/engine_handler.h"
+#include "render/sprite.h"
+#include "render/texture.h"
 
 namespace stren
 {

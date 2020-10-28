@@ -1,7 +1,7 @@
 #include "progressbar.h"
 
-#include "engine_handler.h"
-#include "lua_wrapper.h"
+#include "engine/engine_handler.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

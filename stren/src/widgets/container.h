@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "widget.h"
-#include "utils.h"
+#include "widgets/widget.h"
+#include "utils/utils.h"
 
 namespace stren
 {

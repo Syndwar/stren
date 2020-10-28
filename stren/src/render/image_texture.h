@@ -1,9 +1,9 @@
 #ifndef STREN_IMAGE_TEXTURE_H
 #define STREN_IMAGE_TEXTURE_H
 
-#include "itexture.h"
-#include "rect.h"
-#include "string_ext.h"
+#include "common/string_ext.h"
+#include "common/rect.h"
+#include "render/itexture.h"
 
 struct SDL_Texture;
 

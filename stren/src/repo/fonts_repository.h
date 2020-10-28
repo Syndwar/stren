@@ -1,8 +1,8 @@
 #ifndef STREN_FONTS_REPOSITORY_H
 #define STREN_FONTS_REPOSITORY_H
 
-#include "string_ext.h"
-#include "font_texture.h"
+#include "common/string_ext.h"
+#include "render/font_texture.h"
 
 namespace stren
 {

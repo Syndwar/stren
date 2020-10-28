@@ -1,7 +1,10 @@
 #include "engine_handler.h"
 
-#include "engine.h"
-#include "point.h"
+#include "common/point.h"
+#include "engine/engine.h"
+#include "engine/logger.h"
+
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {
@@ -164,5 +167,171 @@ void EngineHandler::serialize()
     {
         m_engine->serialize();
     }
+}
+
+namespace lua_engine
+{
+int playSound(lua_State *L)
+{
+    lua::Stack stack(1);
+    if (SoundSystem * soundSystem = EngineHandler::getSoundSystem())
+    {
+        const std::string soundId = stack.get(1).getString();
+        int loop = 0;
+        const int stackSize = stack.getSize();
+        if (stackSize > 1)
+        {
+            loop = stack.get(2).getInt();
+        }
+        int channel = -1;
+        if (stackSize > 2)
+        {
+            channel = stack.get(3).getInt();
+        }
+
+        stack.clear();
+        soundSystem->playSound(soundId, loop, channel);
+    }
+    stack.clear();
+    return 0;
+}
+
+int playMusic(lua_State *L)
+{
+    lua::Stack stack(1);
+    if (SoundSystem * soundSystem = EngineHandler::getSoundSystem())
+    {
+        lua::Stack stack;
+        const std::string trackId = stack.get(1).getString();
+        int loop = -1;
+        if (stack.getSize() > 1)
+        {
+            loop = stack.get(2).getInt();
+        }
+        stack.clear();
+        soundSystem->playMusic(trackId, loop);
+    }
+    stack.clear();
+    return 0;
+}
+
+int stopMusic(lua_State *L)
+{
+    if (SoundSystem * soundSystem = EngineHandler::getSoundSystem())
+    {
+        soundSystem->stopMusic();
+    }
+    return 0;
+}
+
+int getScreenWidth(lua_State * L)
+{
+    lua::Stack stack(0);
+    stack.push(EngineHandler::getScreenWidth());
+    return stack.getSize();
+}
+
+int getScreenHeight(lua_State * L)
+{
+    lua::Stack stack(0);
+    stack.push(EngineHandler::getScreenHeight());
+    return stack.getSize();
+}
+
+int getMousePos(lua_State * L)
+{
+    lua::Stack stack(0);
+    const Point mousePos = EngineHandler::getMousePos();
+    stack.push(mousePos.getX());
+    stack.push(mousePos.getY());
+    return stack.getSize();
+}
+
+int shutdown(lua_State *L)
+{
+    EngineHandler::shutdown();
+    return 0;
+}
+
+int restart(lua_State *L)
+{
+    EngineHandler::restart();
+    return 0;
+}
+
+int log(lua_State *L)
+{
+    lua::Stack stack(1);
+    const std::string value = stack.get(1).getString();
+    stren::Logger("blue") << value;
+
+    return 0;
+}
+
+int consoleLog(lua_State *L)
+{
+    lua::Stack stack(1);
+    const std::string value = stack.get(1).getString();
+    EngineHandler::consoleLog(value);
+    return 0;
+}
+
+int deserialize(lua_State * L)
+{
+    EngineHandler::deserialize();
+    return 0;
+}
+
+int serialize(lua_State * L)
+{
+    EngineHandler::serialize();
+    return 0;
+}
+
+int createGame(lua_State * L)
+{
+    EngineHandler::createGame();
+    return 0;
+}
+
+int getTextureSize(lua_State * L)
+{
+    lua::Stack stack(1);
+    const std::string textureId = stack.get(1).getString();
+    stack.clear();
+    if (!textureId.empty())
+    {
+        if (ITexture * texture = EngineHandler::getTexture(textureId))
+        {
+            stack.push(texture->getWidth());
+            stack.push(texture->getHeight());
+        }
+    }
+    return stack.getSize();
+}
+} // lua_engine
+
+void EngineHandler::bind()
+{
+    lua::Stack stack;
+    const luaL_reg functions[] =
+    {
+        { "playSound", lua_engine::playSound },
+        { "playMusic", lua_engine::playMusic },
+        { "stopMusic", lua_engine::stopMusic },
+        { "getScreenWidth", lua_engine::getScreenWidth },
+        { "getScreenHeight", lua_engine::getScreenHeight },
+        { "getMousePos", lua_engine::getMousePos },
+        { "shutdown", lua_engine::shutdown },
+        { "restart", lua_engine::restart },
+        { "log", lua_engine::log },
+        { "consoleLog", lua_engine::consoleLog },
+        { "deserialize", lua_engine::deserialize },
+        { "serialize", lua_engine::serialize },
+        { "createGame", lua_engine::createGame },
+        { "getTextureSize", lua_engine::getTextureSize },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Engine", functions);
 }
 } // stren

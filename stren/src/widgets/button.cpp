@@ -2,14 +2,13 @@
 
 #include "SDL.h"
 
-#include "engine_handler.h"
-#include "renderer.h"
-#include "event.h"
-#include "fonts_repository.h"
-#include "glyph.h"
-#include "lua_wrapper.h"
-#include "listener.h"
-#include "sprite.h"
+#include "engine/engine_handler.h"
+#include "engine/event.h"
+#include "engine/listener.h"
+#include "render/renderer.h"
+#include "render/sprite.h"
+#include "repo/fonts_repository.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

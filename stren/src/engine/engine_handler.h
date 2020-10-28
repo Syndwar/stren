@@ -1,7 +1,7 @@
 #ifndef STREN_ENGINE_HANDLER_H
 #define STREN_ENGINE_HANDLER_H
 
-#include "string_ext.h"
+#include "common/string_ext.h"
 
 struct lua_State;
 
@@ -116,6 +116,10 @@ public:
     /// @todo
     ///
     static void serialize();
+    ///
+    /// @todo
+    ///
+    static void bind();
 };
 
 } // stren

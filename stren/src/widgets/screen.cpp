@@ -1,7 +1,6 @@
 #include "screen.h"
 
-#include "lua_stack.h"
-#include "lua_value.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

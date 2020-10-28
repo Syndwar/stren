@@ -143,6 +143,10 @@ public:
     ///
     void push(const Value & value);
     ///
+    /// push lua table
+    ///
+    void push(const int reference, const bool isTable);
+    ///
     /// get amount of elements in the stack
     ///
     int getSize() const;

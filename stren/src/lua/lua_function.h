@@ -3,9 +3,8 @@
 
 #include <vector>
 
-#include "lua_ext.h"
-
-#include "string_ext.h"
+#include "common/string_ext.h"
+#include "lua/lua_ext.h"
 
 namespace lua
 {

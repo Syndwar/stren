@@ -1,8 +1,7 @@
 #ifndef STREN_SYSTEM_TOOLS_H
 #define STREN_SYSTEM_TOOLS_H
 
-#include "string_ext.h"
-
+#include "common/string_ext.h"
 #include "widgets/container.h"
 
 namespace stren

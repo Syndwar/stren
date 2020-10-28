@@ -1,7 +1,7 @@
 #ifndef STREN_LOGGER_H
 #define STREN_LOGGER_H
 
-#include "string_ext.h"
+#include "common/string_ext.h"
 
 namespace stren
 {

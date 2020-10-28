@@ -1,7 +1,7 @@
 #include "area.h"
 
-#include "action.h"
-#include "lua_wrapper.h"
+#include "engine/action.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

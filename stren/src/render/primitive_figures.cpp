@@ -1,8 +1,9 @@
 #include "primitive_figures.h"
 
 #include "SDL.h"
-#include "colour.h"
-#include "renderer.h"
+
+#include "common/colour.h"
+#include "render/renderer.h"
 
 namespace stren
 {

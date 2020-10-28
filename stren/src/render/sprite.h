@@ -1,9 +1,9 @@
 #ifndef STREN_SPRITE_H
 #define STREN_SPRITE_H
 
-#include "rect.h"
-#include "string_ext.h"
-#include "colour.h"
+#include "common/rect.h"
+#include "common/string_ext.h"
+#include "common/colour.h"
 
 namespace stren
 {

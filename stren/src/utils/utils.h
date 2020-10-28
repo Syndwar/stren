@@ -2,7 +2,7 @@
 #define STREN_UTILS_H
 
 #include <vector>
-#include "string_ext.h"
+#include "common/string_ext.h"
 
 namespace stren
 {

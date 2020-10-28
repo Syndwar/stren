@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "point.h"
-#include "rect.h"
+#include "common/point.h"
+#include "common/rect.h"
 
 struct SDL_Point;
 

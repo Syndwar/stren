@@ -1,10 +1,9 @@
 #include "container.h"
 
-#include "engine_handler.h"
-#include "logger.h"
-#include "event_listener.h"
-#include "lua_stack.h"
-#include "lua_value.h"
+#include "engine/engine_handler.h"
+#include "engine/logger.h"
+#include "engine/event_listener.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

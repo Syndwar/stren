@@ -30,13 +30,13 @@
     <ClInclude Include="src\engine\listener.h" />
     <ClInclude Include="src\engine\logger.h" />
     <ClInclude Include="src\engine\observer.h" />
+    <ClInclude Include="src\engine\screen_selector.h" />
     <ClInclude Include="src\engine\system\debug_panel.h" />
     <ClInclude Include="src\engine\system\widget_tree.h" />
     <ClInclude Include="src\engine\system_tools.h" />
     <ClInclude Include="src\engine\transform.h" />
     <ClInclude Include="src\game\battlefield.h" />
     <ClInclude Include="src\game\game.h" />
-    <ClInclude Include="src\game\unit.h" />
     <ClInclude Include="src\lua\lua_binding.h" />
     <ClInclude Include="src\lua\lua_ext.h" />
     <ClInclude Include="src\lua\lua_function.h" />
@@ -45,10 +45,6 @@
     <ClInclude Include="src\lua\lua_utils.h" />
     <ClInclude Include="src\lua\lua_value.h" />
     <ClInclude Include="src\lua\lua_wrapper.h" />
-    <ClInclude Include="src\map_editor\map_data.h" />
-    <ClInclude Include="src\map_editor\map_editor_filters_panel.h" />
-    <ClInclude Include="src\map_editor\map_editor_items_panel.h" />
-    <ClInclude Include="src\map_editor\map_editor_system_panel.h" />
     <ClInclude Include="src\media\music.h" />
     <ClInclude Include="src\media\music_repository.h" />
     <ClInclude Include="src\media\sound.h" />
@@ -67,8 +63,6 @@
     <ClInclude Include="src\repo\sprites_repository.h" />
     <ClInclude Include="src\repo\texts_repository.h" />
     <ClInclude Include="src\repo\textures_repository.h" />
-    <ClInclude Include="src\screens\map_editor_screen.h" />
-    <ClInclude Include="src\screens\screen_selector.h" />
     <ClInclude Include="src\tests\test_color.h" />
     <ClInclude Include="src\tests\test_lua.h" />
     <ClInclude Include="src\tests\test_observer.h" />
@@ -107,6 +101,7 @@
     <ClCompile Include="src\engine\listener.cpp" />
     <ClCompile Include="src\engine\logger.cpp" />
     <ClCompile Include="src\engine\observer.cpp" />
+    <ClCompile Include="src\engine\screen_selector.cpp" />
     <ClCompile Include="src\engine\system\debug_panel.cpp" />
     <ClCompile Include="src\engine\system\widget_tree.cpp" />
     <ClCompile Include="src\engine\system_tools.cpp" />
@@ -120,10 +115,6 @@
     <ClCompile Include="src\lua\lua_utils.cpp" />
     <ClCompile Include="src\lua\lua_value.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\map_editor\map_data.cpp" />
-    <ClCompile Include="src\map_editor\map_editor_filters_panel.cpp" />
-    <ClCompile Include="src\map_editor\map_editor_items_panel.cpp" />
-    <ClCompile Include="src\map_editor\map_editor_system_panel.cpp" />
     <ClCompile Include="src\media\music.cpp" />
     <ClCompile Include="src\media\music_repository.cpp" />
     <ClCompile Include="src\media\sound.cpp" />
@@ -140,8 +131,6 @@
     <ClCompile Include="src\repo\sprites_repository.cpp" />
     <ClCompile Include="src\repo\texts_repository.cpp" />
     <ClCompile Include="src\repo\textures_repository.cpp" />
-    <ClCompile Include="src\screens\map_editor_screen.cpp" />
-    <ClCompile Include="src\screens\screen_selector.cpp" />
     <ClCompile Include="src\utils\utils.cpp" />
     <ClCompile Include="src\widgets\area.cpp" />
     <ClCompile Include="src\widgets\button.cpp" />
@@ -202,7 +191,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\common;$(ProjectDir)src\engine;$(ProjectDir)src\lua;$(ProjectDir)src\media;$(ProjectDir)src\render;$(ProjectDir)src\game;$(ProjectDir)src\repo;$(ProjectDir)src\tests;$(ProjectDir)src\utils;$(SolutionDir)libs\lua\src;$(SolutionDir)libs\sdl2\include;$(SolutionDir)libs\sdl2_mix;$(SolutionDir)libs\sdl2_ttf;$(SolutionDir)libs\sdl2_img</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(SolutionDir)libs\lua\src;$(SolutionDir)libs\sdl2\include;$(SolutionDir)libs\sdl2_mix;$(SolutionDir)libs\sdl2_ttf;$(SolutionDir)libs\sdl2_img</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -232,7 +221,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\common;$(ProjectDir)src\engine;$(ProjectDir)src\lua;$(ProjectDir)src\media;$(ProjectDir)src\render;$(ProjectDir)src\game;$(ProjectDir)src\repo;$(ProjectDir)src\tests;$(ProjectDir)src\utils;$(SolutionDir)libs\lua\src;$(SolutionDir)libs\sdl2\include;$(SolutionDir)libs\sdl2_mix;$(SolutionDir)libs\sdl2_ttf;$(SolutionDir)libs\sdl2_img</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(SolutionDir)libs\lua\src;$(SolutionDir)libs\sdl2\include;$(SolutionDir)libs\sdl2_mix;$(SolutionDir)libs\sdl2_ttf;$(SolutionDir)libs\sdl2_img</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WarningLevel>Level3</WarningLevel>

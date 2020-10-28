@@ -3,8 +3,8 @@
 
 #include <map>
 
-#include "string_ext.h"
-#include "image_texture.h"
+#include "common/string_ext.h"
+#include "render/image_texture.h"
 
 namespace stren
 {

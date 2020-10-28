@@ -1,9 +1,9 @@
 #include "utils.h"
 
-#include "point.h"
-#include "rect.h"
-#include "lua_wrapper.h"
-#include "logger.h"
+#include "common/point.h"
+#include "common/rect.h"
+#include "engine/logger.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

@@ -1,6 +1,6 @@
 #include "music_repository.h"
 
-#include "lua_wrapper.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {

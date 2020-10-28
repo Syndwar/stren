@@ -1,9 +1,9 @@
 #ifndef STREN_IMAGE_H
 #define STREN_IMAGE_H
 
-#include "widget.h"
-#include "point.h"
-#include "sprite.h"
+#include "widgets/widget.h"
+#include "common/point.h"
+#include "render/sprite.h"
 
 namespace stren
 {

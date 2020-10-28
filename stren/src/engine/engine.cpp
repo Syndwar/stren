@@ -4,15 +4,15 @@
 
 #include "SDL.h"
 
-#include "event.h"
-#include "logger.h"
-#include "lua_wrapper.h"
-#include "lua_binding.h"
-
-#include "renderer.h"
-#include "console.h"
-#include "widgets/screen.h"
+#include "engine/event.h"
+#include "engine/logger.h"
+#include "engine/console.h"
 #include "game/game.h"
+#include "render/renderer.h"
+#include "widgets/screen.h"
+#include "lua/lua_wrapper.h"
+#include "lua/lua_binding.h"
+
 
 namespace stren
 {

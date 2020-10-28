@@ -1,10 +1,10 @@
 #ifndef STREN_SCROLL_CONTAINER_H
 #define STREN_SCROLL_CONTAINER_H
 
-#include "container.h"
-#include "timer.h"
-#include "action.h"
-#include "camera.h"
+#include "widgets/container.h"
+#include "widgets/timer.h"
+#include "engine/action.h"
+#include "engine/camera.h"
 
 namespace stren
 {

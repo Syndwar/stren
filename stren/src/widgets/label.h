@@ -1,9 +1,9 @@
 #ifndef STREN_TEXT_H
 #define STREN_TEXT_H
 
-#include "colour.h"
-#include "clabel.h"
-#include "widget.h"
+#include "common/colour.h"
+#include "render/clabel.h"
+#include "widgets/widget.h"
 
 struct SDL_Renderer;
 
