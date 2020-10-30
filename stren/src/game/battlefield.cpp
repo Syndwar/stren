@@ -1,6 +1,7 @@
 #include "battlefield.h"
 
 #include "engine/event.h"
+#include "lua/lua_wrapper.h"
 
 namespace stren
 {
@@ -72,6 +73,30 @@ void Battlefield::processEvent(const Event & event, bool & isEventCaptured)
     }
    
     ScrollContainer::processEvent(event, isEventCaptured);
+}
+
+namespace lua_battlefield
+{
+int create(lua_State * L)
+{
+    lua::Stack stack(0);
+    const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
+    Battlefield * cnt = new Battlefield(id);
+    stack.clear();
+    stack.push((void *)cnt);
+    return stack.getSize();
+}
+}
+
+void Battlefield::bind()
+{
+    lua::Stack stack;
+    const luaL_reg functions[] =
+    {
+        { "new", lua_battlefield::create },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Battlefield", functions);
 }
 
 } // stren

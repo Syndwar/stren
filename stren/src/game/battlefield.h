@@ -23,6 +23,10 @@ public:
     /// process incoming system events, returns true if the event was processed, otherwise - returns false to let other widget to process it
     ///
     virtual void processEvent(const Event & event, bool & isEventCaptured) override;
+    ///
+    /// @todo
+    ///
+    static void bind();
 };
 } // stren
 #endif // STREN_BATTLEFIELD_H

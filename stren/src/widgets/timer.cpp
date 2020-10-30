@@ -98,18 +98,6 @@ int restart(lua_State * L)
     return 0;
 }
 
-int addCallback(lua_State * L)
-{
-    lua::Stack stack(3);
-    Timer * timer = (Timer *)stack.get(1).getUserData();
-    if (timer)
-    {
-        const std::string eventTypeStr = stack.get(2).getString();
-        const std::string callback = stack.get(3).getString();
-        timer->addCallback(eventTypeStr, callback);
-    }
-    return 0;
-}
 } // lua_timer
 
 void Timer::bind()
@@ -119,7 +107,6 @@ void Timer::bind()
     {
         { "new", lua_timer::create },
         { "restart", lua_timer::restart },
-        { "addCallback", lua_timer::addCallback },
         { NULL, NULL }
     };
     stack.loadLibs("Timer", functions);

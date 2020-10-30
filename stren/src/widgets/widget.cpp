@@ -407,6 +407,19 @@ int moveTo(lua_State * L)
     return 0;
 }
 
+int moveBy(lua_State * L)
+{
+    lua::Stack stack(3);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        const int x = stack.get(2).getInt();
+        const int y = stack.get(3).getInt();
+        widget->moveBy(x, y);
+    }
+    return 0;
+}
+
 int attachTransform(lua_State * L)
 {
     lua::Stack stack(3);
@@ -420,6 +433,20 @@ int attachTransform(lua_State * L)
             widget->attachTransform(Event::strToType(eventType), **transform);
         }
     }
+    return 0;
+}
+
+int addCallback(lua_State * L)
+{
+    lua::Stack stack(3);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        const std::string eventTypeStr = stack.get(2).getString();
+        const std::string callback = stack.get(3).getString();
+        widget->addCallback(eventTypeStr, callback);
+    }
+    stack.clear();
     return 0;
 }
 } // lua_widget
@@ -439,7 +466,9 @@ void Widget::bind()
         { "getParent", lua_widget::getParent },
         { "isOpened", lua_widget::isOpened },
         { "moveTo", lua_widget::moveTo },
+        { "moveBy", lua_widget::moveBy },
         { "attachTransform", lua_widget::attachTransform },
+        { "addCallback", lua_widget::addCallback },
         { NULL, NULL }
     };
     stack.loadLibs("Widget", functions);

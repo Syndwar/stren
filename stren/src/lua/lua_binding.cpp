@@ -12,6 +12,7 @@
 #include "widgets/area.h"
 #include "widgets/scroll_container.h"
 #include "widgets/progressbar.h"
+#include "game/battlefield.h"
 #include "game/game.h"
 
 namespace lua
@@ -34,5 +35,6 @@ void bindWithVM()
     stren::Area::bind();
     stren::ProgressBar::bind();
     stren::Transform::bind();
+    stren::Battlefield::bind();
 }
 } // lua

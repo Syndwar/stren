@@ -226,20 +226,6 @@ int setSprites(lua_State * L)
     stack.clear();
     return 0;
 }
-
-int addCallback(lua_State * L)
-{
-    lua::Stack stack(3);
-    Button * btn = (Button *)stack.get(1).getUserData();
-    if (btn)
-    {
-        const std::string eventTypeStr = stack.get(2).getString();
-        const std::string callback = stack.get(3).getString();
-        btn->addCallback(eventTypeStr, callback);
-    }
-    stack.clear();
-    return 0;
-}
 } // lua_button
 
 void Button::bind()
@@ -253,7 +239,6 @@ void Button::bind()
         { "setColour", lua_button::setTextColour },
         { "setTextAlignment", lua_button::setTextAlignment },
         { "setSprites", lua_button::setSprites },
-        { "addCallback", lua_button::addCallback },
         { NULL, NULL }
     };
     stack.loadLibs("Button", functions);
