@@ -81,6 +81,11 @@ WidgetTreeBranch::WidgetTreeBranch(Widget * widget, WidgetTreeBranch * parent, I
 
 WidgetTreeBranch::~WidgetTreeBranch()
 {
+    if (m_updateAction)
+    {
+        delete m_updateAction;
+        m_updateAction = nullptr;
+    }
 }
 
 void WidgetTreeBranch::onControlClicked()

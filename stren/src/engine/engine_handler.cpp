@@ -3,6 +3,8 @@
 #include "common/point.h"
 #include "engine/engine.h"
 #include "engine/logger.h"
+#include "engine/event.h"
+#include "engine/action.h"
 
 #include "lua/lua_wrapper.h"
 
@@ -169,6 +171,23 @@ void EngineHandler::serialize()
     }
 }
 
+size_t EngineHandler::addKeyboardAction(const EventType eventType, const std::string & key, IAction * action)
+{
+    if (m_engine)
+    {
+        return m_engine->addKeyboardAction(eventType, key, action);
+    }
+    return 0;
+}
+
+void EngineHandler::removeKeyboardAction(const size_t key)
+{
+    if (m_engine)
+    {
+        m_engine->removeKeyboardAction(key);
+    }
+}
+
 namespace lua_engine
 {
 int playSound(lua_State *L)
@@ -311,10 +330,45 @@ int getTextureSize(lua_State * L)
 }
 } // lua_engine
 
+namespace lua_game
+{
+int changeScreen(lua_State * L)
+{
+    lua::Stack stack(1);
+    void * screen = stack.get(1).getUserData();
+    if (screen)
+    {
+        EngineHandler::switchScreen(screen);
+    }
+    return 0;
+}
+} // lua_game
+
+namespace lua_keyboard
+{
+int addAction(lua_State * L)
+{
+    lua::Stack stack(3);
+    const std::string eventId = stack.get(1).getString();
+    const std::string key = stack.get(2).getString();
+    IAction * action = (IAction *)stack.get(3).getUserData();
+    const size_t result = EngineHandler::addKeyboardAction(Event::strToType(eventId), key, action);
+    stack.push(result);
+    return 1;
+}
+int removeAction(lua_State * L)
+{
+    lua::Stack stack(1);
+    const size_t key = static_cast<size_t>(stack.get(1).getInt());
+    EngineHandler::removeKeyboardAction(key);
+    return 0;
+}
+} // lua_keyboard
+
 void EngineHandler::bind()
 {
     lua::Stack stack;
-    const luaL_reg functions[] =
+    const luaL_reg engine_functions[] =
     {
         { "playSound", lua_engine::playSound },
         { "playMusic", lua_engine::playMusic },
@@ -332,6 +386,21 @@ void EngineHandler::bind()
         { "getTextureSize", lua_engine::getTextureSize },
         { NULL, NULL }
     };
-    stack.loadLibs("Engine", functions);
+    stack.loadLibs("Engine", engine_functions);
+
+    const luaL_reg game_functions[] =
+    {
+        { "changeScreen", lua_game::changeScreen },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Game", game_functions);
+
+    const luaL_reg keyboard_functions[] =
+    {
+        { "addAction", lua_keyboard::addAction },
+        { "removeAction", lua_keyboard::removeAction },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Keyboard", keyboard_functions);
 }
 } // stren

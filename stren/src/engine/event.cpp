@@ -40,6 +40,7 @@ EventType Event::strToType(const std::string & type)
     else if ("WidgetClosing" == type)   return EventType::WidgetClosing;
     else if ("TimerElapsed" == type)    return EventType::TimerElapsed;
     else if ("SysQuit" == type)         return EventType::SysQuit;
+    else if ("KeyPressed" == type)      return EventType::KeyPressed;
     return EventType::Unknown;
 }
 

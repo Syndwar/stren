@@ -23,6 +23,7 @@ class SystemTools;
 class Screen;
 class Widget;
 class Game;
+class IAction;
 
 // class Engine
 class Engine
@@ -149,6 +150,14 @@ public:
     /// @todo
     ///
     void serialize();
+    ///
+    /// @todo
+    ///
+    size_t addKeyboardAction(const EventType eventType, const std::string & key, IAction * action);
+    ///
+    /// @todo
+    ///
+    void removeKeyboardAction(const size_t key);
 private:
     ///
     /// @todo

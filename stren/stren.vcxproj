@@ -27,6 +27,7 @@
     <ClInclude Include="src\engine\event.h" />
     <ClInclude Include="src\engine\event_listener.h" />
     <ClInclude Include="src\engine\event_processor.h" />
+    <ClInclude Include="src\engine\keyboard.h" />
     <ClInclude Include="src\engine\listener.h" />
     <ClInclude Include="src\engine\logger.h" />
     <ClInclude Include="src\engine\observer.h" />
@@ -35,7 +36,6 @@
     <ClInclude Include="src\engine\system\widget_tree.h" />
     <ClInclude Include="src\engine\system_tools.h" />
     <ClInclude Include="src\engine\transform.h" />
-    <ClInclude Include="src\game\battlefield.h" />
     <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\lua\lua_binding.h" />
     <ClInclude Include="src\lua\lua_ext.h" />
@@ -98,6 +98,7 @@
     <ClCompile Include="src\engine\event.cpp" />
     <ClCompile Include="src\engine\event_listener.cpp" />
     <ClCompile Include="src\engine\event_processor.cpp" />
+    <ClCompile Include="src\engine\keyboard.cpp" />
     <ClCompile Include="src\engine\listener.cpp" />
     <ClCompile Include="src\engine\logger.cpp" />
     <ClCompile Include="src\engine\observer.cpp" />
@@ -106,7 +107,6 @@
     <ClCompile Include="src\engine\system\widget_tree.cpp" />
     <ClCompile Include="src\engine\system_tools.cpp" />
     <ClCompile Include="src\engine\transform.cpp" />
-    <ClCompile Include="src\game\battlefield.cpp" />
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\lua\lua_binding.cpp" />
     <ClCompile Include="src\lua\lua_function.cpp" />

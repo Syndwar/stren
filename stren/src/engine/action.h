@@ -9,6 +9,10 @@ class IAction
 {
 public:
     ///
+    /// Destructor
+    ///
+    virtual ~IAction() {}
+    ///
     /// @todo
     ///
     virtual void exec() = 0;

@@ -3,16 +3,22 @@
 
 #include "engine/screen_selector.h"
 #include "engine/camera.h"
+#include "engine/keyboard.h"
 
 namespace stren
 {
+class IAction;
 class Event;
+
+enum class EventType;
+
 ///
 /// class Game
 ///
 class Game
 {
 private:
+    Keyboard        m_keyboard;          ///< @todo
     Camera          m_camera;            ///< @todo
     ScreenSelector  m_screenSelector;    ///< @todo
 /*
@@ -50,7 +56,11 @@ public:
     ///
     /// @todo
     ///
-    static void bind();
+    size_t addKeyboardAction(const EventType eventType, const std::string & key, IAction * action);
+    ///
+    /// @todo
+    ///
+    void removeKeyboardAction(const size_t key);
     /*
     ///
     /// @todo

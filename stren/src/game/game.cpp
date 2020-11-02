@@ -3,20 +3,12 @@
 #include "engine/engine_handler.h"
 #include "engine/logger.h"
 #include "widgets/screen.h"
-#include "lua/lua_wrapper.h"
+#include "engine/action.h"
 
 namespace stren
 {
 Game::Game()
 {
-    /*
-    createBoard();
-    createTerrain();
-    createObjects();
-    createUnits();
-    createItems();
-    */
-
     Logger("green") << "[Game] Initilize main camera";
     m_camera.moveTo(0, 0);
     m_camera.resize(EngineHandler::getScreenWidth(), EngineHandler::getScreenHeight());
@@ -29,6 +21,7 @@ Game::~Game()
 
 void Game::update(const size_t dt)
 {
+    m_keyboard.update(dt);
     m_screenSelector.update();
     if (Screen * currentScreen = getCurrentScreen())
     {
@@ -43,6 +36,7 @@ Screen * Game::getCurrentScreen()
 
 void Game::processEvent(const Event & event, bool & isEventCaptured)
 {
+    m_keyboard.processEvent(event, isEventCaptured);
     if (Screen * currentScreen = getCurrentScreen())
     {
         currentScreen->processEvent(event, isEventCaptured);
@@ -62,29 +56,14 @@ void Game::switchScreen(void * screen)
     m_screenSelector.switchToScreen(screen);
 }
 
-namespace lua_game
+size_t Game::addKeyboardAction(const EventType eventType, const std::string & key, IAction * action)
 {
-int changeScreen(lua_State * L)
-{
-    lua::Stack stack(1);
-    void * screen = stack.get(1).getUserData();
-    if (screen)
-    {
-        EngineHandler::switchScreen(screen);
-    }
-    return 0;
+    return m_keyboard.addAction(eventType, key, action);
 }
-} // lua_game
 
-void Game::bind()
+void Game::removeKeyboardAction(const size_t key)
 {
-    lua::Stack stack;
-    const luaL_reg functions[] =
-    {
-        { "changeScreen", lua_game::changeScreen },
-        { NULL, NULL }
-    };
-    stack.loadLibs("Game", functions);
+    m_keyboard.removeAction(key);
 }
 
 /*

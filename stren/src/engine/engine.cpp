@@ -351,4 +351,21 @@ void Engine::deserialize()
     Logger("green") << "[Engine] Deserialize save data";
     initConfig();
 }
+
+size_t Engine::addKeyboardAction(const EventType eventType, const std::string & key, IAction * action)
+{
+    if (m_game)
+    {
+        return m_game->addKeyboardAction(eventType, key, action);
+    }
+    return 0;
+}
+
+void Engine::removeKeyboardAction(const size_t key)
+{
+    if (m_game)
+    {
+        m_game->removeKeyboardAction(key);
+    }
+}
 } // stren

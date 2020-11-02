@@ -14,7 +14,9 @@ class SoundSystem;
 class Screen;
 class Sprite;
 class Widget;
+class IAction;
 
+enum class EventType;
 enum class ScreenId;
 ///
 /// class EngineHandler
@@ -120,6 +122,14 @@ public:
     /// @todo
     ///
     static void bind();
+    ///
+    /// @todo
+    ///
+    static size_t EngineHandler::addKeyboardAction(const EventType eventType, const std::string & key, IAction * action);
+    ///
+    /// @todo
+    ///
+    static void removeKeyboardAction(const size_t key);
 };
 
 } // stren
