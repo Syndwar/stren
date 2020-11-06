@@ -6,7 +6,6 @@
 
 namespace stren
 {
-
 class IAction;
 class Connector;
 class Area;
@@ -25,6 +24,7 @@ private:
     MouseState               m_mouseState;         ///< @todo
     std::unique_ptr<IAction> m_action;             ///< @todo
     EventType                m_actionEvent;        ///< @todo
+    size_t                   m_actionKey;          ///< @todo
 
 public:
     ///
@@ -40,10 +40,6 @@ public:
     ///
     void setAction(EventType eventType, IAction * action);
     ///
-    /// process incoming system events, mark isEventCaptured true if the event was processed, otherwise - mark false to let other widget to process it
-    ///
-    virtual void processEvent(const Event & event, bool & isEventCaptured) override;
-    ///
     /// @todo
     ///
     static void bind();
@@ -51,7 +47,7 @@ private:
     ///
     /// @todo
     ///
-    void callAction(const bool isEnabled);
+    IAction * createAction();
 };
 }
 

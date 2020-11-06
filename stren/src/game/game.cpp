@@ -21,6 +21,7 @@ Game::~Game()
 
 void Game::update(const size_t dt)
 {
+    m_mouse.update(dt);
     m_keyboard.update(dt);
     m_screenSelector.update();
     if (Screen * currentScreen = getCurrentScreen())
@@ -36,6 +37,7 @@ Screen * Game::getCurrentScreen()
 
 void Game::processEvent(const Event & event, bool & isEventCaptured)
 {
+    m_mouse.processEvent(event, isEventCaptured);
     m_keyboard.processEvent(event, isEventCaptured);
     if (Screen * currentScreen = getCurrentScreen())
     {
@@ -64,6 +66,16 @@ size_t Game::addKeyboardAction(const EventType eventType, const std::string & ke
 void Game::removeKeyboardAction(const size_t key)
 {
     m_keyboard.removeAction(key);
+}
+
+size_t Game::addMouseAction(const EventType eventType, const Event::MouseButton button, IAction * action)
+{
+    return m_mouse.addAction(eventType, button, action);
+}
+
+void Game::removeMouseAction(const size_t key)
+{
+    m_mouse.removeAction(key);
 }
 
 /*

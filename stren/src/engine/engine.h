@@ -158,6 +158,14 @@ public:
     /// @todo
     ///
     void removeKeyboardAction(const size_t key);
+    ///
+    /// @todo
+    ///
+    size_t addMouseAction(const EventType eventType, const Event::MouseButton button, IAction * action);
+    ///
+    /// @todo
+    ///
+    void removeMouseAction(const size_t key);
 private:
     ///
     /// @todo

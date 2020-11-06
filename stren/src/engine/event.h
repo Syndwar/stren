@@ -26,7 +26,6 @@ enum class EventType
     WidgetClosing,
     TimerElapsed,
     SysQuit,
-    KeyPressed,
 };                                                  ///< possible event types
 ///
 /// class Event

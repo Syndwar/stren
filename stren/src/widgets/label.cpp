@@ -11,7 +11,7 @@ namespace stren
 {
 Label::Label(const std::string & id)
     : Widget(id)
-    , textAlignment_(Alignment::CenterMiddle)
+    , m_textAlignment(Alignment::CenterMiddle)
 {
 }
 
@@ -21,30 +21,30 @@ Label::~Label()
 
 void Label::setColour(const Colour & colour)
 {
-    label_.setColour(colour);
+    m_label.setColour(colour);
     addUpdateState(UpdateState::Update);
 }
 
 void Label::setFont(const std::string & fontId)
 {
-    label_.setFont(fontId);
+    m_label.setFont(fontId);
     addUpdateState(UpdateState::Update);
 }
 
 void Label::setText(const std::string & text)
 {
-    label_.setText(text);
+    m_label.setText(text);
     addUpdateState(UpdateState::Update);
 }
 
 const std::string & Label::getText() const
 {
-    return label_.getText();
+    return m_label.getText();
 }
 
 void Label::setTextAlignment(const int alignment)
 {
-    textAlignment_ = alignment;
+    m_textAlignment = alignment;
     addUpdateState(UpdateState::Update);
 }
 
@@ -55,18 +55,18 @@ void Label::setTextAlignment(const std::string & alignment)
 
 void Label::doPostMove(const int dx, const int dy)
 {
-    label_.align(getRect(), textAlignment_);
+    m_label.align(getRect(), m_textAlignment);
 }
 
 void Label::doRender()
 {
     if (hasUpdateState(UpdateState::Update))
     {
-        label_.update(getRect(), textAlignment_);
+        m_label.update(getRect(), m_textAlignment);
         removeUpdateState(UpdateState::Update);
     }
 
-    label_.render();
+    m_label.render();
 }
 
 namespace lua_label

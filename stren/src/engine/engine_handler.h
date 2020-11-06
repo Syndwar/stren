@@ -1,7 +1,7 @@
 #ifndef STREN_ENGINE_HANDLER_H
 #define STREN_ENGINE_HANDLER_H
 
-#include "common/string_ext.h"
+#include "engine/event.h"
 
 struct lua_State;
 
@@ -16,7 +16,6 @@ class Sprite;
 class Widget;
 class IAction;
 
-enum class EventType;
 enum class ScreenId;
 ///
 /// class EngineHandler
@@ -130,6 +129,14 @@ public:
     /// @todo
     ///
     static void removeKeyboardAction(const size_t key);
+    ///
+    /// @todo
+    ///
+    static size_t EngineHandler::addMouseAction(const EventType eventType, const Event::MouseButton button, IAction * action);
+    ///
+    /// @todo
+    ///
+    static void removeMouseAction(const size_t key);
 };
 
 } // stren

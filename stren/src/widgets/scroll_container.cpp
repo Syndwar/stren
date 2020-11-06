@@ -25,14 +25,16 @@ class ScrollAction : public IAction
 private:
     ScrollContainer * m_container;     ///< scroll container who created the action
     int               m_direction;     ///< scroll direction
+    bool              m_shouldStart;   ///< should action start scrolling, otherwise it will stop it
 public:
     ///
     /// Constructor
     ///
-    ScrollAction(ScrollContainer * container, const int direction)
+    ScrollAction(ScrollContainer * container, const int direction, const bool shouldStart)
         : IAction()
         , m_container(container)
         , m_direction(direction)
+        , m_shouldStart(shouldStart)
     {
     }
     ///
@@ -42,25 +44,28 @@ public:
     ///
     /// start action
     ///
-    virtual void exec() override
+    virtual bool exec() override
     {
         if (m_container)
         {
-            m_container->scrollTo(m_direction, true);
-        }
-    }
-    ///
-    /// cancel action
-    ///
-    virtual void cancel() override
-    {
-        if (m_container)
-        {
-            if (0 != (m_container->getScrollDirection() & m_direction))
+            if (m_shouldStart)
+            {
+                m_container->scrollTo(m_direction, true);
+
+            }
+            else if (0 != (m_container->getScrollDirection() & m_direction))
             {
                 m_container->scrollTo(m_direction, false);
             }
         }
+        return false;
+    }
+    ///
+    /// start action
+    ///
+    virtual bool exec(const Event & event) override
+    {
+        return exec();
     }
 };
 
@@ -296,17 +301,17 @@ void ScrollContainer::doUpdate(const size_t dt)
     Container::doUpdate(dt);
 }
 
-IAction * ScrollContainer::createAction(const std::string & actionId)
+IAction * ScrollContainer::createAction(const std::string & actionId, const bool shouldStart)
 {
     const int direction = strActionToScrollDirection(actionId);
-    return createAction(direction);
+    return createAction(direction, shouldStart);
 }
 
-IAction * ScrollContainer::createAction(const int direction)
+IAction * ScrollContainer::createAction(const int direction, const bool shouldStart)
 {
     if (direction != ScrollDirection::None)
     {
-        return new ScrollAction(this, direction);
+        return new ScrollAction(this, direction, shouldStart);
     }
     return nullptr;
 }
@@ -440,20 +445,20 @@ int setContentRect(lua_State * L)
 
 int createAction(lua_State * L)
 {
-    lua::Stack stack(2);
+    lua::Stack stack(3);
     ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
     const std::string actionId = stack.get(2).getString();
-    stack.clear();
+    const bool shouldStart = stack.get(3).getBool();
     if (cnt)
     {
-        IAction * action = cnt->createAction(actionId);
+        IAction * action = cnt->createAction(actionId, shouldStart);
         stack.push((void *)action);
     }
     else
     {
         stack.push();
     }
-    return stack.getSize();
+    return 1;
 }
 
 } // lua_scroll_container

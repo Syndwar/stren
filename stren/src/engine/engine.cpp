@@ -368,4 +368,21 @@ void Engine::removeKeyboardAction(const size_t key)
         m_game->removeKeyboardAction(key);
     }
 }
+
+size_t Engine::addMouseAction(const EventType eventType, const Event::MouseButton button, IAction * action)
+{
+    if (m_game)
+    {
+        return m_game->addMouseAction(eventType, button, action);
+    }
+    return 0;
+}
+
+void Engine::removeMouseAction(const size_t key)
+{
+    if (m_game)
+    {
+        m_game->removeMouseAction(key);
+    }
+}
 } // stren

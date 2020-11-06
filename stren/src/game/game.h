@@ -18,6 +18,7 @@ enum class EventType;
 class Game
 {
 private:
+    Mouse           m_mouse;             ///< @todo
     Keyboard        m_keyboard;          ///< @todo
     Camera          m_camera;            ///< @todo
     ScreenSelector  m_screenSelector;    ///< @todo
@@ -61,6 +62,14 @@ public:
     /// @todo
     ///
     void removeKeyboardAction(const size_t key);
+    ///
+    /// @todo
+    ///
+    size_t addMouseAction(const EventType eventType, const Event::MouseButton, IAction * action);
+    ///
+    /// @todo
+    ///
+    void removeMouseAction(const size_t key);
     /*
     ///
     /// @todo

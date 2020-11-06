@@ -12,6 +12,7 @@
 #include "widgets/area.h"
 #include "widgets/scroll_container.h"
 #include "widgets/progressbar.h"
+#include "widgets/text_edit.h"
 
 namespace lua
 {
@@ -32,5 +33,6 @@ void bindWithVM()
     stren::Area::bind();
     stren::ProgressBar::bind();
     stren::Transform::bind();
+    stren::TextEdit::bind();
 }
 } // lua

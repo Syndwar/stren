@@ -188,6 +188,23 @@ void EngineHandler::removeKeyboardAction(const size_t key)
     }
 }
 
+size_t EngineHandler::addMouseAction(const EventType eventType, const Event::MouseButton button, IAction * action)
+{
+    if (m_engine)
+    {
+        return m_engine->addMouseAction(eventType, button, action);
+    }
+    return 0;
+}
+
+void EngineHandler::removeMouseAction(const size_t key)
+{
+    if (m_engine)
+    {
+        m_engine->removeMouseAction(key);
+    }
+}
+
 namespace lua_engine
 {
 int playSound(lua_State *L)
@@ -365,6 +382,27 @@ int removeAction(lua_State * L)
 }
 } // lua_keyboard
 
+namespace lua_mouse
+{
+int addAction(lua_State * L)
+{
+    lua::Stack stack(3);
+    const std::string eventId = stack.get(1).getString();
+    const Event::MouseButton button = static_cast<Event::MouseButton>(stack.get(2).getInt());
+    IAction * action = (IAction *)stack.get(3).getUserData();
+    const size_t result = EngineHandler::addMouseAction(Event::strToType(eventId), button, action);
+    stack.push(result);
+    return 1;
+}
+int removeAction(lua_State * L)
+{
+    lua::Stack stack(1);
+    const size_t key = static_cast<size_t>(stack.get(1).getInt());
+    EngineHandler::removeMouseAction(key);
+    return 0;
+}
+} // lua_mouse
+
 void EngineHandler::bind()
 {
     lua::Stack stack;
@@ -402,5 +440,13 @@ void EngineHandler::bind()
         { NULL, NULL }
     };
     stack.loadLibs("Keyboard", keyboard_functions);
+
+    const luaL_reg mouse_functions[] =
+    {
+        { "addAction", lua_mouse::addAction },
+        { "removeAction", lua_mouse::removeAction },
+        { NULL, NULL }
+    };
+    stack.loadLibs("Mouse", mouse_functions);
 }
 } // stren

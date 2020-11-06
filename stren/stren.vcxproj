@@ -81,6 +81,7 @@
     <ClInclude Include="src\widgets\progressbar.h" />
     <ClInclude Include="src\widgets\screen.h" />
     <ClInclude Include="src\widgets\scroll_container.h" />
+    <ClInclude Include="src\widgets\text_edit.h" />
     <ClInclude Include="src\widgets\timer.h" />
     <ClInclude Include="src\widgets\widget.h" />
   </ItemGroup>
@@ -144,6 +145,7 @@
     <ClCompile Include="src\widgets\progressbar.cpp" />
     <ClCompile Include="src\widgets\screen.cpp" />
     <ClCompile Include="src\widgets\scroll_container.cpp" />
+    <ClCompile Include="src\widgets\text_edit.cpp" />
     <ClCompile Include="src\widgets\timer.cpp" />
     <ClCompile Include="src\widgets\widget.cpp" />
   </ItemGroup>

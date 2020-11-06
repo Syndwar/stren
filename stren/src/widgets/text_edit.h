@@ -1,31 +1,31 @@
-#ifndef STREN_TEXT_H
-#define STREN_TEXT_H
+#ifndef STREN_TEXT_EDIT_H
+#define STREN_TEXT_EDIT_H
 
-#include "common/colour.h"
-#include "render/clabel.h"
 #include "widgets/widget.h"
-
-struct SDL_Renderer;
+#include "render/clabel.h"
 
 namespace stren
 {
+class IAction;
 ///
-/// class Label
+/// class TextEdit
 ///
-class Label : public Widget
+class TextEdit : public Widget
 {
 private:
-    int             m_textAlignment;    ///< @todo
-    CLabel          m_label;            ///< @todo
+    std::vector<size_t> m_actionKeys;       ///< @todo
+    int                 m_textAlignment;    ///< @todo
+    bool                m_isInputMode;      ///< @todo
+    CLabel              m_label;            ///< @todo
 public:
     ///
     /// Constructor
     ///
-    Label(const std::string & id = String::kEmpty);
+    TextEdit(const std::string & id = String::kEmpty);
     ///
     /// Destructor
     ///
-    virtual ~Label();
+    virtual ~TextEdit();
     ///
     /// @todo
     ///
@@ -53,6 +53,18 @@ public:
     ///
     /// @todo
     ///
+    void enableInputMode();
+    ///
+    /// @todo
+    ///
+    void cancelInputMode();
+    ///
+    /// @todo
+    ///
+    bool isInputMode() const;
+    ///
+    /// @todo
+    ///
     virtual void doPostMove(const int dx, const int dy) override;
     ///
     /// @todo
@@ -64,6 +76,5 @@ private:
     ///
     virtual void doRender() override;
 };
-} // stren
-
-#endif
+}
+#endif // STREN_TEXT_EDIT_H

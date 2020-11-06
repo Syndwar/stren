@@ -79,11 +79,11 @@ public:
     ///
     /// creates action, caller must take ownership
     ///
-    IAction * createAction(const std::string & actionId);
+    IAction * createAction(const std::string & actionId, const bool shouldStart);
     ///
     /// creates action, caller must take ownership
     ///
-    IAction * createAction(const int direction);
+    IAction * createAction(const int direction, const bool shouldStart);
     ///
     /// convert screen coordinate to scroll coordinate
     ///

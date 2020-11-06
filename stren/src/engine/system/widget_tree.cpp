@@ -27,18 +27,20 @@ public:
     ///
     /// update widget tree
     ///
-    virtual void exec() override
+    virtual bool exec() override
     {
         if (m_tree)
         {
             m_tree->updateBranches();
         }
+        return false;
     }
     ///
-    /// do nothing
+    /// update widget tree
     ///
-    virtual void cancel() override
+    virtual bool exec(const Event & event) override
     {
+        return exec();
     }
 };
 

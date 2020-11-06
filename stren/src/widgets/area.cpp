@@ -1,44 +1,96 @@
 #include "area.h"
 
 #include "engine/action.h"
+#include "engine/engine_handler.h"
 #include "lua/lua_wrapper.h"
 
 namespace stren
 {
+///
+/// class AreaAction
+///
+class AreaAction : public IAction
+{
+private:
+    Area *  m_container;     ///< container who created the action
+public:
+    ///
+    /// Constructor
+    ///
+    AreaAction(Area * container)
+        : IAction()
+        , m_container(container)
+    {
+    }
+    ///
+    /// Destructor
+    ///
+    virtual ~AreaAction() {}
+    ///
+    /// Start action
+    ///
+    virtual bool exec() override
+    {
+        return false;
+    }
+    ///
+    /// Start action
+    ///
+    virtual bool exec(const Event & event) override
+    {
+        if (m_container)
+        {
+            const bool hasMouse = m_container->getRect().hasCommon(event.pos);
+            if (hasMouse)
+            {
+                //if (event.type == m_actionEvent)
+                //{
+                //    if (hasMouse)
+                //    {
+                //        if (MouseState::Outside == m_mouseState)
+                //        {
+                //            if (m_action)
+                //            {
+                //                m_action->exec(event);
+                //            }
+                //            m_mouseState = MouseState::Over;
+                //        }
+                //        isEventCaptured = true;
+                //    }
+                //    else
+                //    {
+                //        if (MouseState::Over == m_mouseState)
+                //        {
+                //            if (m_action)
+                //            {
+                //                //m_action->cancel(event);
+                //            }
+                //            m_mouseState = MouseState::Outside;
+                //        }
+                //    }
+                //}
+                return true;
+            }
+        }
+        return false;
+    }
+};
+///
+/// class Area
+///
 Area::Area(const std::string & id)
     : Widget(id)
     , m_actionEvent(EventType::None)
     , m_mouseState(MouseState::Outside)
+    , m_actionKey(0)
 {
+    IAction * action = createAction();
+    m_actionKey = EngineHandler::addMouseAction(EventType::MouseMove, Event::MouseButton::None, action);
 }
 
 Area::~Area()
 {
-}
-
-void Area::processEvent(const Event & event, bool & isEventCaptured)
-{
-    const bool hasMouse = !isEventCaptured && getRect().hasCommon(event.pos);
-    if (event.type == m_actionEvent)
-    {
-        if (hasMouse)
-        {
-            if (MouseState::Outside == m_mouseState)
-            {
-                callAction(true);
-                m_mouseState = MouseState::Over;
-            }
-            isEventCaptured = true;
-        }
-        else
-        {
-            if (MouseState::Over == m_mouseState)
-            {
-                callAction(false);
-                m_mouseState = MouseState::Outside;
-            }
-        }
-    }
+    EngineHandler::removeKeyboardAction(m_actionKey);
 }
 
 void Area::setAction(EventType eventType, IAction * action)
@@ -47,19 +99,10 @@ void Area::setAction(EventType eventType, IAction * action)
     m_actionEvent = eventType;
 }
 
-void Area::callAction(const bool isEnabled)
+IAction * Area::createAction()
 {
-    if (m_action)
-    {
-        if (isEnabled)
-        {
-            m_action->exec();
-        }
-        else
-        {
-            m_action->cancel();
-        }
-    }
+    IAction * action = new AreaAction(this);
+    return action;
 }
 
 namespace lua_area

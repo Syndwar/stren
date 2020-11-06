@@ -2,6 +2,7 @@
 #define STREN_ACTION_H
 namespace stren 
 {
+class Event;
 ///
 /// class IAction
 ///
@@ -15,11 +16,11 @@ public:
     ///
     /// @todo
     ///
-    virtual void exec() = 0;
+    virtual bool exec() = 0;
     ///
     /// @todo
     ///
-    virtual void cancel() = 0;
+    virtual bool exec(const Event & event) = 0;
 };
 
 } // stren

@@ -1,40 +1,9 @@
 #include "engine/keyboard.h"
 
-#include "engine/action.h"
-#include "engine/event.h"
 #include "lua/lua_wrapper.h"
 
 namespace stren
 {
-///
-/// class KeyboardAction
-///
-struct KeyboardAction
-{
-    EventType                   eventType;
-    std::string                 key;
-    IAction *                   action;
-    ///
-    /// Constructor
-    ///
-    KeyboardAction(const EventType et, const std::string & k, IAction * a)
-        : eventType(et)
-        , key(k)
-        , action(a)
-    {
-    }
-    ///
-    /// Destructor
-    ///
-    ~KeyboardAction()
-    {
-        if (action)
-        {
-            delete action;
-            action = nullptr;
-        }
-    }
-};
 ///
 /// class Keyboard
 ///
@@ -50,40 +19,44 @@ void Keyboard::processEvent(const Event & event, bool & isEventCaptured)
 {
     if (!isEventCaptured)
     {
-        for (KeyboardAction * ka : m_actions)
+        switch (event.type)
         {
-            if (ka &&  EventType::KeyPressed == ka->eventType && event.key == ka->key)
+        case EventType::KeyDown:
+        case EventType::KeyUp:
+        {
+            for (auto & ka : m_actions)
             {
-                if (EventType::KeyDown == event.type)
+                if (!ka.isEmpty() && event.key == ka.key || ka.key.empty())
                 {
-                    ka->action->exec();
-                    isEventCaptured = true;
-                    break;
-                }
-                else if (EventType::KeyUp == event.type)
-                {
-                    ka->action->cancel();
-                    isEventCaptured = true;
-                    break;
+                    if (ka.eventType == event.type)
+                    {
+                        if (ka.action->exec(event))
+                        {
+                            isEventCaptured = true;
+                            break;
+                        }
+                    }
                 }
             }
+        }
+        break;
         }
     }
 }
 
 size_t Keyboard::addAction(const EventType eventType, const std::string & key, IAction * action)
 {
-    KeyboardAction * keyAction = new KeyboardAction(eventType, key, action);
     const size_t iEnd = m_actions.size();
     for (size_t i = 0; i < iEnd; ++i)
     {
-        if (!m_actions[i])
+        if (m_actions[i].isEmpty())
         {
-            m_actions[i] = keyAction;
+            m_actions[i].reset(eventType, key, action);
             return i;
         }
     }
-    m_actions.push_back(keyAction);
+    m_actions.resize(iEnd + 1);
+    m_actions[iEnd].reset(eventType, key, action);
 
     return iEnd;
 }
@@ -92,11 +65,80 @@ void Keyboard::removeAction(const size_t key)
 {
     if (key < (int)m_actions.size())
     {
-        if (m_actions[key])
+        if (!m_actions[key].isEmpty())
         {
-            delete m_actions[key];
-            m_actions[key] = nullptr;
+            m_actions[key].reset();
         }
     }
 }
+///
+/// class Mouse
+///
+Mouse::Mouse()
+{
+}
+
+void Mouse::update(const size_t dt)
+{
+}
+
+void Mouse::processEvent(const Event & event, bool & isEventCaptured)
+{
+    if (!isEventCaptured)
+    {
+        switch (event.type)
+        {
+        case EventType::MouseUp:
+        case EventType::MouseDown:
+        case EventType::MouseMove:
+        case EventType::MouseWheel:
+        {
+            for (auto & ka : m_actions)
+            {
+                if (!ka.isEmpty() && event.mouseButton == ka.button || Event::MouseButton::None == ka.button)
+                {
+                    if (ka.eventType == event.type)
+                    {
+                        if (ka.action->exec(event))
+                        {
+                            isEventCaptured = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        break;
+        };
+    }
+}
+
+size_t Mouse::addAction(const EventType eventType, const Event::MouseButton button, IAction * action)
+{
+    const size_t iEnd = m_actions.size();
+    for (size_t i = 0; i < iEnd; ++i)
+    {
+        if (m_actions[i].isEmpty())
+        {
+            m_actions[i].reset(eventType, button, action);
+            return i;
+        }
+    }
+    m_actions.resize(iEnd + 1);
+    m_actions[iEnd].reset(eventType, button, action);
+
+    return iEnd;
+}
+
+void Mouse::removeAction(const size_t key)
+{
+    if (key < (int)m_actions.size())
+    {
+        if (!m_actions[key].isEmpty())
+        {
+            m_actions[key].reset();
+        }
+    }
+}
+
 } // stren
