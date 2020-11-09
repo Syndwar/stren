@@ -1,64 +1,65 @@
-#include "engine/keyboard.h"
+#include "mouse.h"
 
 #include "engine/action.h"
 
 namespace stren
 {
 ///
-/// class KeyboardAction
+/// class MouseAction
 ///
-KeyboardAction::KeyboardAction()
+MouseAction::MouseAction()
     : eventType(EventType::None)
 {
 }
 
-KeyboardAction::KeyboardAction(const int et, const std::string & k, IAction * a)
+MouseAction::MouseAction(const int et, const Event::MouseButton b, IAction * a)
     : eventType(et)
-    , key(k)
+    , button(b)
     , action(a)
 {
 }
 
-void KeyboardAction::reset()
+void MouseAction::reset()
 {
     action.reset();
-    key.clear();
+    button = Event::MouseButton::None;
     eventType = EventType::None;
 }
 
-void KeyboardAction::reset(const int et, const std::string & k, IAction * a)
+void MouseAction::reset(const int et, const Event::MouseButton b, IAction * a)
 {
     action.reset(a);
-    key = k;
+    button = b;
     eventType = et;
 }
 
-bool KeyboardAction::isEmpty() const
+bool MouseAction::isEmpty() const
 {
-    return EventType::None == eventType && key.empty() && action;
+    return EventType::None == eventType && Event::MouseButton::None == button && action;
 }
-
 ///
-/// class Keyboard
+/// class Mouse
 ///
-Keyboard::Keyboard()
+Mouse::Mouse()
 {
 }
 
-void Keyboard::update(const size_t dt)
+void Mouse::update(const size_t dt)
 {
 }
 
-void Keyboard::processEvent(const Event & event, bool & isEventCaptured)
+void Mouse::processEvent(const Event & event, bool & isEventCaptured)
 {
     switch (event.type)
     {
-    case EventType::KeyDown:
-    case EventType::KeyUp:
+    case EventType::MouseUp:
+    case EventType::MouseDown:
+    case EventType::MouseMove:
+    case EventType::MouseWheel:
     {
         for (auto & ka : m_actions)
         {
-            if (!ka.isEmpty() && event.key == ka.key || ka.key.empty())
+            if (!ka.isEmpty() && event.mouseButton == ka.button || Event::MouseButton::None == ka.button)
             {
                 if (ka.eventType & event.type)
                 {
@@ -74,27 +75,27 @@ void Keyboard::processEvent(const Event & event, bool & isEventCaptured)
         }
     }
     break;
-    }
+    };
 }
 
-size_t Keyboard::addAction(const int eventType, const std::string & key, IAction * action)
+size_t Mouse::addAction(const int eventType, const Event::MouseButton button, IAction * action)
 {
     const size_t iEnd = m_actions.size();
     for (size_t i = 0; i < iEnd; ++i)
     {
         if (m_actions[i].isEmpty())
         {
-            m_actions[i].reset(eventType, key, action);
+            m_actions[i].reset(eventType, button, action);
             return i;
         }
     }
     m_actions.resize(iEnd + 1);
-    m_actions[iEnd].reset(eventType, key, action);
+    m_actions[iEnd].reset(eventType, button, action);
 
     return iEnd;
 }
 
-void Keyboard::removeAction(const size_t key)
+void Mouse::removeAction(const size_t key)
 {
     if (key < (int)m_actions.size())
     {
@@ -104,5 +105,4 @@ void Keyboard::removeAction(const size_t key)
         }
     }
 }
-
-} // stren
+} //stren

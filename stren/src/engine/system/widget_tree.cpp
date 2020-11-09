@@ -38,7 +38,7 @@ public:
     ///
     /// update widget tree
     ///
-    virtual bool exec(const Event & event) override
+    virtual bool exec(const Event & event, const bool isEventCaptured) override
     {
         return exec();
     }

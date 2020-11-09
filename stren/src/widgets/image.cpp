@@ -3,6 +3,7 @@
 #include "SDL.h"
 
 #include "common/point.h"
+#include "engine/action.h"
 #include "engine/engine_handler.h"
 #include "engine/event.h"
 #include "render/renderer.h"
@@ -11,15 +12,52 @@
 
 namespace stren
 {
+///
+/// class ImageAction
+///
+class ImageAction : public IAction
+{
+private:
+    Image *  m_container;     ///< container who created the action
+public:
+    ///
+    /// Constructor
+    ///
+    ImageAction(Image * container) : IAction(), m_container(container) {}
+    ///
+    /// Destructor
+    ///
+    virtual ~ImageAction() {}
+    ///
+    /// Start action
+    ///
+    virtual bool exec() override { return false; }
+    ///
+    /// Start action
+    ///
+    virtual bool exec(const Event & event, const bool isEventCaptured) override
+    {
+        if (!isEventCaptured && m_container)
+        {
+            return m_container->getRect().hasCommon(event.pos);
+        }
+        return false;
+    }
+};
+
 Image::Image(const std::string & id)
     : Widget(id)
     , m_angle(0)
     , m_flip(Sprite::Flip::None)
+    , m_actionKey(0)
 {
+    IAction * action = new ImageAction(this);
+    m_actionKey = EngineHandler::addMouseAction(EventType::MouseUp | EventType::MouseDown, Event::MouseButton::None, action);
 }
 
 Image::~Image()
 {
+    EngineHandler::removeKeyboardAction(m_actionKey);
 }
 
 void Image::setFlip(const bool flipv, const bool fliph)
@@ -66,27 +104,6 @@ void Image::doRender()
 void Image::setCenter(const int x, const int y)
 {
     m_center.moveTo(x, y);
-}
-
-void Image::processEvent(const Event & event, bool & isEventCaptured)
-{
-    if (!isEventCaptured)
-    {
-            switch (event.type)
-            {
-            case EventType::MouseUp:
-            case EventType::MouseDown:
-            case EventType::MouseClicked:
-            case EventType::MouseMove:
-            {
-                if (getRect().hasCommon(event.pos))
-                {
-                    isEventCaptured = true;
-                }
-            }
-            break;
-        }
-    }
 }
 
 namespace lua_image

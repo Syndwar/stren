@@ -30,6 +30,7 @@
     <ClInclude Include="src\engine\keyboard.h" />
     <ClInclude Include="src\engine\listener.h" />
     <ClInclude Include="src\engine\logger.h" />
+    <ClInclude Include="src\engine\mouse.h" />
     <ClInclude Include="src\engine\observer.h" />
     <ClInclude Include="src\engine\screen_selector.h" />
     <ClInclude Include="src\engine\system\debug_panel.h" />
@@ -102,6 +103,7 @@
     <ClCompile Include="src\engine\keyboard.cpp" />
     <ClCompile Include="src\engine\listener.cpp" />
     <ClCompile Include="src\engine\logger.cpp" />
+    <ClCompile Include="src\engine\mouse.cpp" />
     <ClCompile Include="src\engine\observer.cpp" />
     <ClCompile Include="src\engine\screen_selector.cpp" />
     <ClCompile Include="src\engine\system\debug_panel.cpp" />

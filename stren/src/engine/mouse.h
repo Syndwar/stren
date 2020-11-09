@@ -1,5 +1,5 @@
-#ifndef STREN_KEYBOARD_H
-#define STREN_KEYBOARD_H
+#ifndef STREN_MOUSE_H
+#define STREN_MOUSE_H
 
 #include <vector>
 #include <memory>
@@ -11,22 +11,19 @@ namespace stren
 {
 class IAction;
 
-///
-/// class KeyboardAction
-///
-struct KeyboardAction
+struct MouseAction
 {
     int                         eventType;
-    std::string                 key;
+    Event::MouseButton          button;
     std::unique_ptr<IAction>    action;
     ///
     /// Constructor
     ///
-    KeyboardAction();
+    MouseAction();
     ///
     /// Constructor
     ///
-    KeyboardAction(const int et, const std::string & k, IAction * a);
+    MouseAction(const int et, const Event::MouseButton b, IAction * a);
     ///
     /// @todo
     ///
@@ -34,7 +31,7 @@ struct KeyboardAction
     ///
     /// @todo
     ///
-    void reset(const int et, const std::string & k, IAction * a);
+    void reset(const int et, const Event::MouseButton b, IAction * a);
     ///
     /// @todo
     ///
@@ -42,17 +39,17 @@ struct KeyboardAction
 };
 
 ///
-/// class Keyboard
+/// class Mouse
 ///
-class Keyboard
+class Mouse
 {
 private:
-    std::vector<KeyboardAction> m_actions;      ///< @todo
+    std::vector<MouseAction> m_actions;      ///< @todo
 public:
     ///
     /// Constructor
     ///
-    Keyboard();
+    Mouse();
     ///
     /// @todo
     ///
@@ -64,11 +61,12 @@ public:
     ///
     /// @todo
     ///
-    size_t addAction(const int eventType, const std::string & key, IAction * action);
+    size_t addAction(const int eventType, const Event::MouseButton button, IAction * action);
     ///
     /// @todo
     ///
     void removeAction(const size_t key);
 };
+
 } // stren
-#endif // STREN_KEYBOARD_H
+#endif // STREN_MOUSE_H

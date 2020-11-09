@@ -3,7 +3,6 @@
 #include "engine/engine_handler.h"
 #include "engine/logger.h"
 #include "widgets/screen.h"
-#include "engine/action.h"
 
 namespace stren
 {
@@ -21,8 +20,6 @@ Game::~Game()
 
 void Game::update(const size_t dt)
 {
-    m_mouse.update(dt);
-    m_keyboard.update(dt);
     m_screenSelector.update();
     if (Screen * currentScreen = getCurrentScreen())
     {
@@ -37,8 +34,6 @@ Screen * Game::getCurrentScreen()
 
 void Game::processEvent(const Event & event, bool & isEventCaptured)
 {
-    m_mouse.processEvent(event, isEventCaptured);
-    m_keyboard.processEvent(event, isEventCaptured);
     if (Screen * currentScreen = getCurrentScreen())
     {
         currentScreen->processEvent(event, isEventCaptured);
@@ -56,26 +51,6 @@ void Game::render()
 void Game::switchScreen(void * screen)
 {
     m_screenSelector.switchToScreen(screen);
-}
-
-size_t Game::addKeyboardAction(const EventType eventType, const std::string & key, IAction * action)
-{
-    return m_keyboard.addAction(eventType, key, action);
-}
-
-void Game::removeKeyboardAction(const size_t key)
-{
-    m_keyboard.removeAction(key);
-}
-
-size_t Game::addMouseAction(const EventType eventType, const Event::MouseButton button, IAction * action)
-{
-    return m_mouse.addAction(eventType, button, action);
-}
-
-void Game::removeMouseAction(const size_t key)
-{
-    m_mouse.removeAction(key);
 }
 
 /*

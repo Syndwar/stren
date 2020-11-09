@@ -30,8 +30,8 @@ protected:
 
     enum UpdateState
     {
-        Update = 0x00000001,
-        Align = 0x00000002,
+        Update = 0x0001,
+        Align = 0x0002,
     };
 private:
     std::string                         m_id;                ///< widgets id

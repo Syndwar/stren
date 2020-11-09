@@ -6,7 +6,7 @@
 namespace stren
 {
 class Event;
-enum class EventType;
+enum EventType;
 class EventListener;
 ///
 /// class Observer

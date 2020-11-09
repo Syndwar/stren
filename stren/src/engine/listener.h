@@ -10,7 +10,7 @@
 namespace stren
 {
 class Widget;
-enum class EventType;
+enum EventType;
 ///
 /// class ICallback
 ///

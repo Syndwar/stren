@@ -36,39 +36,39 @@ public:
     ///
     /// Start action
     ///
-    virtual bool exec(const Event & event) override
+    virtual bool exec(const Event & event, const bool isEventCaptured) override
     {
         if (m_container)
         {
             const bool hasMouse = m_container->getRect().hasCommon(event.pos);
             if (hasMouse)
             {
-                //if (event.type == m_actionEvent)
-                //{
-                //    if (hasMouse)
-                //    {
-                //        if (MouseState::Outside == m_mouseState)
-                //        {
-                //            if (m_action)
-                //            {
-                //                m_action->exec(event);
-                //            }
-                //            m_mouseState = MouseState::Over;
-                //        }
-                //        isEventCaptured = true;
-                //    }
-                //    else
-                //    {
-                //        if (MouseState::Over == m_mouseState)
-                //        {
-                //            if (m_action)
-                //            {
-                //                //m_action->cancel(event);
-                //            }
-                //            m_mouseState = MouseState::Outside;
-                //        }
-                //    }
-                //}
+                if (event.type == m_actionEvent)
+                {
+                    if (hasMouse)
+                    {
+                        if (MouseState::Outside == m_mouseState)
+                        {
+                            if (m_action)
+                            {
+                                m_action->exec(event);
+                            }
+                            m_mouseState = MouseState::Over;
+                        }
+                        isEventCaptured = true;
+                    }
+                    else
+                    {
+                        if (MouseState::Over == m_mouseState)
+                        {
+                            if (m_action)
+                            {
+                                //m_action->cancel(event);
+                            }
+                            m_mouseState = MouseState::Outside;
+                        }
+                    }
+                }
                 return true;
             }
         }
@@ -84,7 +84,7 @@ Area::Area(const std::string & id)
     , m_mouseState(MouseState::Outside)
     , m_actionKey(0)
 {
-    IAction * action = createAction();
+    IAction * action = new AreaAction(this);
     m_actionKey = EngineHandler::addMouseAction(EventType::MouseMove, Event::MouseButton::None, action);
 }
 
@@ -97,12 +97,6 @@ void Area::setAction(EventType eventType, IAction * action)
 {
     m_action.reset(action);
     m_actionEvent = eventType;
-}
-
-IAction * Area::createAction()
-{
-    IAction * action = new AreaAction(this);
-    return action;
 }
 
 namespace lua_area

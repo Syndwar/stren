@@ -171,7 +171,7 @@ void EngineHandler::serialize()
     }
 }
 
-size_t EngineHandler::addKeyboardAction(const EventType eventType, const std::string & key, IAction * action)
+size_t EngineHandler::addKeyboardAction(const int eventType, const std::string & key, IAction * action)
 {
     if (m_engine)
     {
@@ -188,7 +188,7 @@ void EngineHandler::removeKeyboardAction(const size_t key)
     }
 }
 
-size_t EngineHandler::addMouseAction(const EventType eventType, const Event::MouseButton button, IAction * action)
+size_t EngineHandler::addMouseAction(const int eventType, const Event::MouseButton button, IAction * action)
 {
     if (m_engine)
     {

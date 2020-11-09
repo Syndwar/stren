@@ -20,7 +20,7 @@ public:
     ///
     /// @todo
     ///
-    virtual bool exec(const Event & event) = 0;
+    virtual bool exec(const Event & event, const bool isEventCaptures) = 0;
 };
 
 } // stren

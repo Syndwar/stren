@@ -7,12 +7,12 @@
 #include "engine/event.h"
 #include "engine/logger.h"
 #include "engine/console.h"
+#include "engine/action.h"
 #include "game/game.h"
 #include "render/renderer.h"
 #include "widgets/screen.h"
 #include "lua/lua_wrapper.h"
 #include "lua/lua_binding.h"
-
 
 namespace stren
 {
@@ -240,6 +240,8 @@ void Engine::render()
 
 void Engine::update(const size_t dt)
 {
+    m_mouse.update(dt);
+    m_keyboard.update(dt);
     if (m_game)
     {
         m_game->update(dt);
@@ -269,8 +271,8 @@ void Engine::processEvents()
             default:
             break;
         }
-
-        m_systemTools.processEvent(event, isEventCaptured);
+        m_mouse.processEvent(event, isEventCaptured);
+        m_keyboard.processEvent(event, isEventCaptured);
 
         if (m_game)
         {
@@ -352,37 +354,23 @@ void Engine::deserialize()
     initConfig();
 }
 
-size_t Engine::addKeyboardAction(const EventType eventType, const std::string & key, IAction * action)
+size_t Engine::addKeyboardAction(const int eventType, const std::string & key, IAction * action)
 {
-    if (m_game)
-    {
-        return m_game->addKeyboardAction(eventType, key, action);
-    }
-    return 0;
+    return m_keyboard.addAction(eventType, key, action);
 }
 
 void Engine::removeKeyboardAction(const size_t key)
 {
-    if (m_game)
-    {
-        m_game->removeKeyboardAction(key);
-    }
+    m_keyboard.removeAction(key);
 }
 
-size_t Engine::addMouseAction(const EventType eventType, const Event::MouseButton button, IAction * action)
+size_t Engine::addMouseAction(const int eventType, const Event::MouseButton button, IAction * action)
 {
-    if (m_game)
-    {
-        return m_game->addMouseAction(eventType, button, action);
-    }
-    return 0;
+    return m_mouse.addAction(eventType, button, action);
 }
 
 void Engine::removeMouseAction(const size_t key)
 {
-    if (m_game)
-    {
-        m_game->removeMouseAction(key);
-    }
+    m_mouse.removeAction(key);
 }
 } // stren

@@ -101,9 +101,9 @@ public:
     ///
     /// Start action
     ///
-    virtual bool exec(const Event & event) override
+    virtual bool exec(const Event & event, const bool isEventCaptured) override
     {
-        if (m_container && m_container->getRect().hasCommon(event.pos))
+        if (!isEventCaptured && m_container && m_container->getRect().hasCommon(event.pos))
         {
             m_container->enableInputMode();
             return true;

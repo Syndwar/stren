@@ -6,7 +6,7 @@
 
 namespace stren
 {
-enum class EventType;
+enum EventType;
 
 ///
 /// class WidgetTransformMod - widget transformation module

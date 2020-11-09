@@ -8,24 +8,24 @@
 
 namespace stren
 {
-enum class EventType
+enum EventType
 {
-    None = 0,
-    Unknown,
-    KeyUp,
-    KeyDown,
-    MouseUp,
-    MouseDown,
-    MouseMove,
-    MouseWheel,
-    MouseClicked,
-    WidgetOpened,
-    WidgetClosed,
-    WidgetDelete,
-    WidgetOpening,
-    WidgetClosing,
-    TimerElapsed,
-    SysQuit,
+    None = 0x0000,
+    Unknown = 0x0001,
+    KeyUp = 0x0002,
+    KeyDown = 0x0004,
+    MouseUp = 0x0008,
+    MouseDown = 0x0010,
+    MouseMove = 0x0020,
+    MouseWheel = 0x0040,
+    MouseClicked = 0x0080,
+    WidgetOpened = 0x0100,
+    WidgetClosed = 0x0200,
+    WidgetDelete = 0x0400,
+    WidgetOpening = 0x0800,
+    WidgetClosing = 0x1000,
+    TimerElapsed = 0x2000,
+    SysQuit = 0x4000,
 };                                                  ///< possible event types
 ///
 /// class Event

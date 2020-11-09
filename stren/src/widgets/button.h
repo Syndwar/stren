@@ -29,14 +29,15 @@ private:
 
     static const size_t kSpritesCount = 3;                          ///< @todo
 
-    int                                 textAlignment_;             ///< @todo
-    int                                 flip_;                      ///< @todo
-    double                              angle_;                     ///< @todo
-    ViewState                           viewState_;                 ///< @todo
-    CLabel                              label_;                     ///< @todo
-    Point                               center_;                    ///< @todo
-    std::vector<Sprite>                 sprites_;                   ///< @todo
-    std::vector<std::string>            spriteIds_;                 ///< @todo
+    size_t                              m_actionKey;                ///< @todo
+    int                                 m_textAlignment;             ///< @todo
+    int                                 m_flip;                      ///< @todo
+    double                              m_angle;                     ///< @todo
+    ViewState                           m_viewState;                 ///< @todo
+    CLabel                              m_label;                     ///< @todo
+    Point                               m_center;                    ///< @todo
+    std::vector<Sprite>                 m_sprites;                   ///< @todo
+    std::vector<std::string>            m_spriteIds;                 ///< @todo
 
 public:
     ///
@@ -50,19 +51,19 @@ public:
     ///
     /// @todo
     ///
-    inline void setAngle(const double angle) { angle_ = angle; }
+    inline void setAngle(const double angle) { m_angle = angle; }
     ///
     /// @todo
     ///
-    inline double angle() const { return angle_; }
+    inline double angle() const { return m_angle; }
     ///
     /// @todo
     ///
-    inline void setFlip(const int flip) { flip_ = flip; }
+    inline void setFlip(const int flip) { m_flip = flip; }
     ///
     /// @todo
     ///
-    inline int flip() const { return flip_; }
+    inline int flip() const { return m_flip; }
     ///
     /// @todo
     ///
@@ -91,10 +92,6 @@ public:
     /// @todo
     ///
     virtual void doPostMove(const int dx, const int dy) override;
-    ///
-    /// process incoming system events
-    ///
-    virtual void processEvent(const Event & event, bool & isEventCaptured) override;
     ///
     /// @todo
     ///

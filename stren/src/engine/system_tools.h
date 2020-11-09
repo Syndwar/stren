@@ -13,7 +13,8 @@ class Event;
 class SystemTools : public Container
 {
 private:
-    bool m_isReady;
+    size_t m_actionKey; ///< @todo
+    bool   m_isReady;   ///< @todo
 public:
     ///
     /// Constructor
@@ -35,10 +36,6 @@ public:
     /// log to console
     ///
     void log(const std::string & message);
-    ///
-    /// process incoming events
-    ///
-    void processEvent(const Event & event, bool & isEventCaptured);
 };
 } // stren
 

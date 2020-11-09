@@ -43,11 +43,6 @@ public:
     /// @todo
     ///
     static void bind();
-private:
-    ///
-    /// @todo
-    ///
-    IAction * createAction();
 };
 }
 
