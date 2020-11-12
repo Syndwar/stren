@@ -446,7 +446,6 @@ int addCallback(lua_State * L)
         const std::string callback = stack.get(3).getString();
         widget->addCallback(eventTypeStr, callback);
     }
-    stack.clear();
     return 0;
 }
 } // lua_widget

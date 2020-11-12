@@ -252,14 +252,8 @@
     <ClInclude Include="src\engine\screen_selector.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\keyboard.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\widgets\text_edit.h">
       <Filter>widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\mouse.h">
-      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -441,14 +435,8 @@
     <ClCompile Include="src\engine\screen_selector.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\keyboard.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="src\widgets\text_edit.cpp">
       <Filter>widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\mouse.cpp">
-      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

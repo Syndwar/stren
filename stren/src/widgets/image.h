@@ -17,7 +17,6 @@ private:
     Point           m_center;        ///< @todo
     double          m_angle;         ///< @todo
     int             m_flip;          ///< @todo
-    size_t          m_actionKey;     ///< @todo
     Sprite          m_sprite;        ///< @todo
 public:
     ///
@@ -52,6 +51,10 @@ public:
     /// @todo
     ///
     static void bind();
+    ///
+    /// process incoming system events, mark isEventCaptured true if the event was processed, otherwise - mark false to let other widget to process it
+    ///
+    virtual void processEvent(const Event & event, bool & isEventCaptured) override;
 private:
     ///
     /// @todo

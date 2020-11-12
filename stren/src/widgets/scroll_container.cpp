@@ -9,66 +9,14 @@
 namespace stren
 {
 
-int strActionToScrollDirection(const std::string & actionId)
+int strToScrollDirection(const std::string & actionId)
 {
-    if (actionId == "ScrollUp") return ScrollContainer::ScrollDirection::Up;
-    if (actionId == "ScrollDown") return ScrollContainer::ScrollDirection::Down;
-    if (actionId == "ScrollLeft") return ScrollContainer::ScrollDirection::Left;
-    if (actionId == "ScrollRight") return ScrollContainer::ScrollDirection::Right;
+    if (actionId == "Up") return ScrollContainer::ScrollDirection::Up;
+    if (actionId == "Down") return ScrollContainer::ScrollDirection::Down;
+    if (actionId == "Left") return ScrollContainer::ScrollDirection::Left;
+    if (actionId == "Right") return ScrollContainer::ScrollDirection::Right;
     return ScrollContainer::ScrollDirection::None;
 }
-///
-/// class ScrollAction provides an ability to move objects inside it around the screen
-///
-class ScrollAction : public IAction
-{
-private:
-    ScrollContainer * m_container;     ///< scroll container who created the action
-    int               m_direction;     ///< scroll direction
-    bool              m_shouldStart;   ///< should action start scrolling, otherwise it will stop it
-public:
-    ///
-    /// Constructor
-    ///
-    ScrollAction(ScrollContainer * container, const int direction, const bool shouldStart)
-        : IAction()
-        , m_container(container)
-        , m_direction(direction)
-        , m_shouldStart(shouldStart)
-    {
-    }
-    ///
-    /// Destructor
-    ///
-    virtual ~ScrollAction() {}
-    ///
-    /// start action
-    ///
-    virtual bool exec() override
-    {
-        if (m_container)
-        {
-            if (m_shouldStart)
-            {
-                m_container->scrollTo(m_direction, true);
-
-            }
-            else if (0 != (m_container->getScrollDirection() & m_direction))
-            {
-                m_container->scrollTo(m_direction, false);
-            }
-        }
-        return false;
-    }
-    ///
-    /// start action
-    ///
-    virtual bool exec(const Event & event) override
-    {
-        return exec();
-    }
-};
-
 ScrollContainer::ScrollContainer(const std::string & id)
     : Container(id)
     , m_updateInterval(100)
@@ -207,29 +155,49 @@ void ScrollContainer::processEvent(const Event & event, bool & isEventCaptured)
 
     if (!isEventCaptured)
     {
-        const Point & mousePos = EngineHandler::getMousePos();
-        if (getRect().hasCommon(mousePos))
+        switch (newEvent.type)
         {
-            switch (newEvent.type)
+            case EventType::MouseDown:
+            case EventType::MouseWheel:
+            case EventType::KeyDown:
+            case EventType::KeyUp:
             {
-                case EventType::MouseDown:
+                const Point & mousePos = EngineHandler::getMousePos();
+                if (getRect().hasCommon(mousePos))
                 {
-                    if (hasCallback(EventType::MouseClicked))
+                    switch (newEvent.type)
                     {
-                        callBack(EventType::MouseClicked, this);
+                    case EventType::MouseDown:
+                    {
+                        if (hasCallback(EventType::MouseClicked))
+                        {
+                            callBack(EventType::MouseClicked, this);
+                            isEventCaptured = true;
+                        }
+                    }
+                    break;
+                    case EventType::MouseWheel:
+                    {
+                        const int dx = event.wheel.getX() * m_wheelSpeed;
+                        const int dy = event.wheel.getY() * m_wheelSpeed;
+                        jumpTo(m_offset.getX() - dx, m_offset.getY() - dy);
                         isEventCaptured = true;
                     }
+                    break;
+                    case EventType::KeyDown:
+                    case EventType::KeyUp:
+                    {
+                        if (hasCallback(newEvent.type))
+                        {
+                            callBack(newEvent.type, this, newEvent.key);
+                            isEventCaptured = true;
+                        }
+                    }
+                    break;
+                    }
                 }
-                break;
-                case EventType::MouseWheel:
-                {
-                    const int dx = event.wheel.getX() * m_wheelSpeed;
-                    const int dy = event.wheel.getY() * m_wheelSpeed;
-                    jumpTo(m_offset.getX() - dx, m_offset.getY() - dy);
-                    isEventCaptured = true;
-                }
-                break;
             }
+            break;
         }
     }
     Container::processEvent(newEvent, isEventCaptured);
@@ -299,21 +267,6 @@ void ScrollContainer::doUpdate(const size_t dt)
     }
 
     Container::doUpdate(dt);
-}
-
-IAction * ScrollContainer::createAction(const std::string & actionId, const bool shouldStart)
-{
-    const int direction = strActionToScrollDirection(actionId);
-    return createAction(direction, shouldStart);
-}
-
-IAction * ScrollContainer::createAction(const int direction, const bool shouldStart)
-{
-    if (direction != ScrollDirection::None)
-    {
-        return new ScrollAction(this, direction, shouldStart);
-    }
-    return nullptr;
 }
 
 Point ScrollContainer::getDirectionPoint(const int direction)
@@ -443,22 +396,25 @@ int setContentRect(lua_State * L)
     return 0;
 }
 
-int createAction(lua_State * L)
+int enableScroll(lua_State * L)
 {
     lua::Stack stack(3);
     ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
-    const std::string actionId = stack.get(2).getString();
-    const bool shouldStart = stack.get(3).getBool();
+    const int direction = strToScrollDirection(stack.get(2).getString());
+    const bool value = stack.get(3).getBool();
     if (cnt)
     {
-        IAction * action = cnt->createAction(actionId, shouldStart);
-        stack.push((void *)action);
+        if (value)
+        {
+            cnt->scrollTo(direction, value);
+
+        }
+        else if (0 != (cnt->getScrollDirection() & direction))
+        {
+            cnt->scrollTo(direction, value);
+        }
     }
-    else
-    {
-        stack.push();
-    }
-    return 1;
+    return 0;
 }
 
 } // lua_scroll_container
@@ -471,7 +427,7 @@ void ScrollContainer::bind()
         { "new", lua_scroll_container::create },
         { "setScrollSpeed", lua_scroll_container::setScrollSpeed },
         { "setContentRect", lua_scroll_container::setContentRect },
-        { "createAction", lua_scroll_container::createAction },
+        { "enableScroll", lua_scroll_container::enableScroll },
         { "jumpTo", lua_scroll_container::jumpTo },
         { "scrollTo", lua_scroll_container::scrollTo },
         { "isScrolling", lua_scroll_container::isScrolling },

@@ -13,7 +13,6 @@ class IAction;
 class TextEdit : public Widget
 {
 private:
-    std::vector<size_t> m_actionKeys;       ///< @todo
     int                 m_textAlignment;    ///< @todo
     bool                m_isInputMode;      ///< @todo
     CLabel              m_label;            ///< @todo
@@ -70,6 +69,10 @@ public:
     /// @todo
     ///
     static void bind();
+    ///
+    /// process incoming system events, mark isEventCaptured true if the event was processed, otherwise - mark false to let other widget to process it
+    ///
+    virtual void processEvent(const Event & event, bool & isEventCaptured) override;
 private:
     ///
     /// @todo

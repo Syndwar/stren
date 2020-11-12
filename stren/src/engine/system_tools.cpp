@@ -12,76 +12,9 @@
 
 namespace stren
 {
-///
-/// class ImageAction
-///
-class SystemToolsAction : public IAction
-{
-private:
-    SystemTools *  m_container;     ///< container who created the action
-public:
-    ///
-    /// Constructor
-    ///
-    SystemToolsAction(SystemTools * container) : IAction(), m_container(container) {}
-    ///
-    /// Destructor
-    ///
-    virtual ~SystemToolsAction() {}
-    ///
-    /// Start action
-    ///
-    virtual bool exec() override { return false; }
-    ///
-    /// Start action
-    ///
-    virtual bool exec(const Event & event) override
-    {
-        if (m_container)
-        {
-            if ("F1" == event.key)
-            {
-                if (Widget * debugPanel = m_container->findWidget<Widget>("debugPanel"))
-                {
-                    debugPanel->view(!debugPanel->isOpened());
-                }
-                return true;
-            }
-            else if ("F2" == event.key)
-            {
-                if (Screen * currentScreen = EngineHandler::getCurrentScreen())
-                {
-                    currentScreen->setDebugView(!currentScreen->isDebugView());
-                }
-                return true;
-            }
-            else if ("F3" == event.key)
-            {
-                if (Widget * widgetsTree = m_container->findWidget<Widget>("widgetTree"))
-                {
-                    widgetsTree->view(!widgetsTree->isOpened());
-                }
-                return true;
-            }
-            else if ("`" == event.key)
-            {
-                if (Widget * console = m_container->findWidget<Widget>("console"))
-                {
-                    console->view(!console->isOpened());
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-};
-///
-/// class SystemTools
-///
 SystemTools::SystemTools()
     : Container("systemTools")
     , m_isReady(false)
-    , m_actionKey(0)
 {
 }
 
@@ -91,9 +24,6 @@ SystemTools::~SystemTools()
 
 void SystemTools::initialize()
 {
-    IAction * action = new SystemToolsAction(this);
-    m_actionKey = EngineHandler::addKeyboardAction(EventType::KeyUp, "", action);
-
     Console * console = new Console("console");
     attach(console);
 
@@ -109,7 +39,6 @@ void SystemTools::initialize()
 
 void SystemTools::release()
 {
-    EngineHandler::removeKeyboardAction(m_actionKey);
     detachAll();
     m_isReady = false;
 }
@@ -122,6 +51,52 @@ void SystemTools::log(const std::string & message)
     {
         console->log(message);
     }
+}
+
+void SystemTools::processEvent(const Event & event, bool & isEventCaptured)
+{
+    if (isEventCaptured) return;
+
+    switch (event.type)
+    {
+    case EventType::KeyDown:
+    {
+        if ("F1" == event.key)
+        {
+            if (Widget * debugPanel = findWidget<Widget>("debugPanel"))
+            {
+                debugPanel->view(!debugPanel->isOpened());
+            }
+            isEventCaptured = true;
+        }
+        else if ("F2" == event.key)
+        {
+            if (Screen * currentScreen = EngineHandler::getCurrentScreen())
+            {
+                currentScreen->setDebugView(!currentScreen->isDebugView());
+            }
+            isEventCaptured = true;
+        }
+        else if ("F3" == event.key)
+        {
+            if (Widget * widgetsTree = findWidget<Widget>("widgetTree"))
+            {
+                widgetsTree->view(!widgetsTree->isOpened());
+            }
+            isEventCaptured = true;
+        }
+        else if ("`" == event.key)
+        {
+            if (Widget * console = findWidget<Widget>("console"))
+            {
+                console->view(!console->isOpened());
+            }
+            isEventCaptured = true;
+        }
+    }
+    break;
+    }
+    Container::processEvent(event, isEventCaptured);
 }
 
 } // stren

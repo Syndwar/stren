@@ -7,110 +7,6 @@
 
 namespace stren
 {
-
-///
-/// class TextInputAction provides an ability to modify text in the control
-///
-class TextInputAction : public IAction
-{
-private:
-    TextEdit *  m_container;     ///< container who created the action
-public:
-    ///
-    /// Constructor
-    ///
-    TextInputAction(TextEdit * container) : IAction(), m_container(container) {}
-    ///
-    /// Destructor
-    ///
-    virtual ~TextInputAction() {}
-    ///
-    /// Start action
-    ///
-    virtual bool exec() override { return false; }
-    ///
-    /// Start action
-    ///
-    virtual bool exec(const Event & event) override
-    {
-        if (m_container && m_container->isInputMode())
-        {
-            if ("Return" == event.key || "Escape" == event.key)
-            {
-                m_container->cancelInputMode();
-            }
-            else if ("Backspace" == event.key)
-            {
-                std::string new_text = m_container->getText();
-                if (new_text.size() > 1)
-                {
-                    new_text.pop_back();
-                    new_text.pop_back();
-                    new_text.append("|");
-                    m_container->setText(new_text);
-                }
-            }
-            else if ("Space" == event.key)
-            {
-                std::string new_text = m_container->getText();
-                new_text.pop_back();
-                new_text.append(" |");
-                m_container->setText(new_text);
-            }
-            else if (1 == event.key.size())
-            {
-                std::string new_text = m_container->getText();
-                new_text.pop_back();
-                if (Event::KeyMod::Shift == event.mod)
-                {
-                    const char input[] = { (char)toupper(event.key[0]), "\0" };
-                    new_text.append(input);
-                }
-                else
-                {
-                    const char input[] = { (char)tolower(event.key[0]), "\0" };
-                    new_text.append(input);
-                }
-                new_text.append("|");
-                m_container->setText(new_text);
-            }
-        }
-        return false;
-    }
-};
-///
-/// class MouseInputAction provides an ability to enable text input mode
-///
-class MouseInputAction : public IAction
-{
-private:
-    TextEdit *  m_container;     ///< container who created the action
-public:
-    ///
-    /// Constructor
-    ///
-    MouseInputAction(TextEdit * container) : IAction(), m_container(container) {}
-    ///
-    /// Destructor
-    ///
-    virtual ~MouseInputAction() {}
-    ///
-    /// Start action
-    ///
-    virtual bool exec() override { return false; }
-    ///
-    /// Start action
-    ///
-    virtual bool exec(const Event & event, const bool isEventCaptured) override
-    {
-        if (!isEventCaptured && m_container && m_container->getRect().hasCommon(event.pos))
-        {
-            m_container->enableInputMode();
-            return true;
-        }
-        return false;
-    }
-};
 ///
 /// class TextEdit
 ///
@@ -119,22 +15,10 @@ TextEdit::TextEdit(const std::string & id)
     , m_textAlignment(Alignment::CenterMiddle)
     , m_isInputMode(false)
 {
-    IAction * action = nullptr;
-    action = new TextInputAction(this);
-    size_t key(0);
-    key = EngineHandler::addKeyboardAction(EventType::KeyUp, "", action);
-    m_actionKeys.push_back(key);
-    action = new MouseInputAction(this);
-    key = EngineHandler::addMouseAction(EventType::MouseUp, Event::MouseButton::None, action);
-    m_actionKeys.push_back(key);
 }
 
 TextEdit::~TextEdit()
 {
-    for (size_t key : m_actionKeys)
-    {
-        EngineHandler::removeKeyboardAction(key);
-    }
 }
 
 void TextEdit::enableInputMode()
@@ -205,6 +89,70 @@ void TextEdit::doRender()
     }
 
     m_label.render();
+}
+
+void TextEdit::processEvent(const Event & event, bool & isEventCaptured)
+{
+    if (isEventCaptured) return;
+
+    switch (event.type)
+    {
+    case EventType::KeyUp:
+    {
+        if (isInputMode())
+        {
+            if ("Return" == event.key || "Escape" == event.key)
+            {
+                cancelInputMode();
+            }
+            else if ("Backspace" == event.key)
+            {
+                std::string new_text = getText();
+                if (new_text.size() > 1)
+                {
+                    new_text.pop_back();
+                    new_text.pop_back();
+                    new_text.append("|");
+                    setText(new_text);
+                }
+            }
+            else if ("Space" == event.key)
+            {
+                std::string new_text = getText();
+                new_text.pop_back();
+                new_text.append(" |");
+                setText(new_text);
+            }
+            else if (1 == event.key.size())
+            {
+                std::string new_text = getText();
+                new_text.pop_back();
+                if (Event::KeyMod::Shift == event.mod)
+                {
+                    const char input[] = { (char)toupper(event.key[0]), "\0" };
+                    new_text.append(input);
+                }
+                else
+                {
+                    const char input[] = { (char)tolower(event.key[0]), "\0" };
+                    new_text.append(input);
+                }
+                new_text.append("|");
+                setText(new_text);
+            }
+        }
+    }
+    break;
+    case EventType::MouseDown:
+    {
+        if (getRect().hasCommon(event.pos))
+        {
+            enableInputMode();
+            isEventCaptured = true;
+        }
+    }
+    break;
+    }
 }
 
 namespace lua_text_edit

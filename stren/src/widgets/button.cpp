@@ -13,91 +13,19 @@
 
 namespace stren
 {
-///
-/// class ImageAction
-///
-class ButtonAction : public IAction
-{
-private:
-    Button *  m_container;     ///< container who created the action
-public:
-    ///
-    /// Constructor
-    ///
-    ButtonAction(Button * container) : IAction(), m_container(container) {}
-    ///
-    /// Destructor
-    ///
-    virtual ~ButtonAction() {}
-    ///
-    /// Start action
-    ///
-    virtual bool exec() override { return false; }
-    ///
-    /// Start action
-    ///
-    virtual bool exec(const Event & event, const bool isEventCaptured) override
-    {
-        if (m_container)
-        {
-            const bool hasMouse = !isEventCaptured && m_container->getRect().hasCommon(event.pos);
-            if (hasMouse && m_container->isOpened())
-            {
-                switch (event.type)
-                {
-                case EventType::MouseMove:
-                {
-                    if (ViewState::Over != m_viewState && ViewState::Pressed != m_viewState)
-                    {
-                        m_viewState = ViewState::Over;
-                    }
-                }
-                break;
-                case EventType::MouseDown:
-                {
-                    m_viewState = ViewState::Pressed;
-                }
-                break;
-                case EventType::MouseUp:
-                {
-                    if (ViewState::Pressed == m_viewState)
-                    {
-                        m_viewState = ViewState::Over;
-
-                        callBack(EventType::MouseClicked, this);
-                    }
-                }
-                break;
-                }
-                return true;
-            }
-            else if (ViewState::Up != m_viewState)
-            {
-                m_viewState = ViewState::Up;
-            }
-        }
-        return false;
-    }
-};
-
 Button::Button(const std::string & id)
     : Widget(id)
     , m_textAlignment(Alignment::Center | Alignment::Middle)
     , m_viewState(ViewState::Up)
     , m_flip(Sprite::Flip::None)
     , m_angle(0)
-    , m_actionKey(0)
 {
     m_sprites.resize(kSpritesCount);
     m_spriteIds.resize(kSpritesCount);
-
-    IAction * action = new ButtonAction(this);
-    m_actionKey = EngineHandler::addMouseAction(EventType::MouseDown | EventType::MouseUp | EventType::MouseMove, Event::MouseButton::None, action);
 }
 
 Button::~Button()
 {
-    EngineHandler::removeKeyboardAction(m_actionKey);
 }
 
 void Button::setColour(const Colour & colour)
@@ -178,6 +106,50 @@ void Button::setSprites(const std::string & upSpr, const std::string & downSpr, 
     m_spriteIds[1] = downSpr;
     m_spriteIds[2] = overSpr;
     addUpdateState(UpdateState::Update);
+}
+
+void Button::processEvent(const Event & event, bool & isEventCaptured)
+{
+    switch (event.type)
+    {
+    case EventType::MouseDown:
+    case EventType::MouseUp:
+    case EventType::MouseMove:
+    {
+        const bool hasMouse = !isEventCaptured && isOpened() && getRect().hasCommon(event.pos);
+        if (hasMouse)
+        {
+            if (EventType::MouseMove == event.type)
+            {
+                if (ViewState::Over != m_viewState && ViewState::Pressed != m_viewState)
+                {
+                    m_viewState = ViewState::Over;
+                    isEventCaptured = true;
+                }
+            }
+            else if (EventType::MouseDown == event.type)
+            {
+                m_viewState = ViewState::Pressed;
+                isEventCaptured = true;
+            }
+            else if (EventType::MouseUp == event.type)
+            {
+                if (ViewState::Pressed == m_viewState)
+                {
+                    m_viewState = ViewState::Over;
+
+                    callBack(EventType::MouseClicked, this);
+                    isEventCaptured = true;
+                }
+            }
+        }
+        else if (ViewState::Up != m_viewState)
+        {
+            m_viewState = ViewState::Up;
+        }
+    }
+    break;
+    }
 }
 
 namespace lua_button

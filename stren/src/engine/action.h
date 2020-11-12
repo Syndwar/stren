@@ -17,10 +17,6 @@ public:
     /// @todo
     ///
     virtual bool exec() = 0;
-    ///
-    /// @todo
-    ///
-    virtual bool exec(const Event & event, const bool isEventCaptures) = 0;
 };
 
 } // stren

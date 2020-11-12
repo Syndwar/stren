@@ -10,7 +10,7 @@
 namespace stren
 {
 class Widget;
-enum EventType;
+enum class EventType;
 ///
 /// class ICallback
 ///
@@ -21,6 +21,10 @@ public:
     /// call the callback
     ///
     virtual void call(const EventType & type, Widget * sender) = 0;
+    ///
+    /// call the callback with one param
+    ///
+    virtual void call(const EventType & type, Widget * sender, const std::string & param) = 0;
 };
 ///
 /// class DelegateCallback
@@ -45,6 +49,13 @@ public:
     {
         m_callback(sender);
     }
+    ///
+    /// call the callback with one param
+    ///
+    virtual void call(const EventType & type, Widget * sender, const std::string & param) override
+    {
+        m_callback(sender, param);
+    }
 };
 ///
 /// class VmCallback
@@ -65,6 +76,10 @@ public:
     /// call the lua function callback
     ///
     virtual void call(const EventType & type, Widget * sender) override;
+    ///
+    /// call the callback with one param
+    ///
+    virtual void call(const EventType & type, Widget * sender, const std::string & param) override;
 };
 ///
 /// class Listener
@@ -104,6 +119,10 @@ public:
     /// call the callback
     ///
     void callBack(const EventType & type, Widget * widget);
+    ///
+    /// call the callback with one param
+    ///
+    void callBack(const EventType & type, Widget * widget, const std::string & param);
     ///
     /// return if callback exist
     ///

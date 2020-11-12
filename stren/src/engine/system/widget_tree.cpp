@@ -35,13 +35,6 @@ public:
         }
         return false;
     }
-    ///
-    /// update widget tree
-    ///
-    virtual bool exec(const Event & event, const bool isEventCaptured) override
-    {
-        return exec();
-    }
 };
 
 WidgetTreeBranch::WidgetTreeBranch(Widget * widget, WidgetTreeBranch * parent, IAction * action)

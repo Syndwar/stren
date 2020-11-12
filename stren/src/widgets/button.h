@@ -29,7 +29,6 @@ private:
 
     static const size_t kSpritesCount = 3;                          ///< @todo
 
-    size_t                              m_actionKey;                ///< @todo
     int                                 m_textAlignment;             ///< @todo
     int                                 m_flip;                      ///< @todo
     double                              m_angle;                     ///< @todo
@@ -96,6 +95,10 @@ public:
     /// @todo
     ///
     static void bind();
+    ///
+    /// process incoming system events, mark isEventCaptured true if the event was processed, otherwise - mark false to let other widget to process it
+    ///
+    virtual void processEvent(const Event & event, bool & isEventCaptured) override;
 private:
     ///
     /// @todo

@@ -22,9 +22,6 @@ private:
     };
 
     MouseState               m_mouseState;         ///< @todo
-    std::unique_ptr<IAction> m_action;             ///< @todo
-    EventType                m_actionEvent;        ///< @todo
-    size_t                   m_actionKey;          ///< @todo
 
 public:
     ///
@@ -36,13 +33,13 @@ public:
     ///
     virtual ~Area();
     ///
-    /// sets an action to this widget, takes ownership of the action
-    ///
-    void setAction(EventType eventType, IAction * action);
-    ///
     /// @todo
     ///
     static void bind();
+    ///
+    /// process incoming system events, mark isEventCaptured true if the event was processed, otherwise - mark false to let other widget to process it
+    ///
+    virtual void processEvent(const Event & event, bool & isEventCaptured) override;
 };
 }
 

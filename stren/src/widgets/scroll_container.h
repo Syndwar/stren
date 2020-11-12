@@ -77,14 +77,6 @@ public:
     ///
     bool isScrolling() const;
     ///
-    /// creates action, caller must take ownership
-    ///
-    IAction * createAction(const std::string & actionId, const bool shouldStart);
-    ///
-    /// creates action, caller must take ownership
-    ///
-    IAction * createAction(const int direction, const bool shouldStart);
-    ///
     /// convert screen coordinate to scroll coordinate
     ///
     Point screenToScrollPos(const int x, const int y) const;

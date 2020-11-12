@@ -9,8 +9,6 @@
 #include "engine/config.h"
 #include "engine/event_processor.h"
 #include "engine/system_tools.h"
-#include "engine/keyboard.h"
-#include "engine/mouse.h"
 #include "media/sound_system.h"
 #include "repo/fonts_repository.h"
 #include "repo/sprites_repository.h"
@@ -56,8 +54,6 @@ private:
     FontsRepository         m_fontsRepo;         ///< @todo
     SoundSystem             m_soundSystem;       ///< @todo
     EventProcessor          m_eventProcessor;    ///< @todo
-    Mouse                   m_mouse;             ///< @todo
-    Keyboard                m_keyboard;          ///< @todo
     SystemTools             m_systemTools;       ///< @todo
     Game *                  m_game;              ///< @todo
 
@@ -154,22 +150,6 @@ public:
     /// @todo
     ///
     void serialize();
-    ///
-    /// @todo
-    ///
-    size_t addKeyboardAction(const int eventType, const std::string & key, IAction * action);
-    ///
-    /// @todo
-    ///
-    void removeKeyboardAction(const size_t key);
-    ///
-    /// @todo
-    ///
-    size_t addMouseAction(const int eventType, const Event::MouseButton button, IAction * action);
-    ///
-    /// @todo
-    ///
-    void removeMouseAction(const size_t key);
 private:
     ///
     /// @todo

@@ -8,24 +8,26 @@
 
 namespace stren
 {
-enum EventType
+enum class EventType
 {
-    None = 0x0000,
-    Unknown = 0x0001,
-    KeyUp = 0x0002,
-    KeyDown = 0x0004,
-    MouseUp = 0x0008,
-    MouseDown = 0x0010,
-    MouseMove = 0x0020,
-    MouseWheel = 0x0040,
-    MouseClicked = 0x0080,
-    WidgetOpened = 0x0100,
-    WidgetClosed = 0x0200,
-    WidgetDelete = 0x0400,
-    WidgetOpening = 0x0800,
-    WidgetClosing = 0x1000,
-    TimerElapsed = 0x2000,
-    SysQuit = 0x4000,
+    None = 0,
+    Unknown,
+    KeyUp,
+    KeyDown,
+    MouseUp,
+    MouseDown,
+    MouseMove,
+    MouseOver,
+    MouseLeft,
+    MouseWheel,
+    MouseClicked,
+    WidgetOpened,
+    WidgetClosed,
+    WidgetDelete,
+    WidgetOpening,
+    WidgetClosing,
+    TimerElapsed,
+    SysQuit,
 };                                                  ///< possible event types
 ///
 /// class Event
@@ -51,6 +53,8 @@ public:
         X1 = 4,
         X2 = 5,
     };                                              ///< possible mouse button values
+
+
 
     EventType   type;                               ///< event type value
     KeyMod      mod;                                ///< key mod value

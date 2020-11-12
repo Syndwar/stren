@@ -240,8 +240,6 @@ void Engine::render()
 
 void Engine::update(const size_t dt)
 {
-    m_mouse.update(dt);
-    m_keyboard.update(dt);
     if (m_game)
     {
         m_game->update(dt);
@@ -271,8 +269,7 @@ void Engine::processEvents()
             default:
             break;
         }
-        m_mouse.processEvent(event, isEventCaptured);
-        m_keyboard.processEvent(event, isEventCaptured);
+        m_systemTools.processEvent(event, isEventCaptured);
 
         if (m_game)
         {
@@ -352,25 +349,5 @@ void Engine::deserialize()
 {
     Logger("green") << "[Engine] Deserialize save data";
     initConfig();
-}
-
-size_t Engine::addKeyboardAction(const int eventType, const std::string & key, IAction * action)
-{
-    return m_keyboard.addAction(eventType, key, action);
-}
-
-void Engine::removeKeyboardAction(const size_t key)
-{
-    m_keyboard.removeAction(key);
-}
-
-size_t Engine::addMouseAction(const int eventType, const Event::MouseButton button, IAction * action)
-{
-    return m_mouse.addAction(eventType, button, action);
-}
-
-void Engine::removeMouseAction(const size_t key)
-{
-    m_mouse.removeAction(key);
 }
 } // stren

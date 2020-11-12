@@ -13,7 +13,6 @@ class Event;
 class SystemTools : public Container
 {
 private:
-    size_t m_actionKey; ///< @todo
     bool   m_isReady;   ///< @todo
 public:
     ///
@@ -36,6 +35,10 @@ public:
     /// log to console
     ///
     void log(const std::string & message);
+    ///
+    /// process incoming system events, mark isEventCaptured true if the event was processed, otherwise - mark false to let other widget to process it
+    ///
+    virtual void processEvent(const Event & event, bool & isEventCaptured) override;
 };
 } // stren
 

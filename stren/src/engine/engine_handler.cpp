@@ -171,40 +171,6 @@ void EngineHandler::serialize()
     }
 }
 
-size_t EngineHandler::addKeyboardAction(const int eventType, const std::string & key, IAction * action)
-{
-    if (m_engine)
-    {
-        return m_engine->addKeyboardAction(eventType, key, action);
-    }
-    return 0;
-}
-
-void EngineHandler::removeKeyboardAction(const size_t key)
-{
-    if (m_engine)
-    {
-        m_engine->removeKeyboardAction(key);
-    }
-}
-
-size_t EngineHandler::addMouseAction(const int eventType, const Event::MouseButton button, IAction * action)
-{
-    if (m_engine)
-    {
-        return m_engine->addMouseAction(eventType, button, action);
-    }
-    return 0;
-}
-
-void EngineHandler::removeMouseAction(const size_t key)
-{
-    if (m_engine)
-    {
-        m_engine->removeMouseAction(key);
-    }
-}
-
 namespace lua_engine
 {
 int playSound(lua_State *L)
@@ -361,48 +327,6 @@ int changeScreen(lua_State * L)
 }
 } // lua_game
 
-namespace lua_keyboard
-{
-int addAction(lua_State * L)
-{
-    lua::Stack stack(3);
-    const std::string eventId = stack.get(1).getString();
-    const std::string key = stack.get(2).getString();
-    IAction * action = (IAction *)stack.get(3).getUserData();
-    const size_t result = EngineHandler::addKeyboardAction(Event::strToType(eventId), key, action);
-    stack.push(result);
-    return 1;
-}
-int removeAction(lua_State * L)
-{
-    lua::Stack stack(1);
-    const size_t key = static_cast<size_t>(stack.get(1).getInt());
-    EngineHandler::removeKeyboardAction(key);
-    return 0;
-}
-} // lua_keyboard
-
-namespace lua_mouse
-{
-int addAction(lua_State * L)
-{
-    lua::Stack stack(3);
-    const std::string eventId = stack.get(1).getString();
-    const Event::MouseButton button = static_cast<Event::MouseButton>(stack.get(2).getInt());
-    IAction * action = (IAction *)stack.get(3).getUserData();
-    const size_t result = EngineHandler::addMouseAction(Event::strToType(eventId), button, action);
-    stack.push(result);
-    return 1;
-}
-int removeAction(lua_State * L)
-{
-    lua::Stack stack(1);
-    const size_t key = static_cast<size_t>(stack.get(1).getInt());
-    EngineHandler::removeMouseAction(key);
-    return 0;
-}
-} // lua_mouse
-
 void EngineHandler::bind()
 {
     lua::Stack stack;
@@ -432,21 +356,5 @@ void EngineHandler::bind()
         { NULL, NULL }
     };
     stack.loadLibs("Game", game_functions);
-
-    const luaL_reg keyboard_functions[] =
-    {
-        { "addAction", lua_keyboard::addAction },
-        { "removeAction", lua_keyboard::removeAction },
-        { NULL, NULL }
-    };
-    stack.loadLibs("Keyboard", keyboard_functions);
-
-    const luaL_reg mouse_functions[] =
-    {
-        { "addAction", lua_mouse::addAction },
-        { "removeAction", lua_mouse::removeAction },
-        { NULL, NULL }
-    };
-    stack.loadLibs("Mouse", mouse_functions);
 }
 } // stren

@@ -14,7 +14,6 @@ class SoundSystem;
 class Screen;
 class Sprite;
 class Widget;
-class IAction;
 
 enum class ScreenId;
 ///
@@ -121,22 +120,6 @@ public:
     /// @todo
     ///
     static void bind();
-    ///
-    /// @todo
-    ///
-    static size_t EngineHandler::addKeyboardAction(const int eventType, const std::string & key, IAction * action);
-    ///
-    /// @todo
-    ///
-    static void removeKeyboardAction(const size_t key);
-    ///
-    /// @todo
-    ///
-    static size_t EngineHandler::addMouseAction(const int eventType, const Event::MouseButton button, IAction * action);
-    ///
-    /// @todo
-    ///
-    static void removeMouseAction(const size_t key);
 };
 
 } // stren

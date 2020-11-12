@@ -16,6 +16,16 @@ void VmCallback::call(const EventType & type, Widget * sender)
     }
 }
 
+void VmCallback::call(const EventType & type, Widget * sender, const std::string & param)
+{
+    if (!m_callback.empty())
+    {
+        lua::Function func(m_callback);
+        std::vector<lua::Value> values = { static_cast<void *>(sender), param };
+        func.call(values);
+    }
+}
+
 void Listener::addCallback(const std::string & type, const std::string & callback)
 {
     addCallback(Event::strToType(type), callback);
@@ -55,6 +65,21 @@ void Listener::callBack(const EventType & type, Widget * widget)
     }
 }
 
+void Listener::callBack(const EventType & type, Widget * widget, const std::string & param)
+{
+    if (!m_callbacks.empty())
+    {
+        auto it = m_callbacks.find(type);
+        if (it != m_callbacks.end())
+        {
+            if (it->second)
+            {
+                it->second->call(type, widget, param);
+            }
+        }
+    }
+}
+
 void Listener::clear()
 {
     m_callbacks.clear();
@@ -64,5 +89,4 @@ bool Listener::hasCallback(const EventType & type) const
 {
     return !m_callbacks.empty() && (m_callbacks.find(type) != m_callbacks.end());
 }
-
 } // stren
