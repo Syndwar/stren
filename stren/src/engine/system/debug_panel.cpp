@@ -9,25 +9,6 @@ namespace stren
 DebugPanel::DebugPanel(const std::string & id)
     : Dialog(id)
 {
-    Label * fpsLbl = new Label("fpsLbl");
-    fpsLbl->setFont("robo_bold_15_fnt");
-    fpsLbl->setTextAlignment(Alignment::CenterMiddle);
-    fpsLbl->setRect(0, 0, 100, 30);
-    fpsLbl->setColour(Colour::Green);
-    fpsLbl->setAlignment(Alignment::LeftTop, 0, 0);
-    attach(fpsLbl);
-
-    Label * mousePosLbl = new Label("mousePosLbl");
-    mousePosLbl->setFont("robo_bold_15_fnt");
-    mousePosLbl->setTextAlignment(Alignment::CenterMiddle);
-    mousePosLbl->setRect(0, 0, 120, 30);
-    mousePosLbl->setColour(Colour::Green);
-    mousePosLbl->setAlignment(Alignment::RightTop, 0, 0);
-    attach(mousePosLbl);
-}
-
-DebugPanel::~DebugPanel()
-{
 }
 
 void DebugPanel::doUpdate(const size_t dt)

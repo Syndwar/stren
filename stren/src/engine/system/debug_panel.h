@@ -15,10 +15,6 @@ public:
     /// Constructor
     ///
     DebugPanel(const std::string & id);
-    ///
-    /// Destructor
-    ///
-    virtual ~DebugPanel();
 protected:
     ///
     /// update content

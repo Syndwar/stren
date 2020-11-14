@@ -448,6 +448,17 @@ int addCallback(lua_State * L)
     }
     return 0;
 }
+
+int switchDebugView(lua_State * L)
+{
+    lua::Stack stack(1);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        widget->setDebugView(!widget->isDebugView());
+    }
+    return 0;
+}
 } // lua_widget
 
 void Widget::bind()
@@ -468,6 +479,7 @@ void Widget::bind()
         { "moveBy", lua_widget::moveBy },
         { "attachTransform", lua_widget::attachTransform },
         { "addCallback", lua_widget::addCallback },
+        { "switchDebugView", lua_widget::switchDebugView },
         { NULL, NULL }
     };
     stack.loadLibs("Widget", functions);

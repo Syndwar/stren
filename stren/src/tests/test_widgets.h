@@ -1,7 +1,7 @@
 #ifndef STREN_TEST_WIDGETS_H
 #define STREN_TEST_WIDGETS_H
 
-#include "colour.h"
+#include "common/colour.h"
 
 namespace test
 {

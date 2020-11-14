@@ -27,6 +27,32 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
 {
     if (isOpened())
     {
+        if (!isEventCaptured)
+        {
+            switch (event.type)
+            {
+            case EventType::MouseMove:
+            {
+                if (hasCallback(event.type))
+                {
+                    callBack(event.type, this);
+                    isEventCaptured = true;
+                }
+            }
+            break;
+            case EventType::KeyDown:
+            case EventType::KeyUp:
+            {
+                if (hasCallback(event.type))
+                {
+                    callBack(event.type, this, event.key);
+                    isEventCaptured = true;
+                }
+            }
+            break;
+            }
+        }
+
         bool result(false);
         for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
         {
@@ -181,7 +207,6 @@ int attach(lua_State * L)
         Widget * widget = (Widget *)stack.get(2).getUserData();
         cnt->attach(widget);
     }
-    stack.clear();
     return 0;
 }
 
@@ -190,7 +215,6 @@ int findWidget(lua_State * L)
     lua::Stack stack(2);
     Container * cnt = (Container *)stack.get(1).getUserData();
     const std::string id = stack.get(2).getString();
-    stack.clear();
     if (cnt)
     {
         Widget * widget = cnt->findWidget<Widget>(id);
@@ -200,7 +224,7 @@ int findWidget(lua_State * L)
     {
         stack.push();
     }
-    return stack.getSize();
+    return 1;
 }
 } // lua_container
 

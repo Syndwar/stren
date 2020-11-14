@@ -8,7 +8,6 @@
 #include "common/string_ext.h"
 #include "engine/config.h"
 #include "engine/event_processor.h"
-#include "engine/system_tools.h"
 #include "media/sound_system.h"
 #include "repo/fonts_repository.h"
 #include "repo/sprites_repository.h"
@@ -54,7 +53,6 @@ private:
     FontsRepository         m_fontsRepo;         ///< @todo
     SoundSystem             m_soundSystem;       ///< @todo
     EventProcessor          m_eventProcessor;    ///< @todo
-    SystemTools             m_systemTools;       ///< @todo
     Game *                  m_game;              ///< @todo
 
 public:
@@ -141,10 +139,6 @@ public:
     ///
     /// @todo
     ///
-    void consoleLog(const std::string & message);
-    ///
-    /// @todo
-    ///
     void deserialize();
     ///
     /// @todo
@@ -183,10 +177,6 @@ private:
     /// @todo
     ///
     void initSound();
-    ///
-    /// @todo
-    ///
-    void initTools();
     ///
     /// @todo
     ///

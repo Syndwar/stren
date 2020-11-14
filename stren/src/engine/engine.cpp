@@ -6,7 +6,6 @@
 
 #include "engine/event.h"
 #include "engine/logger.h"
-#include "engine/console.h"
 #include "engine/action.h"
 #include "game/game.h"
 #include "render/renderer.h"
@@ -68,7 +67,6 @@ bool Engine::init()
         initSprites();
         initTextures();
         initSound();
-        initTools();
 
         Logger("green") << "[Engine] Everything initialized successfully, start main loop";
         m_status = Status::Running;
@@ -125,12 +123,6 @@ void Engine::initSound()
     m_soundSystem.initialize();
 }
 
-void Engine::initTools()
-{
-    Logger("green") << "[Engine] Initialize system tools";
-    m_systemTools.initialize();
-}
-
 void Engine::initScripts()
 {
     lua::bindWithVM();
@@ -138,11 +130,6 @@ void Engine::initScripts()
     Logger("green") << "[Engine] Initialize Lua";
     lua::Stack stack;
     stack.loadScript("base/scripts/main.lua");
-}
-
-void Engine::consoleLog(const std::string & message)
-{
-    m_systemTools.log(message);
 }
 
 void Engine::createGame()
@@ -233,7 +220,6 @@ void Engine::render()
     {
         m_game->render();
     }
-    m_systemTools.render();
 
     Renderer::render();
 }
@@ -244,7 +230,6 @@ void Engine::update(const size_t dt)
     {
         m_game->update(dt);
     }
-    m_systemTools.update(dt);
 }
 
 void Engine::processEvents()
@@ -269,8 +254,6 @@ void Engine::processEvents()
             default:
             break;
         }
-        m_systemTools.processEvent(event, isEventCaptured);
-
         if (m_game)
         {
             m_game->processEvent(event, isEventCaptured);
@@ -286,7 +269,6 @@ void Engine::clean()
         delete m_game;
         m_game = nullptr;
     }
-    m_systemTools.release();
     // Destroy sprites repo before textures repo
     m_spritesRepo.release();
     m_texturesRepo.release();

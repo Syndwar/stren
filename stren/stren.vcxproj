@@ -21,7 +21,6 @@
     <ClInclude Include="src\engine\app_window.h" />
     <ClInclude Include="src\engine\camera.h" />
     <ClInclude Include="src\engine\config.h" />
-    <ClInclude Include="src\engine\console.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="src\engine\engine_handler.h" />
     <ClInclude Include="src\engine\event.h" />
@@ -33,7 +32,6 @@
     <ClInclude Include="src\engine\screen_selector.h" />
     <ClInclude Include="src\engine\system\debug_panel.h" />
     <ClInclude Include="src\engine\system\widget_tree.h" />
-    <ClInclude Include="src\engine\system_tools.h" />
     <ClInclude Include="src\engine\transform.h" />
     <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\lua\lua_binding.h" />
@@ -92,7 +90,6 @@
     <ClCompile Include="src\engine\app_window.cpp" />
     <ClCompile Include="src\engine\camera.cpp" />
     <ClCompile Include="src\engine\config.cpp" />
-    <ClCompile Include="src\engine\console.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\engine_handler.cpp" />
     <ClCompile Include="src\engine\event.cpp" />
@@ -104,7 +101,6 @@
     <ClCompile Include="src\engine\screen_selector.cpp" />
     <ClCompile Include="src\engine\system\debug_panel.cpp" />
     <ClCompile Include="src\engine\system\widget_tree.cpp" />
-    <ClCompile Include="src\engine\system_tools.cpp" />
     <ClCompile Include="src\engine\transform.cpp" />
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\lua\lua_binding.cpp" />

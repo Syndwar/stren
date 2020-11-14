@@ -159,8 +159,6 @@ void ScrollContainer::processEvent(const Event & event, bool & isEventCaptured)
         {
             case EventType::MouseDown:
             case EventType::MouseWheel:
-            case EventType::KeyDown:
-            case EventType::KeyUp:
             {
                 const Point & mousePos = EngineHandler::getMousePos();
                 if (getRect().hasCommon(mousePos))
@@ -182,16 +180,6 @@ void ScrollContainer::processEvent(const Event & event, bool & isEventCaptured)
                         const int dy = event.wheel.getY() * m_wheelSpeed;
                         jumpTo(m_offset.getX() - dx, m_offset.getY() - dy);
                         isEventCaptured = true;
-                    }
-                    break;
-                    case EventType::KeyDown:
-                    case EventType::KeyUp:
-                    {
-                        if (hasCallback(newEvent.type))
-                        {
-                            callBack(newEvent.type, this, newEvent.key);
-                            isEventCaptured = true;
-                        }
                     }
                     break;
                     }

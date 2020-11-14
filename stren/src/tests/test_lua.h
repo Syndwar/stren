@@ -1,11 +1,11 @@
 #ifndef STREN_TEST_LUA_H
 #define STREN_TEST_LUA_H
 
-#include "lua_wrapper.h"
+#include "lua/lua_wrapper.h"
 
-#include "point.h"
-#include "rect.h"
-#include "utils.h"
+#include "common/point.h"
+#include "common/rect.h"
+#include "utils/utils.h"
 
 using namespace lua;
 

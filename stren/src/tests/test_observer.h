@@ -1,9 +1,9 @@
 #ifndef STREN_TEST_OBSERVER_H
 #define STREN_TEST_OBSERVER_H
 
-#include "event_listener.h"
-#include "observer.h"
-#include "event.h"
+#include "engine/event_listener.h"
+#include "engine/observer.h"
+#include "engine/event.h"
 
 using namespace stren;
 

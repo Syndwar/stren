@@ -139,14 +139,6 @@ ITexture * EngineHandler::getTexture(const std::string & textureId)
     return m_engine ? m_engine->getTexture(textureId) : nullptr;
 }
 
-void EngineHandler::consoleLog(const std::string & message)
-{
-    if (m_engine)
-    {
-        m_engine->consoleLog(message);
-    }
-}
-
 void EngineHandler::switchScreen(void * screen)
 {
     if (m_engine)
@@ -270,14 +262,6 @@ int log(lua_State *L)
     return 0;
 }
 
-int consoleLog(lua_State *L)
-{
-    lua::Stack stack(1);
-    const std::string value = stack.get(1).getString();
-    EngineHandler::consoleLog(value);
-    return 0;
-}
-
 int deserialize(lua_State * L)
 {
     EngineHandler::deserialize();
@@ -341,7 +325,6 @@ void EngineHandler::bind()
         { "shutdown", lua_engine::shutdown },
         { "restart", lua_engine::restart },
         { "log", lua_engine::log },
-        { "consoleLog", lua_engine::consoleLog },
         { "deserialize", lua_engine::deserialize },
         { "serialize", lua_engine::serialize },
         { "createGame", lua_engine::createGame },

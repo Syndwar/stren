@@ -225,12 +225,6 @@
     <ClInclude Include="src\render\primitive_figures.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\console.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\system_tools.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\system\widget_tree.h">
       <Filter>engine\system</Filter>
     </ClInclude>
@@ -410,12 +404,6 @@
     </ClCompile>
     <ClCompile Include="src\render\primitive_figures.cpp">
       <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\console.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\system_tools.cpp">
-      <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\system\widget_tree.cpp">
       <Filter>engine\system</Filter>

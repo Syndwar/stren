@@ -101,10 +101,6 @@ public:
     ///
     static ITexture * getTexture(const std::string & textureId);
     ///
-    /// send message to the console
-    ///
-    static void consoleLog(const std::string & message);
-    ///
     /// switch current screen with the new one defined by id
     ///
     static void switchScreen(void * screen);
