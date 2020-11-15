@@ -6,7 +6,7 @@
 namespace stren
 {
 Timer::Timer(const std::string & id)
-    : Widget()
+    : Widget(id)
     , m_time(0)
     , m_workTime(0)
     , m_workState(WorkState::Stopped)

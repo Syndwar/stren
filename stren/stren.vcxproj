@@ -30,7 +30,6 @@
     <ClInclude Include="src\engine\logger.h" />
     <ClInclude Include="src\engine\observer.h" />
     <ClInclude Include="src\engine\screen_selector.h" />
-    <ClInclude Include="src\engine\system\debug_panel.h" />
     <ClInclude Include="src\engine\system\widget_tree.h" />
     <ClInclude Include="src\engine\transform.h" />
     <ClInclude Include="src\game\game.h" />
@@ -99,7 +98,6 @@
     <ClCompile Include="src\engine\logger.cpp" />
     <ClCompile Include="src\engine\observer.cpp" />
     <ClCompile Include="src\engine\screen_selector.cpp" />
-    <ClCompile Include="src\engine\system\debug_panel.cpp" />
     <ClCompile Include="src\engine\system\widget_tree.cpp" />
     <ClCompile Include="src\engine\transform.cpp" />
     <ClCompile Include="src\game\game.cpp" />

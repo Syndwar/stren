@@ -295,6 +295,14 @@ int getTextureSize(lua_State * L)
     }
     return stack.getSize();
 }
+
+int getFPS(lua_State * L)
+{
+    lua::Stack stack;
+    const size_t fps = EngineHandler::getFPS();
+    stack.push(fps);
+    return 1;
+}
 } // lua_engine
 
 namespace lua_game
@@ -329,6 +337,7 @@ void EngineHandler::bind()
         { "serialize", lua_engine::serialize },
         { "createGame", lua_engine::createGame },
         { "getTextureSize", lua_engine::getTextureSize },
+        { "getFPS", lua_engine::getFPS },
         { NULL, NULL }
     };
     stack.loadLibs("Engine", engine_functions);

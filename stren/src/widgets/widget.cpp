@@ -349,6 +349,18 @@ int view(lua_State *L)
     return 0;
 }
 
+int instantView(lua_State *L)
+{
+    lua::Stack stack(2);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    if (widget)
+    {
+        const bool isOpen = stack.get(2).getBool();
+        widget->instantView(isOpen);
+    }
+    return 0;
+}
+
 int setAlignment(lua_State * L)
 {
     lua::Stack stack(2);
@@ -473,6 +485,7 @@ void Widget::bind()
         { "open", lua_widget::open },
         { "close", lua_widget::close },
         { "view", lua_widget::view },
+        { "instantView", lua_widget::instantView },
         { "getParent", lua_widget::getParent },
         { "isOpened", lua_widget::isOpened },
         { "moveTo", lua_widget::moveTo },

@@ -130,14 +130,6 @@ WidgetTree::WidgetTree(const std::string & id)
     , m_root(nullptr)
     , m_counter(0)
 {
-    const int width = EngineHandler::getScreenWidth();
-    const int height = EngineHandler::getScreenHeight();
-    setRect(0, 0, width, height);
-    instantClose();
-}
-
-WidgetTree::~WidgetTree()
-{
 }
 
 void WidgetTree::doOpen()

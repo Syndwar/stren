@@ -79,10 +79,6 @@ public:
     ///
     WidgetTree(const std::string & id);
     ///
-    /// Destructor
-    ///
-    ~WidgetTree();
-    ///
     /// @todo
     ///
     void updateBranches();

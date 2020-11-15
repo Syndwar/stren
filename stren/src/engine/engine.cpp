@@ -176,7 +176,7 @@ void Engine::initConfig()
 
 void Engine::wait()
 {
-    const int frameTime = SDL_GetTicks() - m_lastFrameTime;
+    int frameTime = SDL_GetTicks() - m_lastFrameTime;
     if (m_fpsLimit > 0)
     {
         const int timeToWait = m_frameTimeLimit - frameTime;
@@ -187,6 +187,7 @@ void Engine::wait()
         }
     }
     // save frame actual time
+    frameTime = SDL_GetTicks() - m_lastFrameTime;
     m_frameTimeHistory[m_frameIndex] = frameTime;
 
     ++m_frameIndex;
