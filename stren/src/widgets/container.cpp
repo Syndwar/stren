@@ -31,15 +31,6 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
         {
             switch (event.type)
             {
-            case EventType::MouseMove:
-            {
-                if (hasCallback(event.type))
-                {
-                    callBack(event.type, this);
-                    isEventCaptured = true;
-                }
-            }
-            break;
             case EventType::KeyDown:
             case EventType::KeyUp:
             {

@@ -238,7 +238,7 @@ int getMousePos(lua_State * L)
     const Point mousePos = EngineHandler::getMousePos();
     stack.push(mousePos.getX());
     stack.push(mousePos.getY());
-    return stack.getSize();
+    return 2;
 }
 
 int shutdown(lua_State *L)

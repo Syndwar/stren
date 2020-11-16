@@ -104,6 +104,7 @@ void TextEdit::processEvent(const Event & event, bool & isEventCaptured)
             if ("Return" == event.key || "Escape" == event.key)
             {
                 cancelInputMode();
+                isEventCaptured = true;
             }
             else if ("Backspace" == event.key)
             {
@@ -115,6 +116,7 @@ void TextEdit::processEvent(const Event & event, bool & isEventCaptured)
                     new_text.append("|");
                     setText(new_text);
                 }
+                isEventCaptured = true;
             }
             else if ("Space" == event.key)
             {
@@ -122,6 +124,7 @@ void TextEdit::processEvent(const Event & event, bool & isEventCaptured)
                 new_text.pop_back();
                 new_text.append(" |");
                 setText(new_text);
+                isEventCaptured = true;
             }
             else if (1 == event.key.size())
             {
@@ -139,6 +142,7 @@ void TextEdit::processEvent(const Event & event, bool & isEventCaptured)
                 }
                 new_text.append("|");
                 setText(new_text);
+                isEventCaptured = true;
             }
         }
     }
