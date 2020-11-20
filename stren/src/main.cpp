@@ -24,10 +24,10 @@
 
 #include "SDL.h"
 
-#include "engine_handler.h"
+#include "engine/engine_handler.h"
 
 #ifdef STREN_UNIT_TEST
-#include "test_unit.h"
+#include "tests/test_unit.h"
 #endif
 
 #ifdef WIN32

@@ -201,6 +201,17 @@ int attach(lua_State * L)
     return 0;
 }
 
+int detachAll(lua_State * L)
+{
+    lua::Stack stack(1);
+    Container * cnt = (Container *)stack.get(1).getUserData();
+    if (cnt)
+    {
+        cnt->detachAll();
+    }
+    return 0;
+}
+
 int findWidget(lua_State * L)
 {
     lua::Stack stack(2);
@@ -217,6 +228,30 @@ int findWidget(lua_State * L)
     }
     return 1;
 }
+
+int getAttached(lua_State * L)
+{
+    lua::Stack stack(1);
+    Widget * widget = (Widget *)stack.get(1).getUserData();
+    Container * cnt = dynamic_cast<Container *>(widget);
+    lua::Table tbl;
+    tbl.create();
+    if (cnt)
+    {
+        int i = 1;
+        std::vector<Widget *> attached = cnt->debugGetAttached();
+        for (Widget * w : attached)
+        {
+            if (w)
+            {
+                tbl.set(i, (void *)w);
+                ++i;
+            }
+        }
+    }
+    stack.push(tbl);
+    return 1;
+}
 } // lua_container
 
 void Container::bind()
@@ -227,6 +262,8 @@ void Container::bind()
         { "new", lua_container::create },
         { "attach", lua_container::attach },
         { "findWidget", lua_container::findWidget },
+        { "getAttached", lua_container::getAttached },
+        { "detachAll", lua_container::detachAll },
         { NULL, NULL }
     };
     stack.loadLibs("Container", functions);

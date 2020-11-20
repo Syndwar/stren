@@ -31,9 +31,6 @@
     <Filter Include="game">
       <UniqueIdentifier>{72437340-0176-4964-84a3-3ae98d681888}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine\system">
-      <UniqueIdentifier>{b4bb43ac-2387-40ae-a65f-e18d42d54853}</UniqueIdentifier>
-    </Filter>
     <Filter Include="widgets\mods">
       <UniqueIdentifier>{8d1c4770-06d8-485d-922d-66dd79e7e63a}</UniqueIdentifier>
     </Filter>
@@ -225,9 +222,6 @@
     <ClInclude Include="src\render\primitive_figures.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\system\widget_tree.h">
-      <Filter>engine\system</Filter>
-    </ClInclude>
     <ClInclude Include="src\tests\test_widgets.h">
       <Filter>tests</Filter>
     </ClInclude>
@@ -401,9 +395,6 @@
     </ClCompile>
     <ClCompile Include="src\render\primitive_figures.cpp">
       <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\system\widget_tree.cpp">
-      <Filter>engine\system</Filter>
     </ClCompile>
     <ClCompile Include="src\widgets\mods\widget_transform_mod.cpp">
       <Filter>widgets\mods</Filter>
