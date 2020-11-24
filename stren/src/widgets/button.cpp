@@ -5,7 +5,6 @@
 #include "engine/engine_handler.h"
 #include "engine/event.h"
 #include "engine/listener.h"
-#include "engine/action.h"
 #include "render/renderer.h"
 #include "render/sprite.h"
 #include "repo/fonts_repository.h"

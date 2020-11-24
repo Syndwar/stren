@@ -6,7 +6,6 @@
 
 namespace stren
 {
-class IAction;
 ///
 /// class TextEdit
 ///

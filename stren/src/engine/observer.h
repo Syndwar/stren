@@ -7,52 +7,38 @@ namespace stren
 {
 class Event;
 enum class EventType;
-class EventListener;
 ///
 /// class Observer
 ///
 class Observer
 {
 private:
-    EventListener *         m_listener;            ///< @todo
     std::vector<EventType>  m_needEvents;          ///< @todo
 public:
     ///
-    /// Default Constructor is forbidden
+    /// Constructor
     ///
-    Observer() = delete;
+    Observer();
     ///
     /// Constructor
     ///
-    Observer(EventListener * listener);
-    ///
-    /// Constructor
-    ///
-    Observer(EventListener * listener, const std::vector<EventType> & needEvents);
-    ///
-    /// Copy Constructor
-    ///
-    Observer(const Observer & observer);
-    ///
-    /// Move Constructor
-    ///
-    Observer(Observer && observer);
+    Observer(const std::vector<EventType> & needEvents);
     ///
     /// Destructor
     ///
     virtual ~Observer();
     ///
-    /// Copy assign operator
+    /// notify child class
     ///
-    Observer & operator=(const Observer & observer);
-    ///
-    /// Move assign operator
-    ///
-    Observer & operator=(Observer && observer);
+    virtual void notify() = 0;
     ///
     /// notify child class
     ///
-    virtual bool notify(const Event & event) = 0;
+    virtual void notify(const Event & event, bool & isEventCaptured) = 0;
+    ///
+    /// notify child class
+    ///
+    virtual void notify(const size_t dt) = 0;
     ///
     /// returns if given event type is registered for this observer
     ///

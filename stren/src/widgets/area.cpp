@@ -1,6 +1,5 @@
 #include "area.h"
 
-#include "engine/action.h"
 #include "engine/engine_handler.h"
 #include "lua/lua_wrapper.h"
 

@@ -11,9 +11,9 @@ class Observer;
 ///
 /// class EventListener
 ///
-class EventListener
+class IListener
 {
-private:
+protected:
     std::vector<Observer *> m_observers; ///< @todo
 public:
     ///
@@ -24,10 +24,41 @@ public:
     /// remove observer
     ///
     void remove(Observer * observer);
+};
+///
+/// class EventListener
+///
+class EventListener : public IListener
+{
+public:
     ///
     /// notify observers
     ///
-    void notify(Event & event);
+    void notify(const Event & event, bool & isEventCaptured);
+};
+
+///
+/// class UpdateEventListener
+///
+class UpdateEventListener : public IListener
+{
+public:
+    ///
+    /// @todo
+    ///
+    void update(const size_t dt);
+};
+
+///
+/// class RenderEventListener
+///
+class RenderEventListener : public IListener
+{
+public:
+    ///
+    /// @todo
+    ///
+    void render();
 };
 
 } // stren

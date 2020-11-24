@@ -17,7 +17,6 @@
     <ClInclude Include="src\common\point.h" />
     <ClInclude Include="src\common\rect.h" />
     <ClInclude Include="src\common\string_ext.h" />
-    <ClInclude Include="src\engine\action.h" />
     <ClInclude Include="src\engine\app_window.h" />
     <ClInclude Include="src\engine\camera.h" />
     <ClInclude Include="src\engine\config.h" />

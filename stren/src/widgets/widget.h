@@ -7,6 +7,7 @@
 #include "common/point.h"
 #include "common/rect.h"
 #include "engine/listener.h"
+#include "engine/observer.h"
 #include "widgets/mods/widget_transform_mod.h"
 
 namespace stren
@@ -17,7 +18,7 @@ class PrimitiveRect;
 ///
 /// base Widget class for engine entities
 ///
-class Widget : public Listener
+class Widget : public Listener, public Observer
 {
 protected:
     enum class ViewState
@@ -166,6 +167,18 @@ public:
     /// @todo
     ///
     static void bind();
+    ///
+    /// @todo
+    ///
+    virtual void notify() override { render(); }
+    ///
+    /// @todo
+    ///
+    virtual void notify(const size_t dt) override { update(dt); }
+    ///
+    /// @todo
+    ///
+    virtual void notify(const Event & event, bool & isEventCaptured) override { processEvent(event, isEventCaptured); }
 protected:
     ///
     /// @todo

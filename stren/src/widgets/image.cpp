@@ -3,7 +3,6 @@
 #include "SDL.h"
 
 #include "common/point.h"
-#include "engine/action.h"
 #include "engine/engine_handler.h"
 #include "engine/event.h"
 #include "render/renderer.h"

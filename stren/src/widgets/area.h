@@ -6,8 +6,6 @@
 
 namespace stren
 {
-class IAction;
-class Connector;
 class Area;
 ///
 /// class Area

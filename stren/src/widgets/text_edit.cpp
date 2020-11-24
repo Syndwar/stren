@@ -2,7 +2,6 @@
 
 #include "engine/engine_handler.h"
 #include "engine/event.h"
-#include "engine/action.h"
 #include "lua/lua_wrapper.h"
 
 namespace stren

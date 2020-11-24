@@ -168,9 +168,6 @@
     <ClInclude Include="src\lua\lua_wrapper.h">
       <Filter>lua</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\action.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\app_window.h">
       <Filter>engine</Filter>
     </ClInclude>

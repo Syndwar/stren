@@ -5,7 +5,10 @@
 
 namespace stren
 {
-void EventListener::add(Observer * observer)
+///
+/// class IListener
+///
+void IListener::add(Observer * observer)
 {
     if (observer)
     {
@@ -22,7 +25,7 @@ void EventListener::add(Observer * observer)
     }
 }
 
-void EventListener::remove(Observer * observer)
+void IListener::remove(Observer * observer)
 {
     if (observer)
     {
@@ -36,15 +39,51 @@ void EventListener::remove(Observer * observer)
         }
     }
 }
-
-void EventListener::notify(Event & event)
+///
+/// class EventListener
+///
+void EventListener::notify(const Event & event, bool & isEventCaptured)
 {
-    for (int i = m_observers.size() - 1; i >= 0; --i)
+    if (m_observers.empty()) return;
+
+    for (size_t i = m_observers.size(); i > 0; --i)
     {
-        Observer * observer = m_observers[i];
+        Observer * observer = m_observers[i - 1];
         if (observer && observer->isEventMonitored(event.type))
         {
-            observer->notify(event);
+            observer->notify(event, isEventCaptured);
+        }
+    }
+}
+///
+/// class UpdateEventListener
+///
+void UpdateEventListener::update(const size_t dt)
+{
+    if (m_observers.empty()) return;
+
+    for (size_t i = m_observers.size(); i > 0; --i)
+    {
+        Observer * observer = m_observers[i - 1];
+        if (observer)
+        {
+            observer->notify(dt);
+        }
+    }
+}
+///
+/// class RenderEventListener
+///
+void RenderEventListener::render()
+{
+    if (m_observers.empty()) return;
+
+    for (size_t i = m_observers.size(); i > 0; --i)
+    {
+        Observer * observer = m_observers[i - 1];
+        if (observer)
+        {
+            observer->notify();
         }
     }
 }

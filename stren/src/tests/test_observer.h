@@ -9,7 +9,6 @@ using namespace stren;
 
 namespace test
 {
-
 ///
 /// class StrenObserver
 ///
@@ -29,14 +28,17 @@ public:
         class A : public Observer
         {
         public:
-            A()
-                : Observer(nullptr)
+            A() : Observer()
             {
             }
 
             virtual ~A() {}
 
-            virtual bool notify(const Event & event) override { return true; }
+            virtual void notify() override {}
+
+            virtual void notify(const size_t dt) override {}
+
+            virtual void notify(const Event & event, bool & isEventCaptured) override {}
         };
 
         {
@@ -50,17 +52,19 @@ public:
         public:
             int i = 0;
 
-            B(EventListener * listener = nullptr)
-                : Observer(listener, { EventType::SysQuit })
+            B() : Observer({ EventType::SysQuit })
             {
             }
 
             virtual ~B() {}
 
-            virtual bool notify(const Event & event) override
+            virtual void notify() override {}
+
+            virtual void notify(const size_t dt) override {}
+
+            virtual void notify(const Event & event, bool & isEventCaptured) override
             {
                 ++i;
-                return true;
             }
         };
 
@@ -69,12 +73,15 @@ public:
         }
 
         {
-            B b2(&listener);
-            listener.notify(event);
+            B b2;
+            bool isEventCaptured(false);
+            listener.add(&b2);
+            listener.notify(event, isEventCaptured);
             stren::assertMessage(0 == b2.i, "Error");
             event.type = EventType::SysQuit;
-            listener.notify(event);
+            listener.notify(event, isEventCaptured);
             stren::assertMessage(1 == b2.i, "Error");
+            listener.remove(&b2);
         }
     }
 };

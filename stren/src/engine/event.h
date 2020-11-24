@@ -28,6 +28,8 @@ enum class EventType
     WidgetClosing,
     TimerElapsed,
     SysQuit,
+    SysUpdate,
+    SysRender,
 };                                                  ///< possible event types
 ///
 /// class Event

@@ -6,7 +6,6 @@
 
 #include "engine/event.h"
 #include "engine/logger.h"
-#include "engine/action.h"
 #include "game/game.h"
 #include "render/renderer.h"
 #include "widgets/screen.h"
@@ -130,6 +129,7 @@ void Engine::initScripts()
     Logger("green") << "[Engine] Initialize Lua";
     lua::Stack stack;
     stack.loadScript("base/scripts/main.lua");
+    lua::Function("main").call();
 }
 
 void Engine::createGame()
@@ -255,6 +255,7 @@ void Engine::processEvents()
             default:
             break;
         }
+
         if (m_game)
         {
             m_game->processEvent(event, isEventCaptured);
@@ -264,6 +265,10 @@ void Engine::processEvents()
 
 void Engine::clean()
 {
+    // Call lua function with game exit logic
+    Logger("green") << "[Engine] Call Lua exit script";
+    lua::Function("exit").call();
+
     // Destroy all widgets before textures repo
     if (m_game)
     {
@@ -302,6 +307,54 @@ bool Engine::createRenderer()
     }
 
     return false;
+}
+
+void Engine::addUpdateObserver(void * widget)
+{
+    if (m_game)
+    {
+        m_game->addUpdateObserver(widget);
+    }
+}
+
+void Engine::addRenderObserver(void * widget)
+{
+    if (m_game)
+    {
+        m_game->addRenderObserver(widget);
+    }
+}
+
+void Engine::addEventObserver(void * widget)
+{
+    if (m_game)
+    {
+        m_game->addEventObserver(widget);
+    }
+}
+
+void Engine::removeUpdateObserver(void * widget)
+{
+    if (m_game)
+    {
+        m_game->removeUpdateObserver(widget);
+    }
+}
+
+void Engine::removeRenderObserver(void * widget)
+{
+    if (m_game)
+    {
+        m_game->removeRenderObserver(widget);
+    }
+}
+
+void Engine::removeEventObserver(void * widget)
+{
+    if (m_game)
+    {
+        m_game->removeEventObserver(widget);
+    }
 }
 
 const std::string & Engine::getTextByAlias(const std::string & alias)

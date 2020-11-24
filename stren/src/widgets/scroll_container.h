@@ -3,12 +3,10 @@
 
 #include "widgets/container.h"
 #include "widgets/timer.h"
-#include "engine/action.h"
 #include "engine/camera.h"
 
 namespace stren
 {
-class IAction;
 ///
 /// class ScrollContainer provides an ability to move objects inside it around the screen
 ///
