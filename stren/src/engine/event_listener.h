@@ -36,31 +36,6 @@ public:
     ///
     void notify(const Event & event, bool & isEventCaptured);
 };
-
-///
-/// class UpdateEventListener
-///
-class UpdateEventListener : public IListener
-{
-public:
-    ///
-    /// @todo
-    ///
-    void update(const size_t dt);
-};
-
-///
-/// class RenderEventListener
-///
-class RenderEventListener : public IListener
-{
-public:
-    ///
-    /// @todo
-    ///
-    void render();
-};
-
 } // stren
 
 #endif // STREN_EVENT_LISTENER_H

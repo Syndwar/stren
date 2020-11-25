@@ -66,6 +66,11 @@ public:
     ///
     virtual void attach(Widget * widget);
     ///
+    /// detach widget from the container, no longer owns
+    ///
+    virtual void detach(Widget * widget);
+    ///
+    ///
     /// detach widgets from the container
     ///
     void detachAll();
@@ -107,6 +112,10 @@ private:
     /// @todo
     ///
     void sortChildren();
+    ///
+    /// @todo
+    ///
+    void removeDeadWidgets();
 };
 } // stren
 #endif // STREN_CONTAINER_H

@@ -95,6 +95,38 @@ void Container::attach(Widget * widget)
     }
 }
 
+void Container::detach(Widget * widget)
+{
+    if (!widget) return;
+
+    Widget * parent = widget->getParent();
+    if (parent)
+    {
+        addUpdateState(UpdateState::Update);
+
+        for (size_t i = 0, iEnd = m_attached.size(); i < iEnd; ++i)
+        {
+            if (m_attached[i] == widget)
+            {
+                m_attached[i] = nullptr;
+                break;
+            }
+        }
+
+        widget->setParent(nullptr);
+
+        const std::string & id = widget->getId();
+        if (!id.empty())
+        {
+            auto it = m_map.find(id);
+            if (it != m_map.end())
+            {
+                m_map.erase(id);
+            }
+        }
+    }
+}
+
 void Container::detachAll()
 {
     m_map.clear();
@@ -129,6 +161,22 @@ void Container::sortChildren()
             Widget * tmp = m_attached[i];
             m_attached[i] = m_attached[minIndex];
             m_attached[minIndex] = tmp;
+        }
+    }
+}
+
+void Container::removeDeadWidgets()
+{
+    auto it = m_attached.begin();
+    while (it != m_attached.end())
+    {
+        if (nullptr == *it)
+        {
+            it = m_attached.erase(it);
+        }
+        else
+        {
+            ++it;
         }
     }
 }
@@ -200,6 +248,18 @@ int attach(lua_State * L)
     return 0;
 }
 
+int detach(lua_State * L)
+{
+    lua::Stack stack(2);
+    Container * cnt = (Container *)stack.get(1).getUserData();
+    if (cnt)
+    {
+        Widget * widget = (Widget *)stack.get(2).getUserData();
+        cnt->detach(widget);
+    }
+    return 0;
+}
+
 int detachAll(lua_State * L)
 {
     lua::Stack stack(1);
@@ -260,6 +320,7 @@ void Container::bind()
     {
         { "new", lua_container::create },
         { "attach", lua_container::attach },
+        { "detach", lua_container::detach },
         { "findWidget", lua_container::findWidget },
         { "getAttached", lua_container::getAttached },
         { "detachAll", lua_container::detachAll },

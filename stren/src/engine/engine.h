@@ -143,30 +143,6 @@ public:
     /// @todo
     ///
     void serialize();
-    ///
-    /// @todo
-    ///
-    void addUpdateObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void addRenderObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void addEventObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void removeUpdateObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void removeRenderObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void removeEventObserver(void * widget);
 private:
     ///
     /// @todo

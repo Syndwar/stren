@@ -3,7 +3,6 @@
 
 #include "engine/screen_selector.h"
 #include "engine/camera.h"
-#include "engine/event_listener.h"
 
 namespace stren
 {
@@ -17,9 +16,6 @@ class Game
 private:
     Camera                  m_camera;            ///< @todo
     ScreenSelector          m_screenSelector;    ///< @todo
-    UpdateEventListener     m_updateListener;    ///< @todo
-    RenderEventListener     m_renderListener;    ///< @todo
-    EventListener           m_eventListener;     ///< @todo
 /*
     std::vector<Unit> m_units;
 */
@@ -52,30 +48,6 @@ public:
     /// @todo
     ///
     void switchScreen(void * screen);
-    ///
-    /// @todo
-    ///
-    void addUpdateObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void addRenderObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void addEventObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void removeUpdateObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void removeRenderObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    void removeEventObserver(void * widget);
     /*
     ///
     /// @todo

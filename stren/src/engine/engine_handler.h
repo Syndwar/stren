@@ -116,30 +116,6 @@ public:
     /// @todo
     ///
     static void bind();
-    ///
-    /// @todo
-    ///
-    static void addUpdateObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    static void addRenderObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    static void addEventObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    static void removeUpdateObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    static void removeRenderObserver(void * widget);
-    ///
-    /// @todo
-    ///
-    static void removeEventObserver(void * widget);
 };
 
 } // stren

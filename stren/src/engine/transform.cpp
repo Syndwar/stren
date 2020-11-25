@@ -1,7 +1,7 @@
 #include "transform.h"
 
-#include "renderer.h"
-#include "lua_wrapper.h"
+#include "render/renderer.h"
+#include "lua/lua_wrapper.h"
 #include <memory>
 
 #define TransformPointsLimit 100

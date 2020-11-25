@@ -21,7 +21,6 @@ Game::~Game()
 void Game::update(const size_t dt)
 {
     m_screenSelector.update();
-    m_updateListener.update(dt);
 
     if (Screen * currentScreen = getCurrentScreen())
     {
@@ -36,8 +35,6 @@ Screen * Game::getCurrentScreen()
 
 void Game::processEvent(const Event & event, bool & isEventCaptured)
 {
-    m_eventListener.notify(event, isEventCaptured);
-
     if (Screen * currentScreen = getCurrentScreen())
     {
         currentScreen->processEvent(event, isEventCaptured);
@@ -52,61 +49,12 @@ void Game::render()
     }
 
     m_camera.place();
-    m_renderListener.render();
     m_camera.restore();
 }
 
 void Game::switchScreen(void * screen)
 {
     m_screenSelector.switchToScreen(screen);
-}
-
-void Game::addUpdateObserver(void * widget)
-{
-    if (Observer * observer = static_cast<Observer *>(widget))
-    {
-        m_updateListener.add(observer);
-    }
-}
-
-void Game::addRenderObserver(void * widget)
-{
-    if (Observer * observer = static_cast<Observer *>(widget))
-    {
-        m_renderListener.add(observer);
-    }
-}
-
-void Game::addEventObserver(void * widget)
-{
-    if (Observer * observer = static_cast<Observer *>(widget))
-    {
-        m_eventListener.add(observer);
-    }
-}
-
-void Game::removeUpdateObserver(void * widget)
-{
-    if (Observer * observer = static_cast<Observer *>(widget))
-    {
-        m_updateListener.remove(observer);
-    }
-}
-
-void Game::removeRenderObserver(void * widget)
-{
-    if (Observer * observer = static_cast<Observer *>(widget))
-    {
-        m_renderListener.remove(observer);
-    }
-}
-
-void Game::removeEventObserver(void * widget)
-{
-    if (Observer * observer = static_cast<Observer *>(widget))
-    {
-        m_eventListener.remove(observer);
-    }
 }
 
 /*

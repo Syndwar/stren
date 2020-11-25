@@ -55,36 +55,4 @@ void EventListener::notify(const Event & event, bool & isEventCaptured)
         }
     }
 }
-///
-/// class UpdateEventListener
-///
-void UpdateEventListener::update(const size_t dt)
-{
-    if (m_observers.empty()) return;
-
-    for (size_t i = m_observers.size(); i > 0; --i)
-    {
-        Observer * observer = m_observers[i - 1];
-        if (observer)
-        {
-            observer->notify(dt);
-        }
-    }
-}
-///
-/// class RenderEventListener
-///
-void RenderEventListener::render()
-{
-    if (m_observers.empty()) return;
-
-    for (size_t i = m_observers.size(); i > 0; --i)
-    {
-        Observer * observer = m_observers[i - 1];
-        if (observer)
-        {
-            observer->notify();
-        }
-    }
-}
 } // stren

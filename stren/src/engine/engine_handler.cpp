@@ -162,54 +162,6 @@ void EngineHandler::serialize()
     }
 }
 
-void EngineHandler::addUpdateObserver(void * widget)
-{
-    if (m_engine)
-    {
-        m_engine->addUpdateObserver(widget);
-    }
-}
-
-void EngineHandler::addRenderObserver(void * widget)
-{
-    if (m_engine)
-    {
-        m_engine->addRenderObserver(widget);
-    }
-}
-
-void EngineHandler::addEventObserver(void * widget)
-{
-    if (m_engine)
-    {
-        m_engine->addEventObserver(widget);
-    }
-}
-
-void EngineHandler::removeUpdateObserver(void * widget)
-{
-    if (m_engine)
-    {
-        m_engine->removeUpdateObserver(widget);
-    }
-}
-
-void EngineHandler::removeRenderObserver(void * widget)
-{
-    if (m_engine)
-    {
-        m_engine->removeRenderObserver(widget);
-    }
-}
-
-void EngineHandler::removeEventObserver(void * widget)
-{
-    if (m_engine)
-    {
-        m_engine->removeEventObserver(widget);
-    }
-}
-
 namespace lua_engine
 {
 int playSound(lua_State *L)
@@ -350,72 +302,6 @@ int getFPS(lua_State * L)
     stack.push(fps);
     return 1;
 }
-
-int addUpdateObserver(lua_State * L)
-{
-    lua::Stack stack(1);
-    void * widget = stack.get(1).getUserData();
-    if (widget)
-    {
-        EngineHandler::addUpdateObserver(widget);
-    }
-    return 0;
-}
-
-int addRenderObserver(lua_State * L)
-{
-    lua::Stack stack(1);
-    void * widget = stack.get(1).getUserData();
-    if (widget)
-    {
-        EngineHandler::addRenderObserver(widget);
-    }
-    return 0;
-}
-
-int addEventObserver(lua_State * L)
-{
-    lua::Stack stack(1);
-    void * widget = stack.get(1).getUserData();
-    if (widget)
-    {
-        EngineHandler::addEventObserver(widget);
-    }
-    return 0;
-}
-
-int removeUpdateObserver(lua_State * L)
-{
-    lua::Stack stack(1);
-    void * widget = stack.get(1).getUserData();
-    if (widget)
-    {
-        EngineHandler::removeUpdateObserver(widget);
-    }
-    return 0;
-}
-
-int removeRenderObserver(lua_State * L)
-{
-    lua::Stack stack(1);
-    void * widget = stack.get(1).getUserData();
-    if (widget)
-    {
-        EngineHandler::removeRenderObserver(widget);
-    }
-    return 0;
-}
-
-int removeEventObserver(lua_State * L)
-{
-    lua::Stack stack(1);
-    void * widget = stack.get(1).getUserData();
-    if (widget)
-    {
-        EngineHandler::removeEventObserver(widget);
-    }
-    return 0;
-}
 } // lua_engine
 
 namespace lua_game
@@ -451,12 +337,6 @@ void EngineHandler::bind()
         { "createGame", lua_engine::createGame },
         { "getTextureSize", lua_engine::getTextureSize },
         { "getFPS", lua_engine::getFPS },
-        { "addUpdateObserver", lua_engine::addUpdateObserver },
-        { "removeUpdateObserver", lua_engine::removeUpdateObserver },
-        { "addRenderObserver", lua_engine::addRenderObserver },
-        { "removeRenderObserver", lua_engine::removeRenderObserver },
-        { "addEventObserver", lua_engine::addEventObserver },
-        { "removeEventObserver", lua_engine::removeEventObserver },
         { NULL, NULL }
     };
     stack.loadLibs("Engine", engine_functions);

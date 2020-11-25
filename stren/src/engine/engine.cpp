@@ -309,54 +309,6 @@ bool Engine::createRenderer()
     return false;
 }
 
-void Engine::addUpdateObserver(void * widget)
-{
-    if (m_game)
-    {
-        m_game->addUpdateObserver(widget);
-    }
-}
-
-void Engine::addRenderObserver(void * widget)
-{
-    if (m_game)
-    {
-        m_game->addRenderObserver(widget);
-    }
-}
-
-void Engine::addEventObserver(void * widget)
-{
-    if (m_game)
-    {
-        m_game->addEventObserver(widget);
-    }
-}
-
-void Engine::removeUpdateObserver(void * widget)
-{
-    if (m_game)
-    {
-        m_game->removeUpdateObserver(widget);
-    }
-}
-
-void Engine::removeRenderObserver(void * widget)
-{
-    if (m_game)
-    {
-        m_game->removeRenderObserver(widget);
-    }
-}
-
-void Engine::removeEventObserver(void * widget)
-{
-    if (m_game)
-    {
-        m_game->removeEventObserver(widget);
-    }
-}
-
 const std::string & Engine::getTextByAlias(const std::string & alias)
 {
     return m_textsRepo.getText(alias);

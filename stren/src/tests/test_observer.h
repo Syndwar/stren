@@ -34,10 +34,6 @@ public:
 
             virtual ~A() {}
 
-            virtual void notify() override {}
-
-            virtual void notify(const size_t dt) override {}
-
             virtual void notify(const Event & event, bool & isEventCaptured) override {}
         };
 
@@ -58,10 +54,6 @@ public:
 
             virtual ~B() {}
 
-            virtual void notify() override {}
-
-            virtual void notify(const size_t dt) override {}
-
             virtual void notify(const Event & event, bool & isEventCaptured) override
             {
                 ++i;
@@ -73,8 +65,8 @@ public:
         }
 
         {
-            B b2;
             bool isEventCaptured(false);
+            B b2;
             listener.add(&b2);
             listener.notify(event, isEventCaptured);
             stren::assertMessage(0 == b2.i, "Error");

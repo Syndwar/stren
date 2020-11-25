@@ -30,15 +30,7 @@ public:
     ///
     /// notify child class
     ///
-    virtual void notify() = 0;
-    ///
-    /// notify child class
-    ///
     virtual void notify(const Event & event, bool & isEventCaptured) = 0;
-    ///
-    /// notify child class
-    ///
-    virtual void notify(const size_t dt) = 0;
     ///
     /// returns if given event type is registered for this observer
     ///
