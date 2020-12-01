@@ -173,7 +173,8 @@ int create(lua_State * L)
 int setText(lua_State * L)
 {
     lua::Stack stack(2);
-    TextEdit * edit = (TextEdit *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    TextEdit * edit = (TextEdit *)tbl.get("this").getUserData();
     if (edit)
     {
         const std::string text = stack.get(2).getString();
@@ -187,7 +188,8 @@ int setText(lua_State * L)
 int setFont(lua_State * L)
 {
     lua::Stack stack(2);
-    TextEdit * edit = (TextEdit *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    TextEdit * edit = (TextEdit *)tbl.get("this").getUserData();
     if (edit)
     {
         const std::string font = stack.get(2).getString();
@@ -200,7 +202,8 @@ int setFont(lua_State * L)
 int setColour(lua_State * L)
 {
     lua::Stack stack(2);
-    TextEdit * edit = (TextEdit *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    TextEdit * edit = (TextEdit *)tbl.get("this").getUserData();
     if (edit)
     {
         const std::string colorStr = stack.get(2).getString();
@@ -213,7 +216,8 @@ int setColour(lua_State * L)
 int setTextAlignment(lua_State * L)
 {
     lua::Stack stack(2);
-    TextEdit * edit = (TextEdit *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    TextEdit * edit = (TextEdit *)tbl.get("this").getUserData();
     if (edit)
     {
         const std::string textAlign = stack.get(2).getString();

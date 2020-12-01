@@ -320,7 +320,8 @@ int create(lua_State * L)
 int setScrollSpeed(lua_State * L)
 {
     lua::Stack stack(2);
-    ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
     if (cnt)
     {
         const int speed = stack.get(2).getInt();
@@ -333,7 +334,8 @@ int setScrollSpeed(lua_State * L)
 int jumpTo(lua_State * L)
 {
     lua::Stack stack(3);
-    ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
     if (cnt)
     {
         const int x = stack.get(2).getInt();
@@ -346,7 +348,8 @@ int jumpTo(lua_State * L)
 int scrollTo(lua_State * L)
 {
     lua::Stack stack(3);
-    ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
     if (cnt)
     {
         const int x = stack.get(2).getInt();
@@ -359,7 +362,8 @@ int scrollTo(lua_State * L)
 int isScrolling(lua_State * L)
 {
     lua::Stack stack(1);
-    ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
     bool isScrolling(false);
     if (cnt)
     {
@@ -372,7 +376,8 @@ int isScrolling(lua_State * L)
 int setContentRect(lua_State * L)
 {
     lua::Stack stack(5);
-    ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
     if (cnt)
     {
         const int x = stack.get(2).getInt();
@@ -387,7 +392,8 @@ int setContentRect(lua_State * L)
 int enableScroll(lua_State * L)
 {
     lua::Stack stack(3);
-    ScrollContainer * cnt = (ScrollContainer *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
     const int direction = strToScrollDirection(stack.get(2).getString());
     const bool value = stack.get(3).getBool();
     if (cnt)

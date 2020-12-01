@@ -239,10 +239,12 @@ int create(lua_State * L)
 int attach(lua_State * L)
 {
     lua::Stack stack(2);
-    Container * cnt = (Container *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Container * cnt = (Container *)tbl.get("this").getUserData();
     if (cnt)
     {
-        Widget * widget = (Widget *)stack.get(2).getUserData();
+        lua::Table widgetTbl(stack.get(2));
+        Widget * widget = (Widget *)widgetTbl.get("this").getUserData();
         cnt->attach(widget);
     }
     return 0;
@@ -251,10 +253,12 @@ int attach(lua_State * L)
 int detach(lua_State * L)
 {
     lua::Stack stack(2);
-    Container * cnt = (Container *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Container * cnt = (Container *)tbl.get("this").getUserData();
     if (cnt)
     {
-        Widget * widget = (Widget *)stack.get(2).getUserData();
+        lua::Table widgetTbl(stack.get(2));
+        Widget * widget = (Widget *)widgetTbl.get("this").getUserData();
         cnt->detach(widget);
     }
     return 0;
@@ -263,7 +267,8 @@ int detach(lua_State * L)
 int detachAll(lua_State * L)
 {
     lua::Stack stack(1);
-    Container * cnt = (Container *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Container * cnt = (Container *)tbl.get("this").getUserData();
     if (cnt)
     {
         cnt->detachAll();
@@ -274,7 +279,8 @@ int detachAll(lua_State * L)
 int findWidget(lua_State * L)
 {
     lua::Stack stack(2);
-    Container * cnt = (Container *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Container * cnt = (Container *)tbl.get("this").getUserData();
     const std::string id = stack.get(2).getString();
     if (cnt)
     {
@@ -291,10 +297,11 @@ int findWidget(lua_State * L)
 int getAttached(lua_State * L)
 {
     lua::Stack stack(1);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     Container * cnt = dynamic_cast<Container *>(widget);
-    lua::Table tbl;
-    tbl.create();
+    lua::Table resultTbl;
+    resultTbl.create();
     if (cnt)
     {
         int i = 1;
@@ -303,12 +310,12 @@ int getAttached(lua_State * L)
         {
             if (w)
             {
-                tbl.set(i, (void *)w);
+                resultTbl.set(i, (void *)w);
                 ++i;
             }
         }
     }
-    stack.push(tbl);
+    stack.push(resultTbl);
     return 1;
 }
 } // lua_container

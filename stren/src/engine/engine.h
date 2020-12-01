@@ -4,6 +4,8 @@
 #include <vector>
 
 #include "engine/app_window.h"
+#include "memory_controller.h"
+#include "engine/memory_controller.h"
 #include "common/colour.h"
 #include "common/string_ext.h"
 #include "engine/config.h"
@@ -53,6 +55,7 @@ private:
     SoundSystem             m_soundSystem;       ///< @todo
     EventProcessor          m_eventProcessor;    ///< @todo
     Game *                  m_game;              ///< @todo
+    MemoryController        m_memoryController;  ///< @todo
 
 public:
     ///

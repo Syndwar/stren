@@ -237,6 +237,9 @@
     <ClInclude Include="src\widgets\text_edit.h">
       <Filter>widgets</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\memory_controller.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\common\point.cpp">
@@ -407,6 +410,9 @@
     </ClCompile>
     <ClCompile Include="src\widgets\text_edit.cpp">
       <Filter>widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\memory_controller.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

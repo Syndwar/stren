@@ -77,7 +77,7 @@ public:
     ///
     virtual void call(const EventType & type, Widget * sender) override;
     ///
-    /// call the callback with one param
+    /// call the lua function with one param
     ///
     virtual void call(const EventType & type, Widget * sender, const std::string & param) override;
 };
@@ -100,11 +100,11 @@ public:
         m_callbacks[eventType] = std::move(callback);
     }
     ///
-    /// add specific callback
+    /// add vm callback with no params
     ///
     void addCallback(const std::string & type, const std::string & callback);
     ///
-    /// add specific callback
+    /// add vm callback with no params
     ///
     void addCallback(const EventType & type, const std::string & callback);
     ///

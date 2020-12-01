@@ -279,7 +279,8 @@ namespace lua_widget
 int getId(lua_State * L)
 {
     lua::Stack stack(1);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const std::string & id = widget->getId();
@@ -295,7 +296,8 @@ int getId(lua_State * L)
 int setRect(lua_State *L)
 {
     lua::Stack stack(5);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         widget->setRect(stack.get(2).getInt(), stack.get(3).getInt(), stack.get(4).getInt(), stack.get(5).getInt());
@@ -306,7 +308,8 @@ int setRect(lua_State *L)
 int setOrder(lua_State * L)
 {
     lua::Stack stack(2);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const int order = stack.get(2).getInt();
@@ -318,7 +321,8 @@ int setOrder(lua_State * L)
 int open(lua_State *L)
 {
     lua::Stack stack(1);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         widget->open();
@@ -329,7 +333,8 @@ int open(lua_State *L)
 int close(lua_State *L)
 {
     lua::Stack stack(1);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         widget->close();
@@ -340,7 +345,8 @@ int close(lua_State *L)
 int view(lua_State *L)
 {
     lua::Stack stack(2);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const bool isOpen = stack.get(2).getBool();
@@ -352,7 +358,8 @@ int view(lua_State *L)
 int instantView(lua_State *L)
 {
     lua::Stack stack(2);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const bool isOpen = stack.get(2).getBool();
@@ -364,7 +371,8 @@ int instantView(lua_State *L)
 int setAlignment(lua_State * L)
 {
     lua::Stack stack(2);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const std::string textAlign = stack.get(2).getString();
@@ -378,7 +386,8 @@ int setAlignment(lua_State * L)
 int getParent(lua_State * L)
 {
     lua::Stack stack(1);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     stack.clear();
     if (widget)
     {
@@ -395,7 +404,8 @@ int getParent(lua_State * L)
 int isOpened(lua_State * L)
 {
     lua::Stack stack(1);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     stack.clear();
     bool isOpened(false);
     if (widget)
@@ -409,7 +419,8 @@ int isOpened(lua_State * L)
 int moveTo(lua_State * L)
 {
     lua::Stack stack(3);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const int x = stack.get(2).getInt();
@@ -422,7 +433,8 @@ int moveTo(lua_State * L)
 int moveBy(lua_State * L)
 {
     lua::Stack stack(3);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const int x = stack.get(2).getInt();
@@ -435,7 +447,8 @@ int moveBy(lua_State * L)
 int attachTransform(lua_State * L)
 {
     lua::Stack stack(3);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const std::string eventType = stack.get(2).getString();
@@ -451,7 +464,8 @@ int attachTransform(lua_State * L)
 int addCallback(lua_State * L)
 {
     lua::Stack stack(3);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const std::string eventTypeStr = stack.get(2).getString();
@@ -464,7 +478,8 @@ int addCallback(lua_State * L)
 int switchDebugView(lua_State * L)
 {
     lua::Stack stack(1);
-    Widget * widget = (Widget *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         widget->setDebugView(!widget->isDebugView());

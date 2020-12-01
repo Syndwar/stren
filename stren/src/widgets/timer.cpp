@@ -88,7 +88,8 @@ int create(lua_State * L)
 int restart(lua_State * L)
 {
     lua::Stack stack(1);
-    Timer * timer = (Timer *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Timer * timer = (Timer *)tbl.get("this").getUserData();
     if (timer)
     {
         const int ms = stack.get(2).getInt();

@@ -136,7 +136,8 @@ int create(lua_State * L)
 int setSprite(lua_State * L)
 {
     lua::Stack stack(2);
-    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
     if (pb)
     {
         const std::string spr = stack.get(2).getString();
@@ -149,7 +150,8 @@ int setSprite(lua_State * L)
 int setCurrentValue(lua_State * L)
 {
     lua::Stack stack(2);
-    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
     if (pb)
     {
         const int value = stack.get(2).getInt();
@@ -162,7 +164,8 @@ int setCurrentValue(lua_State * L)
 int setMaxValue(lua_State * L)
 {
     lua::Stack stack(2);
-    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
     if (pb)
     {
         const int value = stack.get(2).getInt();
@@ -175,7 +178,8 @@ int setMaxValue(lua_State * L)
 int setFillSpeed(lua_State * L)
 {
     lua::Stack stack(2);
-    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
     if (pb)
     {
         const int speed = stack.get(2).getInt();
@@ -188,7 +192,8 @@ int setFillSpeed(lua_State * L)
 int setVertical(lua_State * L)
 {
     lua::Stack stack(2);
-    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
     if (pb)
     {
         const bool isVertical = stack.get(2).getBool();
@@ -201,7 +206,8 @@ int setVertical(lua_State * L)
 int windTo(lua_State * L)
 {
     lua::Stack stack(2);
-    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
     if (pb)
     {
         const int value = stack.get(2).getInt();
@@ -214,7 +220,8 @@ int windTo(lua_State * L)
 int getCurrentValue(lua_State * L)
 {
     lua::Stack stack(1);
-    ProgressBar * pb = (ProgressBar *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
     stack.clear();
     int value(0);
     if (pb)

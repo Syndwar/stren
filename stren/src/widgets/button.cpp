@@ -166,7 +166,8 @@ int create(lua_State * L)
 int setText(lua_State * L)
 {
     lua::Stack stack(2);
-    Button * btn = (Button *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Button * btn = (Button *)tbl.get("this").getUserData();
     if (btn)
     {
         const std::string text = stack.get(2).getString();
@@ -180,7 +181,8 @@ int setText(lua_State * L)
 int setFont(lua_State * L)
 {
     lua::Stack stack(2);
-    Button * btn = (Button *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Button * btn = (Button *)tbl.get("this").getUserData();
     if (btn)
     {
         const std::string font = stack.get(2).getString();
@@ -193,7 +195,8 @@ int setFont(lua_State * L)
 int setTextColour(lua_State * L)
 {
     lua::Stack stack(2);
-    Button * btn = (Button *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Button * btn = (Button *)tbl.get("this").getUserData();
     if (btn)
     {
         const std::string colorStr = stack.get(2).getString();
@@ -206,7 +209,8 @@ int setTextColour(lua_State * L)
 int setTextAlignment(lua_State * L)
 {
     lua::Stack stack(2);
-    Button * btn = (Button *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Button * btn = (Button *)tbl.get("this").getUserData();
     if (btn)
     {
         const std::string textAlign = stack.get(2).getString();
@@ -219,7 +223,8 @@ int setTextAlignment(lua_State * L)
 int setSprites(lua_State * L)
 {
     lua::Stack stack(4);
-    Button * btn = (Button *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Button * btn = (Button *)tbl.get("this").getUserData();
     if (btn)
     {
         const std::string upSpr = stack.get(2).getString();

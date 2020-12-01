@@ -102,7 +102,8 @@ int create(lua_State * L)
 int setSprite(lua_State * L)
 {
     lua::Stack stack(2);
-    Image * img = (Image *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Image * img = (Image *)tbl.get("this").getUserData();
     if (img)
     {
         const std::string spr = stack.get(2).getString();
@@ -115,7 +116,8 @@ int setSprite(lua_State * L)
 int setAngle(lua_State * L)
 {
     lua::Stack stack(2);
-    Image * img = (Image *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Image * img = (Image *)tbl.get("this").getUserData();
     if (img)
     {
         const int angle = stack.get(2).getInt();
@@ -128,7 +130,8 @@ int setAngle(lua_State * L)
 int setFlip(lua_State * L)
 {
     lua::Stack stack(3);
-    Image * img = (Image *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Image * img = (Image *)tbl.get("this").getUserData();
     if (img)
     {
         const bool flipv = stack.get(2).getBool();

@@ -143,7 +143,8 @@ int create(lua_State * L)
 int setSprite(lua_State * L)
 {
     lua::Stack stack(2);
-    Fader * fader = (Fader *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Fader * fader = (Fader *)tbl.get("this").getUserData();
     if (fader)
     {
         const std::string spr = stack.get(2).getString();
@@ -156,7 +157,8 @@ int setSprite(lua_State * L)
 int setFadeSpeed(lua_State * L)
 {
     lua::Stack stack(2);
-    Fader * fader = (Fader *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Fader * fader = (Fader *)tbl.get("this").getUserData();
     if (fader)
     {
         const int speed = stack.get(2).getInt();
@@ -169,7 +171,8 @@ int setFadeSpeed(lua_State * L)
 int getFadeSpeed(lua_State * L)
 {
     lua::Stack stack(1);
-    Fader * fader = (Fader *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Fader * fader = (Fader *)tbl.get("this").getUserData();
     int speed(0);
     if (fader)
     {
@@ -183,7 +186,8 @@ int getFadeSpeed(lua_State * L)
 int fadeIn(lua_State * L)
 {
     lua::Stack stack(1);
-    Fader * fader = (Fader *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Fader * fader = (Fader *)tbl.get("this").getUserData();
     if (fader)
     {
         fader->fadeIn();
@@ -194,7 +198,8 @@ int fadeIn(lua_State * L)
 int fadeOut(lua_State * L)
 {
     lua::Stack stack(1);
-    Fader * fader = (Fader *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Fader * fader = (Fader *)tbl.get("this").getUserData();
     if (fader)
     {
         fader->fadeOut();

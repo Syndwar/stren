@@ -89,7 +89,8 @@ int create(lua_State * L)
 int setColour(lua_State *L)
 {
     lua::Stack stack(2);
-    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
     if (primitive)
     {
         const std::string colorStr = stack.get(2).getString();
@@ -102,7 +103,8 @@ int setColour(lua_State *L)
 int createCircle(lua_State * L)
 {
     lua::Stack stack(4);
-    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
     if (primitive)
     {
         const int x = stack.get(2).getInt();
@@ -116,7 +118,8 @@ int createCircle(lua_State * L)
 int createPoint(lua_State * L)
 {
     lua::Stack stack(3);
-    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
     if (primitive)
     {
         const int x = stack.get(2).getInt();
@@ -129,7 +132,8 @@ int createPoint(lua_State * L)
 int createRect(lua_State * L)
 {
     lua::Stack stack(6);
-    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
     if (primitive)
     {
         const int x = stack.get(2).getInt();
@@ -145,7 +149,8 @@ int createRect(lua_State * L)
 int creatLines(lua_State * L)
 {
     lua::Stack stack(2);
-    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
     if (primitive)
     {
         lua::Table tbl(stack.get(2));
@@ -159,7 +164,8 @@ int creatLines(lua_State * L)
 int createPoints(lua_State * L)
 {
     lua::Stack stack(2);
-    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
     if (primitive)
     {
         lua::Table tbl(stack.get(2));
@@ -173,7 +179,8 @@ int createPoints(lua_State * L)
 int createRects(lua_State * L)
 {
     lua::Stack stack(2);
-    Primitive * primitive = (Primitive *)stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
     if (primitive)
     {
         lua::Table tbl(stack.get(2));
