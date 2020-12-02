@@ -463,14 +463,15 @@ int attachTransform(lua_State * L)
 
 int addCallback(lua_State * L)
 {
-    lua::Stack stack(3);
+    lua::Stack stack(4);
     lua::Table tbl(stack.get(1));
     Widget * widget = (Widget *)tbl.get("this").getUserData();
     if (widget)
     {
         const std::string eventTypeStr = stack.get(2).getString();
-        const std::string callback = stack.get(3).getString();
-        widget->addCallback(eventTypeStr, callback);
+        const lua::Value callback = stack.get(3);
+        const lua::Value param = stack.get(4);
+        widget->addCallback(eventTypeStr, callback, param);
     }
     return 0;
 }

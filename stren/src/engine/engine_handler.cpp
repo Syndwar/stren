@@ -309,7 +309,8 @@ namespace lua_game
 int changeScreen(lua_State * L)
 {
     lua::Stack stack(1);
-    void * screen = stack.get(1).getUserData();
+    lua::Table tbl(stack.get(1));
+    void * screen = tbl.get("this").getUserData();
     if (screen)
     {
         EngineHandler::switchScreen(screen);

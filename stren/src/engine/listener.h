@@ -20,11 +20,11 @@ public:
     ///
     /// call the callback
     ///
-    virtual void call(const EventType & type, Widget * sender) = 0;
+    virtual void call(Widget * sender) = 0;
     ///
     /// call the callback with one param
     ///
-    virtual void call(const EventType & type, Widget * sender, const std::string & param) = 0;
+    virtual void call(Widget * sender, const std::string & param) = 0;
 };
 ///
 /// class DelegateCallback
@@ -45,14 +45,14 @@ public:
     ///
     /// call the delegate callback
     ///
-    virtual void call(const EventType & type, Widget * sender) override
+    virtual void call(Widget * sender) override
     {
         m_callback(sender);
     }
     ///
     /// call the callback with one param
     ///
-    virtual void call(const EventType & type, Widget * sender, const std::string & param) override
+    virtual void call(Widget * sender, const std::string & param) override
     {
         m_callback(sender, param);
     }
@@ -75,11 +75,46 @@ public:
     ///
     /// call the lua function callback
     ///
-    virtual void call(const EventType & type, Widget * sender) override;
+    virtual void call(Widget * sender) override;
     ///
     /// call the lua function with one param
     ///
-    virtual void call(const EventType & type, Widget * sender, const std::string & param) override;
+    virtual void call(Widget * sender, const std::string & param) override;
+};
+
+template<typename Method, typename Param>
+class VmCallback2 : public ICallback
+{
+private:
+    Method m_method; // vm method
+    Param m_param; // vm param
+public:
+    ///
+    /// Constructor
+    ///
+    VmCallback2(const Method & method, const Param & param)
+        : m_method(method)
+        , m_param(param)
+    {
+    }
+    ///
+    /// call the lua function callback
+    ///
+    virtual void call(Widget * sender) override
+    {
+        lua::Function func(m_method);
+        std::vector<lua::Value> values = { m_param, static_cast<void *>(sender) };
+        func.call(values);
+    }
+    ///
+    /// call the lua function with one param
+    ///
+    virtual void call(Widget * sender, const std::string & param) override
+    {
+        lua::Function func(m_method);
+        std::vector<lua::Value> values = { m_param, static_cast<void *>(sender), param };
+        func.call(values);
+    }
 };
 ///
 /// class Listener
@@ -97,6 +132,16 @@ public:
     {
         auto callback = std::make_unique<DelegateCallback>();
         callback->connect(holder, method);
+        m_callbacks[eventType] = std::move(callback);
+    }
+    ///
+    /// add vm callback
+    ///
+    template<typename Method, typename Param>
+    void addCallback(const std::string & type, const Method & method, const Param & param)
+    {
+        EventType eventType = Event::strToType(type);
+        auto callback = std::make_unique<VmCallback2<Method, Param>>(method, param);
         m_callbacks[eventType] = std::move(callback);
     }
     ///

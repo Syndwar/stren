@@ -310,7 +310,11 @@ int getAttached(lua_State * L)
         {
             if (w)
             {
-                resultTbl.set(i, (void *)w);
+                lua::Table widgetTbl;
+                widgetTbl.create();
+                widgetTbl.set("this", (void *)w);
+
+                resultTbl.set(i, widgetTbl);
                 ++i;
             }
         }

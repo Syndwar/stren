@@ -6,7 +6,7 @@
 namespace stren
 {
 
-void VmCallback::call(const EventType & type, Widget * sender)
+void VmCallback::call(Widget * sender)
 {
     if (!m_callback.empty())
     {
@@ -16,7 +16,7 @@ void VmCallback::call(const EventType & type, Widget * sender)
     }
 }
 
-void VmCallback::call(const EventType & type, Widget * sender, const std::string & param)
+void VmCallback::call(Widget * sender, const std::string & param)
 {
     if (!m_callback.empty())
     {
@@ -59,7 +59,7 @@ void Listener::callBack(const EventType & type, Widget * widget)
         {
             if (it->second)
             {
-                it->second->call(type, widget);
+                it->second->call(widget);
             }
         }
     }
@@ -74,7 +74,7 @@ void Listener::callBack(const EventType & type, Widget * widget, const std::stri
         {
             if (it->second)
             {
-                it->second->call(type, widget, param);
+                it->second->call(widget, param);
             }
         }
     }
