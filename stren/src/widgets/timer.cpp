@@ -1,6 +1,6 @@
 #include "timer.h"
 
-#include "engine/event.h"
+#include "engine/engine_handler.h"
 #include "lua/lua_wrapper.h"
 
 namespace stren
@@ -80,6 +80,7 @@ int create(lua_State * L)
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Timer * timer = new Timer(id);
+    EngineHandler::storeInMemoryController(timer);
     stack.clear();
     stack.push((void *)timer);
     return stack.getSize();

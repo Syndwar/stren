@@ -1,5 +1,6 @@
 #include "screen.h"
 
+#include "engine/engine_handler.h"
 #include "lua/lua_wrapper.h"
 
 namespace stren

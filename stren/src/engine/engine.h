@@ -146,6 +146,18 @@ public:
     /// @todo
     ///
     void serialize();
+    ///
+    /// store widget in memory controller
+    ///
+    size_t storeInMemoryController(Widget * widget);
+    ///
+    /// get widget from memory controller
+    ///
+    Widget * getFromMemoryController(const size_t handler);
+    ///
+    /// check for unused resources and free them
+    ///
+    void collectGarbage();
 private:
     ///
     /// @todo

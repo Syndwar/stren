@@ -11,7 +11,7 @@ class Screen : public Container
 {
 public:
     ///
-    /// Construcor
+    /// Constructor
     ///
     Screen(const std::string & id = String::kEmpty);
     ///

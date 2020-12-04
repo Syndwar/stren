@@ -116,6 +116,18 @@ public:
     /// @todo
     ///
     static void bind();
+    ///
+    /// store widget in memory controller
+    ///
+    static size_t storeInMemoryController(Widget * widget);
+    ///
+    /// get widget from memory controller
+    ///
+    static Widget * getFromMemoryController(const size_t handler);
+    ///
+    /// collects unreleased resources in the engine
+    ///
+    static void collectGarbage();
 };
 
 } // stren

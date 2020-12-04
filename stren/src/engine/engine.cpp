@@ -54,6 +54,21 @@ void Engine::postRender()
 {
 }
 
+void Engine::collectGarbage()
+{
+    m_memoryController.collectGarbage();
+}
+
+size_t Engine::storeInMemoryController(Widget * widget)
+{
+    return m_memoryController.store(widget);
+}
+
+Widget * Engine::getFromMemoryController(const size_t handler)
+{
+    return m_memoryController.get(handler);
+}
+
 bool Engine::init()
 {
     initScripts();
@@ -269,6 +284,7 @@ void Engine::clean()
     Logger("green") << "[Engine] Call Lua exit script";
     lua::Function("exit").call();
 
+    m_memoryController.release();
     // Destroy all widgets before textures repo
     if (m_game)
     {

@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 
+#include "engine/engine_handler.h"
 #include "common/point.h"
 #include "render/renderer.h"
 #include "render/glyph.h"
@@ -76,6 +77,7 @@ int create(lua_State * L)
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Label * lbl = new Label(id);
+    EngineHandler::storeInMemoryController(lbl);
     stack.clear();
     stack.push((void *)lbl);
     return stack.getSize();

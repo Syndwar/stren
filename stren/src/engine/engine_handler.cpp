@@ -162,6 +162,32 @@ void EngineHandler::serialize()
     }
 }
 
+size_t EngineHandler::storeInMemoryController(Widget * widget)
+{
+    if (m_engine)
+    {
+        return m_engine->storeInMemoryController(widget);
+    }
+    return 0;
+}
+
+Widget * EngineHandler::getFromMemoryController(const size_t handler)
+{
+    if (m_engine)
+    {
+        m_engine->getFromMemoryController(handler);
+    }
+    return nullptr;
+}
+
+void EngineHandler::collectGarbage()
+{
+    if (m_engine)
+    {
+        m_engine->collectGarbage();
+    }
+}
+
 namespace lua_engine
 {
 int playSound(lua_State *L)

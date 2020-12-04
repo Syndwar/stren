@@ -135,6 +135,7 @@ int create(lua_State * L)
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Fader * fader = new Fader(id);
+    EngineHandler::storeInMemoryController(fader);
     stack.clear();
     stack.push((void *)fader);
     return stack.getSize();

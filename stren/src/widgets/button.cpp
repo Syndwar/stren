@@ -158,6 +158,7 @@ int create(lua_State * L)
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Button * btn = new Button(id);
+    EngineHandler::storeInMemoryController(btn);
     stack.clear();
     stack.push((void *)btn);
     return stack.getSize();

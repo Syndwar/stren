@@ -61,7 +61,7 @@ public:
     ///
     /// create new metatable
     ///
-    void createNewMetatable(const std::string & privateId, const std::string & publicId, const luaL_Reg * funcs, const luaL_Reg * metafuncs);
+    void createNewMetatable(const std::string & publicId, const luaL_Reg * funcs, const luaL_Reg * metafuncs);
     ///
     /// get value from stack
     ///

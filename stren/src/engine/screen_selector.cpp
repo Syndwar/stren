@@ -1,5 +1,6 @@
 #include "screen_selector.h"
 
+#include "engine/engine_handler.h"
 #include "widgets/screen.h"
 #include "lua/lua_wrapper.h"
 
@@ -33,6 +34,7 @@ void ScreenSelector::update()
         // collect lua garbage
         lua::Stack stack;
         stack.collectGarbage();
+        EngineHandler::collectGarbage();
     }
 }
 

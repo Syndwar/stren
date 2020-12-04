@@ -445,10 +445,11 @@ void * Stack::createNewFullDataWitMetatable(const size_t size, const std::string
     return nullptr;
 }
 
-void Stack::createNewMetatable(const std::string & privateId, const std::string & publicId, const luaL_Reg * funcs, const luaL_Reg * metafuncs)
+void Stack::createNewMetatable(const std::string & publicId, const luaL_Reg * funcs, const luaL_Reg * metafuncs)
 {
     if (m_luaState)
     {
+        const std::string privateId("luaL_" + publicId);
         int i = getSize();
         luaL_newmetatable(m_luaState, privateId.c_str());
         luaL_register(m_luaState, nullptr, funcs);

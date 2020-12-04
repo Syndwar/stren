@@ -1,5 +1,6 @@
 #include "dialog.h"
 
+#include "engine/engine_handler.h"
 #include "lua/lua_wrapper.h"
 
 namespace stren
@@ -21,6 +22,7 @@ int create(lua_State * L)
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Dialog * dlg = new Dialog(id);
+    EngineHandler::storeInMemoryController(dlg);
     stack.clear();
     stack.push((void *)dlg);
     return stack.getSize();

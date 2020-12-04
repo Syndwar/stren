@@ -134,7 +134,7 @@ void Container::detachAll()
     {
         if (widget)
         {
-            delete widget;
+            widget->setParent(nullptr);
         }
     }
     m_attached.clear();
@@ -231,6 +231,7 @@ int create(lua_State * L)
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Container * cnt = new Container(id);
+    EngineHandler::storeInMemoryController(cnt);
     stack.clear();
     stack.push((void *)cnt);
     return stack.getSize();

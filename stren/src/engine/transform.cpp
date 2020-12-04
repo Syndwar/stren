@@ -199,7 +199,7 @@ void Transform::bind()
         { NULL, NULL }
     };
     lua::Stack stack;
-    stack.createNewMetatable("luaL_Transform", "Transform", functions, metafunctions);
+    stack.createNewMetatable("Transform", functions, metafunctions);
 }
 
 } // stren
