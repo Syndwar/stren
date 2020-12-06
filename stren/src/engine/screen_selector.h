@@ -22,7 +22,7 @@ public:
     ///
     /// switch current screen to the specific screen
     ///
-    void switchToScreen(void * screen);
+    void switchToScreen(Screen * screen);
     ///
     /// update screens
     ///

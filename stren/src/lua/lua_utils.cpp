@@ -1,10 +1,10 @@
 #include "lua_utils.h"
 
-#include "point.h"
-#include "rect.h"
+#include "common/point.h"
+#include "common/rect.h"
 
-#include "lua_table.h"
-#include "lua_value.h"
+#include "lua/lua_table.h"
+#include "lua/lua_value.h"
 
 namespace lua
 {

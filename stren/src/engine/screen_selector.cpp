@@ -17,15 +17,12 @@ void ScreenSelector::update()
 {
     if (m_nextScreen)
     {
-        // close current screen
         if (m_currentScreen)
         {
+            // close current screen
             m_currentScreen->close();
-        }
-        // if current screen exits - delete it
-        if (m_currentScreen)
-        {
-            delete m_currentScreen;
+            // if current screen exits - remove it from parent
+            m_currentScreen->setParent(nullptr);
         }
         // make next screen current and open it
         m_currentScreen = m_nextScreen;
@@ -42,27 +39,25 @@ void ScreenSelector::release()
 {
     if (m_currentScreen)
     {
-        delete m_currentScreen;
+        m_currentScreen->setParent(nullptr);
         m_currentScreen = nullptr;
     }
     if (m_nextScreen)
     {
-        delete m_nextScreen;
+        m_nextScreen->setParent(nullptr);
         m_nextScreen = nullptr;
     }
 }
 
-void ScreenSelector::switchToScreen(void * screen)
+void ScreenSelector::switchToScreen(Screen * screen)
 {
     if (!screen) return;
     // do not create a new screen if next screen not yet switched to
     if (m_nextScreen) return;
 
-    Screen * newScreen = (Screen *)screen;
-
-    if (newScreen)
+    if (screen)
     {
-        m_nextScreen = newScreen;
+        m_nextScreen = screen;
     }
 }
 } // stren

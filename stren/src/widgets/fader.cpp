@@ -1,6 +1,7 @@
 #include "fader.h"
 
 #include "common/point.h"
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "render/texture.h"
 #include "render/renderer.h"
@@ -134,18 +135,16 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    Fader * fader = new Fader(id);
-    EngineHandler::storeInMemoryController(fader);
-    stack.clear();
-    stack.push((void *)fader);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new Fader(id));
+    stack.push(handler);
+    return 1;
 }
 
 int setSprite(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Fader * fader = (Fader *)tbl.get("this").getUserData();
+    Fader * fader = EngineHandler::getMemoryObj<Fader *>(tbl);
     if (fader)
     {
         const std::string spr = stack.get(2).getString();
@@ -159,7 +158,7 @@ int setFadeSpeed(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Fader * fader = (Fader *)tbl.get("this").getUserData();
+    Fader * fader = EngineHandler::getMemoryObj<Fader *>(tbl);
     if (fader)
     {
         const int speed = stack.get(2).getInt();
@@ -173,7 +172,7 @@ int getFadeSpeed(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Fader * fader = (Fader *)tbl.get("this").getUserData();
+    Fader * fader = EngineHandler::getMemoryObj<Fader *>(tbl);
     int speed(0);
     if (fader)
     {
@@ -188,7 +187,7 @@ int fadeIn(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Fader * fader = (Fader *)tbl.get("this").getUserData();
+    Fader * fader = EngineHandler::getMemoryObj<Fader *>(tbl);
     if (fader)
     {
         fader->fadeIn();
@@ -200,7 +199,7 @@ int fadeOut(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Fader * fader = (Fader *)tbl.get("this").getUserData();
+    Fader * fader = EngineHandler::getMemoryObj<Fader *>(tbl);
     if (fader)
     {
         fader->fadeOut();

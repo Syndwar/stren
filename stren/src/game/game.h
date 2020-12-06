@@ -7,6 +7,7 @@
 namespace stren
 {
 class Event;
+class Screen;
 
 ///
 /// class Game
@@ -47,7 +48,7 @@ public:
     ///
     /// @todo
     ///
-    void switchScreen(void * screen);
+    void switchScreen(Screen * screen);
     /*
     ///
     /// @todo

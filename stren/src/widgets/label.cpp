@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "common/point.h"
 #include "render/renderer.h"
@@ -76,25 +77,21 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    Label * lbl = new Label(id);
-    EngineHandler::storeInMemoryController(lbl);
-    stack.clear();
-    stack.push((void *)lbl);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new Label(id));
+    stack.push(handler);
+    return 1;
 }
 
 int setText(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Label * lbl = (Label *)tbl.get("this").getUserData();
+    Label * lbl = EngineHandler::getMemoryObj<Label *>(tbl);
     if (lbl)
     {
         const std::string text = stack.get(2).getString();
         lbl->setText(text);
     }
-
-    stack.clear();
     return 0;
 }
 
@@ -102,7 +99,7 @@ int setFont(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Label * lbl = (Label *)tbl.get("this").getUserData();
+    Label * lbl = EngineHandler::getMemoryObj<Label *>(tbl);
     if (lbl)
     {
         const std::string font = stack.get(2).getString();
@@ -116,7 +113,7 @@ int setColour(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Label * lbl = (Label *)tbl.get("this").getUserData();
+    Label * lbl = EngineHandler::getMemoryObj<Label *>(tbl);
     if (lbl)
     {
         const std::string colorStr = stack.get(2).getString();
@@ -130,7 +127,7 @@ int setTextAlignment(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Label * lbl = (Label *)tbl.get("this").getUserData();
+    Label * lbl = EngineHandler::getMemoryObj<Label *>(tbl);
     if (lbl)
     {
         const std::string textAlign = stack.get(2).getString();

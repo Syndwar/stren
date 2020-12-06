@@ -103,7 +103,7 @@ public:
     ///
     /// switch current screen with the new one defined by id
     ///
-    static void switchScreen(void * screen);
+    static void switchScreen(Screen * screen);
     ///
     /// @todo
     ///
@@ -123,7 +123,24 @@ public:
     ///
     /// get widget from memory controller
     ///
-    static Widget * getFromMemoryController(const size_t handler);
+    template<typename T>
+    static T getFromMemoryController(const size_t handler)
+    {
+        if (m_engine)
+        {
+            return m_engine->getFromMemoryController<T>(handler);
+        }
+        return nullptr;
+    }
+    ///
+    /// @todo
+    ///
+    template<typename T1, typename T2>
+    static T1 getMemoryObj(const T2 & tbl)
+    {
+        const size_t handler = static_cast<size_t>(tbl.get("this").getInt());
+        return getFromMemoryController<T1>(handler);
+    }
     ///
     /// collects unreleased resources in the engine
     ///

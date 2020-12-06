@@ -9,6 +9,7 @@ Screen::Screen(const std::string & id)
     : Container(id)
 {
     setState(ViewState::Closed);
+    setParent(this);
 }
 
 Screen::~Screen()
@@ -21,10 +22,9 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    Screen * screen = new Screen(id);
-    stack.clear();
-    stack.push((void *)screen);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new Screen(id));
+    stack.push(handler);
+    return 1;
 }
 } // lua_screen
 

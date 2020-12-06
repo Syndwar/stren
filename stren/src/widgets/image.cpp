@@ -3,6 +3,7 @@
 #include "SDL.h"
 
 #include "common/point.h"
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "engine/event.h"
 #include "render/renderer.h"
@@ -93,18 +94,16 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    Image * btn = new Image(id);
-    EngineHandler::storeInMemoryController(btn);
-    stack.clear();
-    stack.push((void *)btn);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new Image(id));
+    stack.push(handler);
+    return 1;
 }
 
 int setSprite(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Image * img = (Image *)tbl.get("this").getUserData();
+    Image * img = EngineHandler::getMemoryObj<Image *>(tbl);
     if (img)
     {
         const std::string spr = stack.get(2).getString();
@@ -118,7 +117,7 @@ int setAngle(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Image * img = (Image *)tbl.get("this").getUserData();
+    Image * img = EngineHandler::getMemoryObj<Image *>(tbl);
     if (img)
     {
         const int angle = stack.get(2).getInt();
@@ -132,7 +131,7 @@ int setFlip(lua_State * L)
 {
     lua::Stack stack(3);
     lua::Table tbl(stack.get(1));
-    Image * img = (Image *)tbl.get("this").getUserData();
+    Image * img = EngineHandler::getMemoryObj<Image *>(tbl);
     if (img)
     {
         const bool flipv = stack.get(2).getBool();

@@ -1,5 +1,6 @@
 #include "primitive.h"
 
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "render/primitive_figures.h"
 #include "lua/lua_wrapper.h"
@@ -81,18 +82,16 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    Primitive * primitive = new Primitive(id);
-    EngineHandler::storeInMemoryController(primitive);
-    stack.clear();
-    stack.push((void *)primitive);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new Primitive(id));
+    stack.push(handler);
+    return 1;
 }
 
 int setColour(lua_State *L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
+    Primitive * primitive = EngineHandler::getMemoryObj<Primitive *>(tbl);
     if (primitive)
     {
         const std::string colorStr = stack.get(2).getString();
@@ -106,7 +105,7 @@ int createCircle(lua_State * L)
 {
     lua::Stack stack(4);
     lua::Table tbl(stack.get(1));
-    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
+    Primitive * primitive = EngineHandler::getMemoryObj<Primitive *>(tbl);
     if (primitive)
     {
         const int x = stack.get(2).getInt();
@@ -121,7 +120,7 @@ int createPoint(lua_State * L)
 {
     lua::Stack stack(3);
     lua::Table tbl(stack.get(1));
-    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
+    Primitive * primitive = EngineHandler::getMemoryObj<Primitive *>(tbl);
     if (primitive)
     {
         const int x = stack.get(2).getInt();
@@ -135,7 +134,7 @@ int createRect(lua_State * L)
 {
     lua::Stack stack(6);
     lua::Table tbl(stack.get(1));
-    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
+    Primitive * primitive = EngineHandler::getMemoryObj<Primitive *>(tbl);
     if (primitive)
     {
         const int x = stack.get(2).getInt();
@@ -152,7 +151,7 @@ int creatLines(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
+    Primitive * primitive = EngineHandler::getMemoryObj<Primitive *>(tbl);
     if (primitive)
     {
         lua::Table tbl(stack.get(2));
@@ -167,7 +166,7 @@ int createPoints(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
+    Primitive * primitive = EngineHandler::getMemoryObj<Primitive *>(tbl);
     if (primitive)
     {
         lua::Table tbl(stack.get(2));
@@ -182,7 +181,7 @@ int createRects(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Primitive * primitive = (Primitive *)tbl.get("this").getUserData();
+    Primitive * primitive = EngineHandler::getMemoryObj<Primitive *>(tbl);
     if (primitive)
     {
         lua::Table tbl(stack.get(2));

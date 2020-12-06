@@ -32,7 +32,16 @@ public:
     ///
     /// Get widget from storage using handle key
     ///
-    Widget * get(const size_t handle);
+    template<typename T>
+    T get(const size_t handle)
+    {
+        auto it = m_content.find(handle);
+        if (it != m_content.end())
+        {
+            return dynamic_cast<T>(it->second);
+        }
+        return nullptr;
+    }
     ///
     /// Check if some widgets are dead and delete them
     ///

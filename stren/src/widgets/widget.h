@@ -166,6 +166,10 @@ public:
     /// @todo
     ///
     static void bind();
+    ///
+    /// @todo
+    ///
+    virtual bool isDead() const { return !getParent(); }
 protected:
     ///
     /// @todo

@@ -1,5 +1,6 @@
 #include "scroll_container.h"
 
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "engine/event.h"
 #include "render/renderer.h"
@@ -311,18 +312,16 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    ScrollContainer * cnt = new ScrollContainer(id);
-    EngineHandler::storeInMemoryController(cnt);
-    stack.clear();
-    stack.push((void *)cnt);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new ScrollContainer(id));
+    stack.push(handler);
+    return 1;
 }
 
 int setScrollSpeed(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
+    ScrollContainer * cnt = EngineHandler::getMemoryObj<ScrollContainer *>(tbl);
     if (cnt)
     {
         const int speed = stack.get(2).getInt();
@@ -336,7 +335,7 @@ int jumpTo(lua_State * L)
 {
     lua::Stack stack(3);
     lua::Table tbl(stack.get(1));
-    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
+    ScrollContainer * cnt = EngineHandler::getMemoryObj<ScrollContainer *>(tbl);
     if (cnt)
     {
         const int x = stack.get(2).getInt();
@@ -350,7 +349,7 @@ int scrollTo(lua_State * L)
 {
     lua::Stack stack(3);
     lua::Table tbl(stack.get(1));
-    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
+    ScrollContainer * cnt = EngineHandler::getMemoryObj<ScrollContainer *>(tbl);
     if (cnt)
     {
         const int x = stack.get(2).getInt();
@@ -364,7 +363,7 @@ int isScrolling(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
+    ScrollContainer * cnt = EngineHandler::getMemoryObj<ScrollContainer *>(tbl);
     bool isScrolling(false);
     if (cnt)
     {
@@ -378,7 +377,7 @@ int setContentRect(lua_State * L)
 {
     lua::Stack stack(5);
     lua::Table tbl(stack.get(1));
-    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
+    ScrollContainer * cnt = EngineHandler::getMemoryObj<ScrollContainer *>(tbl);
     if (cnt)
     {
         const int x = stack.get(2).getInt();
@@ -394,7 +393,7 @@ int enableScroll(lua_State * L)
 {
     lua::Stack stack(3);
     lua::Table tbl(stack.get(1));
-    ScrollContainer * cnt = (ScrollContainer *)tbl.get("this").getUserData();
+    ScrollContainer * cnt = EngineHandler::getMemoryObj<ScrollContainer *>(tbl);
     const int direction = strToScrollDirection(stack.get(2).getString());
     const bool value = stack.get(3).getBool();
     if (cnt)

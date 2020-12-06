@@ -52,7 +52,7 @@ void Game::render()
     m_camera.restore();
 }
 
-void Game::switchScreen(void * screen)
+void Game::switchScreen(Screen * screen)
 {
     m_screenSelector.switchToScreen(screen);
 }

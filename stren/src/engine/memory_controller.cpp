@@ -21,16 +21,6 @@ size_t MemoryController::store(Widget * widget)
     return m_counter;
 }
 
-Widget * MemoryController::get(const size_t handle)
-{
-    auto it = m_content.find(handle);
-    if (it != m_content.end())
-    {
-        return it->second;
-    }
-    return nullptr;
-}
-
 void MemoryController::collectGarbage()
 {
     if (!m_content.size()) return;
@@ -38,7 +28,7 @@ void MemoryController::collectGarbage()
     for (auto it = m_content.cbegin(); it != m_content.cend(); /* */)
     {
         Widget * widget = it->second;
-        if (widget && !widget->getParent())
+        if (widget && widget->isDead())
         {
             delete widget;
             it = m_content.erase(it);

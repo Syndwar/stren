@@ -1,6 +1,7 @@
 #include "widget.h"
 
 #include "common/colour.h"
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "engine/event.h"
 #include "engine/transform.h"
@@ -280,7 +281,7 @@ int getId(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         const std::string & id = widget->getId();
@@ -297,7 +298,7 @@ int setRect(lua_State *L)
 {
     lua::Stack stack(5);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         widget->setRect(stack.get(2).getInt(), stack.get(3).getInt(), stack.get(4).getInt(), stack.get(5).getInt());
@@ -309,7 +310,7 @@ int setOrder(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         const int order = stack.get(2).getInt();
@@ -322,7 +323,7 @@ int open(lua_State *L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         widget->open();
@@ -334,7 +335,7 @@ int close(lua_State *L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         widget->close();
@@ -346,7 +347,7 @@ int view(lua_State *L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         const bool isOpen = stack.get(2).getBool();
@@ -359,7 +360,7 @@ int instantView(lua_State *L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         const bool isOpen = stack.get(2).getBool();
@@ -372,7 +373,7 @@ int setAlignment(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         const std::string textAlign = stack.get(2).getString();
@@ -387,7 +388,7 @@ int getParent(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     stack.clear();
     if (widget)
     {
@@ -405,7 +406,7 @@ int isOpened(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     stack.clear();
     bool isOpened(false);
     if (widget)
@@ -420,7 +421,7 @@ int moveTo(lua_State * L)
 {
     lua::Stack stack(3);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         const int x = stack.get(2).getInt();
@@ -434,7 +435,7 @@ int moveBy(lua_State * L)
 {
     lua::Stack stack(3);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         const int x = stack.get(2).getInt();
@@ -448,7 +449,7 @@ int attachTransform(lua_State * L)
 {
     lua::Stack stack(3);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         const std::string eventType = stack.get(2).getString();
@@ -465,7 +466,7 @@ int addCallback(lua_State * L)
 {
     lua::Stack stack(4);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         const std::string eventTypeStr = stack.get(2).getString();
@@ -480,7 +481,7 @@ int switchDebugView(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
     if (widget)
     {
         widget->setDebugView(!widget->isDebugView());

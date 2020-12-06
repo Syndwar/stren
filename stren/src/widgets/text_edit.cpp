@@ -1,5 +1,6 @@
 #include "widgets/text_edit.h"
 
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "engine/event.h"
 #include "lua/lua_wrapper.h"
@@ -164,18 +165,16 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    TextEdit * edit = new TextEdit(id);
-    EngineHandler::storeInMemoryController(edit);
-    stack.clear();
-    stack.push((void *)edit);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new TextEdit(id));
+    stack.push(handler);
+    return 1;
 }
 
 int setText(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    TextEdit * edit = (TextEdit *)tbl.get("this").getUserData();
+    TextEdit * edit = EngineHandler::getMemoryObj<TextEdit *>(tbl);
     if (edit)
     {
         const std::string text = stack.get(2).getString();
@@ -190,7 +189,7 @@ int setFont(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    TextEdit * edit = (TextEdit *)tbl.get("this").getUserData();
+    TextEdit * edit = EngineHandler::getMemoryObj<TextEdit *>(tbl);
     if (edit)
     {
         const std::string font = stack.get(2).getString();
@@ -204,7 +203,7 @@ int setColour(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    TextEdit * edit = (TextEdit *)tbl.get("this").getUserData();
+    TextEdit * edit = EngineHandler::getMemoryObj<TextEdit *>(tbl);
     if (edit)
     {
         const std::string colorStr = stack.get(2).getString();
@@ -218,7 +217,7 @@ int setTextAlignment(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    TextEdit * edit = (TextEdit *)tbl.get("this").getUserData();
+    TextEdit * edit = EngineHandler::getMemoryObj<TextEdit *>(tbl);
     if (edit)
     {
         const std::string textAlign = stack.get(2).getString();

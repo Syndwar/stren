@@ -4,6 +4,7 @@
 #include "engine/engine.h"
 #include "engine/logger.h"
 #include "engine/event.h"
+#include "widgets/screen.h"
 
 #include "lua/lua_wrapper.h"
 
@@ -138,7 +139,7 @@ ITexture * EngineHandler::getTexture(const std::string & textureId)
     return m_engine ? m_engine->getTexture(textureId) : nullptr;
 }
 
-void EngineHandler::switchScreen(void * screen)
+void EngineHandler::switchScreen(Screen * screen)
 {
     if (m_engine)
     {
@@ -169,15 +170,6 @@ size_t EngineHandler::storeInMemoryController(Widget * widget)
         return m_engine->storeInMemoryController(widget);
     }
     return 0;
-}
-
-Widget * EngineHandler::getFromMemoryController(const size_t handler)
-{
-    if (m_engine)
-    {
-        m_engine->getFromMemoryController(handler);
-    }
-    return nullptr;
 }
 
 void EngineHandler::collectGarbage()
@@ -336,7 +328,7 @@ int changeScreen(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    void * screen = tbl.get("this").getUserData();
+    Screen * screen = EngineHandler::getMemoryObj<Screen *>(tbl);
     if (screen)
     {
         EngineHandler::switchScreen(screen);

@@ -43,11 +43,9 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    Area * area = new Area(id);
-    EngineHandler::storeInMemoryController(area);
-    stack.clear();
-    stack.push((void *)area);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new Area(id));
+    stack.push(handler);
+    return 1;
 }
 } // lua_area
 

@@ -121,7 +121,7 @@ public:
     ///
     /// switch current screen with the new one defined by id
     ///
-    void switchScreen(void * screen);
+    void switchScreen(Screen * screen);
     ///
     /// @todo
     ///
@@ -153,7 +153,11 @@ public:
     ///
     /// get widget from memory controller
     ///
-    Widget * getFromMemoryController(const size_t handler);
+    template<typename T>
+    T getFromMemoryController(const size_t handler)
+    {
+        return m_memoryController.get<T>(handler);
+    }
     ///
     /// check for unused resources and free them
     ///

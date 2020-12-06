@@ -1,5 +1,6 @@
 #include "container.h"
 
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "engine/logger.h"
 #include "lua/lua_wrapper.h"
@@ -231,21 +232,20 @@ int create(lua_State * L)
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
     Container * cnt = new Container(id);
-    EngineHandler::storeInMemoryController(cnt);
-    stack.clear();
-    stack.push((void *)cnt);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new Container(id));
+    stack.push(handler);
+    return 1;
 }
 
 int attach(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Container * cnt = (Container *)tbl.get("this").getUserData();
+    Container * cnt = EngineHandler::getMemoryObj<Container *>(tbl);
     if (cnt)
     {
         lua::Table widgetTbl(stack.get(2));
-        Widget * widget = (Widget *)widgetTbl.get("this").getUserData();
+        Widget * widget = EngineHandler::getMemoryObj<Widget *>(widgetTbl);
         cnt->attach(widget);
     }
     return 0;
@@ -255,24 +255,12 @@ int detach(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Container * cnt = (Container *)tbl.get("this").getUserData();
+    Container * cnt = EngineHandler::getMemoryObj<Container *>(tbl);
     if (cnt)
     {
         lua::Table widgetTbl(stack.get(2));
-        Widget * widget = (Widget *)widgetTbl.get("this").getUserData();
+        Widget * widget = EngineHandler::getMemoryObj<Widget *>(widgetTbl);
         cnt->detach(widget);
-    }
-    return 0;
-}
-
-int detachAll(lua_State * L)
-{
-    lua::Stack stack(1);
-    lua::Table tbl(stack.get(1));
-    Container * cnt = (Container *)tbl.get("this").getUserData();
-    if (cnt)
-    {
-        cnt->detachAll();
     }
     return 0;
 }
@@ -281,7 +269,7 @@ int findWidget(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    Container * cnt = (Container *)tbl.get("this").getUserData();
+    Container * cnt = EngineHandler::getMemoryObj<Container *>(tbl);
     const std::string id = stack.get(2).getString();
     if (cnt)
     {
@@ -299,8 +287,7 @@ int getAttached(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Widget * widget = (Widget *)tbl.get("this").getUserData();
-    Container * cnt = dynamic_cast<Container *>(widget);
+    Container * cnt = EngineHandler::getMemoryObj<Container *>(tbl);
     lua::Table resultTbl;
     resultTbl.create();
     if (cnt)
@@ -323,6 +310,19 @@ int getAttached(lua_State * L)
     stack.push(resultTbl);
     return 1;
 }
+
+int detachAll(lua_State * L)
+{
+    lua::Stack stack(1);
+    lua::Table tbl(stack.get(1));
+    Container * cnt = EngineHandler::getMemoryObj<Container *>(tbl);
+    if (cnt)
+    {
+        cnt->detachAll();
+    }
+    return 0;
+}
+
 } // lua_container
 
 void Container::bind()

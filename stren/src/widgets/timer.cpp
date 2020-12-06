@@ -1,5 +1,6 @@
 #include "timer.h"
 
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "lua/lua_wrapper.h"
 
@@ -79,24 +80,21 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    Timer * timer = new Timer(id);
-    EngineHandler::storeInMemoryController(timer);
-    stack.clear();
-    stack.push((void *)timer);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new Timer(id));
+    stack.push(handler);
+    return 1;
 }
 
 int restart(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    Timer * timer = (Timer *)tbl.get("this").getUserData();
+    Timer * timer = EngineHandler::getMemoryObj<Timer *>(tbl);
     if (timer)
     {
         const int ms = stack.get(2).getInt();
         timer->restart(ms);
     }
-    stack.clear();
     return 0;
 }
 

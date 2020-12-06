@@ -1,5 +1,6 @@
 #include "progressbar.h"
 
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "lua/lua_wrapper.h"
 
@@ -127,18 +128,16 @@ int create(lua_State * L)
 {
     lua::Stack stack(0);
     const std::string id = stack.getSize() > 0 ? stack.get(1).getString() : String::kEmpty;
-    ProgressBar * pb = new ProgressBar(id);
-    EngineHandler::storeInMemoryController(pb);
-    stack.clear();
-    stack.push((void *)pb);
-    return stack.getSize();
+    const size_t handler = EngineHandler::storeInMemoryController(new ProgressBar(id));
+    stack.push(handler);
+    return 1;
 }
 
 int setSprite(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
+    ProgressBar * pb = EngineHandler::getMemoryObj<ProgressBar *>(tbl);
     if (pb)
     {
         const std::string spr = stack.get(2).getString();
@@ -152,7 +151,7 @@ int setCurrentValue(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
+    ProgressBar * pb = EngineHandler::getMemoryObj<ProgressBar *>(tbl);
     if (pb)
     {
         const int value = stack.get(2).getInt();
@@ -166,7 +165,7 @@ int setMaxValue(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
+    ProgressBar * pb = EngineHandler::getMemoryObj<ProgressBar *>(tbl);
     if (pb)
     {
         const int value = stack.get(2).getInt();
@@ -180,7 +179,7 @@ int setFillSpeed(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
+    ProgressBar * pb = EngineHandler::getMemoryObj<ProgressBar *>(tbl);
     if (pb)
     {
         const int speed = stack.get(2).getInt();
@@ -194,7 +193,7 @@ int setVertical(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
+    ProgressBar * pb = EngineHandler::getMemoryObj<ProgressBar *>(tbl);
     if (pb)
     {
         const bool isVertical = stack.get(2).getBool();
@@ -208,7 +207,7 @@ int windTo(lua_State * L)
 {
     lua::Stack stack(2);
     lua::Table tbl(stack.get(1));
-    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
+    ProgressBar * pb = EngineHandler::getMemoryObj<ProgressBar *>(tbl);
     if (pb)
     {
         const int value = stack.get(2).getInt();
@@ -222,7 +221,7 @@ int getCurrentValue(lua_State * L)
 {
     lua::Stack stack(1);
     lua::Table tbl(stack.get(1));
-    ProgressBar * pb = (ProgressBar *)tbl.get("this").getUserData();
+    ProgressBar * pb = EngineHandler::getMemoryObj<ProgressBar *>(tbl);
     stack.clear();
     int value(0);
     if (pb)

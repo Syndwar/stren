@@ -1,6 +1,7 @@
 #include "clabel.h"
 
 #include "lua/lua_wrapper.h"
+#include "engine/engine.h"
 #include "engine/engine_handler.h"
 #include "repo/fonts_repository.h"
 #include "render/renderer.h"
