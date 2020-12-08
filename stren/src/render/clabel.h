@@ -13,6 +13,7 @@ namespace stren
 class CLabel
 {
 private:
+    bool                m_isWrap;    ///< should do text wrapping
     Colour              m_colour;    ///< @todo
     std::string         m_text;      ///< @todo
     std::string         m_fontId;    ///< @todo
@@ -59,6 +60,14 @@ public:
     /// align glyphs
     ///
     void align(const Rect & rect, const int alignment);
+    ///
+    /// enable/disable text wrapping
+    ///
+    void setWrap(const bool value) { m_isWrap = value; }
+    ///
+    /// returns if wrapping enabled/disabled
+    ///
+    bool getWrap() const { return m_isWrap; }
 };
 } // stren
 

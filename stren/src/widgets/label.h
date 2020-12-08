@@ -53,7 +53,15 @@ public:
     ///
     /// @todo
     ///
+    void setWrap(const bool value);
+    ///
+    /// is called when widget position has changed
+    ///
     virtual void doPostMove(const int dx, const int dy) override;
+    ///
+    /// is called when widget size has changed
+    ///
+    virtual void doPostResize(const int dw, const int dh) override;
     ///
     /// @todo
     ///

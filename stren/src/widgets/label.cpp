@@ -60,6 +60,11 @@ void Label::doPostMove(const int dx, const int dy)
     m_label.align(getRect(), m_textAlignment);
 }
 
+void Label::doPostResize(const int dw, const int dh)
+{
+    addUpdateState(UpdateState::Align);
+}
+
 void Label::doRender()
 {
     if (hasUpdateState(UpdateState::Update))
@@ -68,7 +73,18 @@ void Label::doRender()
         removeUpdateState(UpdateState::Update);
     }
 
+    if (hasUpdateState(UpdateState::Align))
+    {
+        m_label.align(getRect(), m_textAlignment);
+        removeUpdateState(UpdateState::Align);
+    }
+
     m_label.render();
+}
+
+void Label::setWrap(const bool value)
+{
+    m_label.setWrap(value);
 }
 
 namespace lua_label
@@ -105,7 +121,6 @@ int setFont(lua_State * L)
         const std::string font = stack.get(2).getString();
         lbl->setFont(font);
     }
-    stack.clear();
     return 0;
 }
 
@@ -119,7 +134,6 @@ int setColour(lua_State * L)
         const std::string colorStr = stack.get(2).getString();
         lbl->setColour(colorStr);
     }
-    stack.clear();
     return 0;
 }
 
@@ -133,10 +147,22 @@ int setTextAlignment(lua_State * L)
         const std::string textAlign = stack.get(2).getString();
         lbl->setTextAlignment(textAlign);
     }
-    stack.clear();
     return 0;
 }
+
+int setWrap(lua_State * L)
+{
+    lua::Stack stack(2);
+    lua::Table tbl(stack.get(1));
+    Label * lbl = EngineHandler::getMemoryObj<Label *>(tbl);
+    if (lbl)
+    {
+        const bool isWrapEnable = stack.get(2).getBool();
+        lbl->setWrap(isWrapEnable);
+    }
+    return 0;
 }
+} // lua_label
 
 void Label::bind()
 {
@@ -148,6 +174,7 @@ void Label::bind()
         { "setFont", lua_label::setFont },
         { "setColour", lua_label::setColour },
         { "setTextAlignment", lua_label::setTextAlignment },
+        { "setWrap", lua_label::setWrap },
         { NULL, NULL }
     };
     stack.loadLibs("Label", functions);

@@ -10,6 +10,7 @@ namespace stren
 {
 CLabel::CLabel()
     : m_colour(Colour::White)
+    , m_isWrap(false)
 {
 }
 
@@ -26,25 +27,11 @@ void CLabel::update(const Rect & rect, const int alignment)
 {
     if (!m_text.empty() && !m_fontId.empty())
     {
-        m_textRect.moveTo(0, 0);
         m_glyphs.clear();
-        int offsetX(0);
-        int offsetY(0);
         for (const char letter : m_text)
         {
-            Glyph newGlyph(letter, m_fontId, m_colour);
-            newGlyph.moveTo(offsetX, offsetY);
-            const int glyphWidth = newGlyph.getWidth();
-            const int glyphHeight = newGlyph.getHeight();
-            offsetX += glyphWidth;
-
-            if (m_textRect.getHeight() < glyphHeight)
-            {
-                m_textRect.setHeight(glyphHeight);
-            }
-            m_textRect.setWidth(offsetX);
-
-            m_glyphs.push_back(newGlyph);
+            Glyph glyph(letter, m_fontId, m_colour);
+            m_glyphs.push_back(glyph);
         }
     }
     align(rect, alignment);
@@ -52,6 +39,45 @@ void CLabel::update(const Rect & rect, const int alignment)
 
 void CLabel::align(const Rect & rect, const int alignment)
 {
+    int offsetX(0);
+    int offsetY(0);
+    int rowHeight(0);
+    m_textRect.set(0, 0, 0, 0);
+
+    for (Glyph & glyph : m_glyphs)
+    {
+        const int glyphWidth = glyph.getWidth();
+        const int glyphHeight = glyph.getHeight();
+
+        if (m_isWrap)
+        {
+            if (offsetX + glyphWidth > rect.getWidth())
+            {
+                offsetX = 0;
+                offsetY += rowHeight;
+                rowHeight = glyphHeight;
+            }
+        }
+
+        glyph.moveTo(offsetX, offsetY);
+
+        offsetX += glyphWidth;
+
+        if (rowHeight < glyphHeight)
+        {
+            rowHeight = glyphHeight;
+        }
+
+        if (m_textRect.getHeight() < offsetY + glyphHeight)
+        {
+            m_textRect.setHeight(offsetY + glyphHeight);
+        }
+        if (m_textRect.getWidth() < offsetX + glyphWidth)
+        {
+            m_textRect.setWidth(offsetX + glyphWidth);
+        }
+    }
+
     const int oldX = m_textRect.getX();
     const int oldY = m_textRect.getY();
     rect.align(m_textRect, alignment);

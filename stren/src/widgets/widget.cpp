@@ -33,14 +33,20 @@ void Widget::moveTo(const int x, const int y)
 {
     const int dx = x - m_rect.getX();
     const int dy = y - m_rect.getY();
-    m_rect.moveTo(x, y);
-    doPostMove(dx, dy);
+    if (dx || dy)
+    {
+        m_rect.moveTo(x, y);
+        doPostMove(dx, dy);
+    }
 }
 
 void Widget::moveBy(const int dx, const int dy)
 {
-    m_rect.moveBy(dx, dy);
-    doPostMove(dx, dy);
+    if (dx || dy)
+    {
+        m_rect.moveBy(dx, dy);
+        doPostMove(dx, dy);
+    }
 }
 
 void Widget::update(const size_t dt)
@@ -75,8 +81,19 @@ void Widget::setRect(const int x, const int y, const int w, const int h)
     }
     const int dx = x - m_rect.getX();
     const int dy = y - m_rect.getY();
+    const int dw = w - m_rect.getWidth();
+    const int dh = h - m_rect.getHeight();
+
     m_rect.set(x, y, width, height);
-    doPostMove(dx, dy);
+
+    if (dx || dy)
+    {
+        doPostMove(dx, dy);
+    }
+    if (dw || dh)
+    {
+        doPostResize(dw, dh);
+    }
 }
 
 void Widget::setRect(const Rect & rect)
@@ -306,6 +323,22 @@ int setRect(lua_State *L)
     return 0;
 }
 
+int getRect(lua_State *L)
+{
+    lua::Stack stack(1);
+    lua::Table tbl(stack.get(1));
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
+    if (widget)
+    {
+        const Rect & rect = widget->getRect();
+        stack.push(rect.getX());
+        stack.push(rect.getY());
+        stack.push(rect.getWidth());
+        stack.push(rect.getHeight());
+    }
+    return 4;
+}
+
 int setOrder(lua_State * L)
 {
     lua::Stack stack(2);
@@ -497,6 +530,7 @@ void Widget::bind()
     {
         { "getId", lua_widget::getId },
         { "setRect", lua_widget::setRect },
+        { "getRect", lua_widget::getRect },
         { "setAlignment", lua_widget::setAlignment },
         { "setOrder", lua_widget::setOrder },
         { "open", lua_widget::open },

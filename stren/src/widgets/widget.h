@@ -196,6 +196,10 @@ protected:
     ///
     virtual void doPostMove(const int dx, const int dy) {}
     ///
+    /// is called when widget size has changed
+    ///
+    virtual void doPostResize(const int dw, const int dh) {}
+    ///
     /// custom code that should be called in the child widget before the rendering
     ///
     virtual void doPreRender();
