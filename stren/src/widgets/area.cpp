@@ -18,22 +18,44 @@ Area::~Area()
 void Area::processEvent(const Event & event, bool & isEventCaptured)
 {
     if (isEventCaptured) return;
-    if (EventType::MouseMove != event.type) return;
-     
-    const bool hasMouse = isOpened() && getRect().hasCommon(event.pos);
-    if (hasMouse)
+
+    switch (event.type)
     {
-        if (MouseState::Outside == m_mouseState)
+    case EventType::MouseDown:
+    case EventType::MouseUp:
+    {
+        if (getRect().hasCommon(event.pos))
         {
-            m_mouseState = MouseState::Over;
-            callBack(EventType::MouseOver, this);
+            isEventCaptured = true;
         }
-        isEventCaptured = true;
     }
-    else if (MouseState::Over == m_mouseState)
+    break;
+    case EventType::MouseMove:
     {
-        m_mouseState = MouseState::Outside;
-        callBack(EventType::MouseLeft, this);
+        if (getRect().hasCommon(event.pos))
+        {
+            if (MouseState::Outside == m_mouseState)
+            {
+                m_mouseState = MouseState::Over;
+                if (hasCallback(EventType::MouseOver))
+                {
+                    callBack(EventType::MouseOver, this);
+                }
+            }
+            isEventCaptured = true;
+        }
+        else if (MouseState::Over == m_mouseState)
+        {
+            m_mouseState = MouseState::Outside;
+            if (hasCallback(EventType::MouseLeft))
+            {
+                callBack(EventType::MouseLeft, this);
+            }
+        }
+    }
+    break;
+    default:
+    break;
     }
 }
 

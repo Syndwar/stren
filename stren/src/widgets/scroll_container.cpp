@@ -24,7 +24,6 @@ ScrollContainer::ScrollContainer(const std::string & id)
     , m_speed(1)
     , m_wheelSpeed(16)
     , m_direction(ScrollDirection::None)
-    , m_camera(getRect())
 {
 }
 
@@ -37,9 +36,17 @@ void ScrollContainer::doPostMove(const int dx, const int dy)
     Container::doPostMove(dx, dy);
 
     calculateMaxOffset();
-    
+
     const Rect & rect = getRect();
     m_camera.moveTo(rect.getX(), rect.getY());
+    m_camera.resize(rect.getWidth(), rect.getHeight());
+}
+
+void ScrollContainer::doPostResize(const int dw, const int dh)
+{
+    Container::doPostResize(dw, dh);
+
+    const Rect & rect = getRect();
     m_camera.resize(rect.getWidth(), rect.getHeight());
 }
 
@@ -411,6 +418,24 @@ int enableScroll(lua_State * L)
     return 0;
 }
 
+int screenToScrollPos(lua_State * L)
+{
+    lua::Stack stack(3);
+    lua::Table tbl(stack.get(1));
+    ScrollContainer * cnt = EngineHandler::getMemoryObj<ScrollContainer *>(tbl);
+    int x = stack.get(2).getInt();
+    int y = stack.get(3).getInt();
+    if (cnt)
+    {
+        const Point pos = cnt->screenToScrollPos(x, y);
+        x = pos.getX();
+        y = pos.getY();
+    }
+    stack.push(x);
+    stack.push(y);
+    return 2;
+}
+
 } // lua_scroll_container
 
 void ScrollContainer::bind()
@@ -425,6 +450,7 @@ void ScrollContainer::bind()
         { "jumpTo", lua_scroll_container::jumpTo },
         { "scrollTo", lua_scroll_container::scrollTo },
         { "isScrolling", lua_scroll_container::isScrolling },
+        { "screenToScrollPos", lua_scroll_container::screenToScrollPos },
         { NULL, NULL }
     };
     stack.loadLibs("ScrollContainer", functions);

@@ -21,6 +21,21 @@ size_t MemoryController::store(Widget * widget)
     return m_counter;
 }
 
+size_t MemoryController::find(Widget * widget)
+{
+    if (widget)
+    {
+        for (const auto & it : m_content)
+        {
+            if (it.second == widget)
+            {
+                return it.first;
+            }
+        }
+    }
+    return 0;
+}
+
 void MemoryController::collectGarbage()
 {
     if (!m_content.size()) return;

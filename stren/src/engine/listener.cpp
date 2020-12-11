@@ -6,36 +6,6 @@
 namespace stren
 {
 
-void VmCallback::call(Widget * sender)
-{
-    if (!m_callback.empty())
-    {
-        lua::Function func(m_callback);
-        std::vector<lua::Value> values = { static_cast<void *>(sender) };
-        func.call(values);
-    }
-}
-
-void VmCallback::call(Widget * sender, const std::string & param)
-{
-    if (!m_callback.empty())
-    {
-        lua::Function func(m_callback);
-        std::vector<lua::Value> values = { static_cast<void *>(sender), param };
-        func.call(values);
-    }
-}
-
-void Listener::addCallback(const std::string & type, const std::string & callback)
-{
-    addCallback(Event::strToType(type), callback);
-}
-
-void Listener::addCallback(const EventType & type, const std::string & callback)
-{
-    m_callbacks[type] = std::make_unique<VmCallback>(callback);
-}
-
 void Listener::removeCallback(const std::string & type)
 {
     removeCallback(Event::strToType(type));
@@ -60,21 +30,6 @@ void Listener::callBack(const EventType & type, Widget * widget)
             if (it->second)
             {
                 it->second->call(widget);
-            }
-        }
-    }
-}
-
-void Listener::callBack(const EventType & type, Widget * widget, const std::string & param)
-{
-    if (!m_callbacks.empty())
-    {
-        auto it = m_callbacks.find(type);
-        if (it != m_callbacks.end())
-        {
-            if (it->second)
-            {
-                it->second->call(widget, param);
             }
         }
     }

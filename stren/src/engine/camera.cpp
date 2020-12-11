@@ -10,12 +10,12 @@ Camera::Camera()
 }
 
 Camera::Camera(const Rect & rect)
-    : rect_(rect)
+    : m_rect(rect)
 {
 }
 
 Camera::Camera(const int x, const int y, const int w, const int h)
-    : rect_(x, y, w, h)
+    : m_rect(x, y, w, h)
 {
 }
 
@@ -35,24 +35,24 @@ void Camera::render(Widget * widget)
 
 void Camera::place()
 {
-    clippingRect_ = Renderer::getClippingRect();
-    Renderer::addOffset(target_.getX(), target_.getY());
-    Renderer::setClippingRect(rect_);
+    m_clippingRect = Renderer::getClippingRect();
+    Renderer::addOffset(m_target.getX(), m_target.getY());
+    Renderer::setClippingRect(m_rect);
 }
 
 void Camera::restore()
 {
-    Renderer::addOffset(-target_.getX(), -target_.getY());
-    Renderer::setClippingRect(clippingRect_);
+    Renderer::addOffset(-m_target.getX(), -m_target.getY());
+    Renderer::setClippingRect(m_clippingRect);
 }
 
 void Camera::moveTo(const int x, const int y)
 {
-    rect_.moveTo(x, y);
+    m_rect.moveTo(x, y);
 }
 
 void Camera::resize(const int w, const int h)
 {
-    rect_.setSize(w, h);
+    m_rect.setSize(w, h);
 }
 } // stren

@@ -30,6 +30,10 @@ public:
     ///
     size_t store(Widget * widget);
     ///
+    /// Find widget and return the handle
+    ///
+    size_t find(Widget * widget);
+    ///
     /// Get widget from storage using handle key
     ///
     template<typename T>

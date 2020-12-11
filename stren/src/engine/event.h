@@ -30,6 +30,23 @@ enum class EventType
     SysQuit,
     SysUpdate,
     SysRender,
+    KeyUp_W,
+    KeyDown_W,
+    KeyUp_A,
+    KeyDown_A,
+    KeyUp_D,
+    KeyDown_D,
+    KeyUp_S,
+    KeyDown_S,
+    KeyUp_Grave,
+    KeyDown_Grave,
+    KeyUp_F1,
+    KeyDown_F1,
+    KeyUp_F2,
+    KeyDown_F2,
+    KeyUp_F3,
+    KeyDown_F3,
+
 };                                                  ///< possible event types
 ///
 /// class Event
@@ -55,8 +72,6 @@ public:
         X1 = 4,
         X2 = 5,
     };                                              ///< possible mouse button values
-
-
 
     EventType   type;                               ///< event type value
     KeyMod      mod;                                ///< key mod value
@@ -86,8 +101,13 @@ public:
     ///
     void clear();
     ///
+    /// returns full type
+    ///
+    EventType getType() const;
+    ///
     /// convert string event name to EventType
     ///
+
     static EventType strToType(const std::string & type);
 };
 

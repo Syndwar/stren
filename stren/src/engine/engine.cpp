@@ -64,6 +64,11 @@ size_t Engine::storeInMemoryController(Widget * widget)
     return m_memoryController.store(widget);
 }
 
+size_t Engine::findInMemoryController(Widget * widget)
+{
+    return m_memoryController.find(widget);
+}
+
 bool Engine::init()
 {
     initScripts();

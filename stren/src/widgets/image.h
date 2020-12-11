@@ -13,10 +13,11 @@ namespace stren
 class Image : public Widget
 {
 private:
+    bool            m_ignoreMouse;   ///< @todo
+    int             m_flip;          ///< @todo
+    double          m_angle;         ///< @todo
     std::string     m_spriteId;      ///< @todo
     Point           m_center;        ///< @todo
-    double          m_angle;         ///< @todo
-    int             m_flip;          ///< @todo
     Sprite          m_sprite;        ///< @todo
 public:
     ///
@@ -50,11 +51,15 @@ public:
     ///
     /// @todo
     ///
-    static void bind();
+    void ignoreMouse(const bool value) { m_ignoreMouse = value; }
     ///
     /// process incoming system events, mark isEventCaptured true if the event was processed, otherwise - mark false to let other widget to process it
     ///
     virtual void processEvent(const Event & event, bool & isEventCaptured) override;
+    ///
+    /// @todo
+    ///
+    static void bind();
 private:
     ///
     /// @todo

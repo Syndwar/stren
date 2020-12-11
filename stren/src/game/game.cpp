@@ -43,12 +43,12 @@ void Game::processEvent(const Event & event, bool & isEventCaptured)
 
 void Game::render()
 {
+    m_camera.place();
     if (Screen * currentScreen = getCurrentScreen())
     {
         m_camera.render(currentScreen);
     }
 
-    m_camera.place();
     m_camera.restore();
 }
 

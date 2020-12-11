@@ -14,6 +14,7 @@ namespace stren
 Label::Label(const std::string & id)
     : Widget(id)
     , m_textAlignment(Alignment::CenterMiddle)
+    , m_ignoreMouse(true)
 {
 }
 
@@ -85,6 +86,28 @@ void Label::doRender()
 void Label::setWrap(const bool value)
 {
     m_label.setWrap(value);
+}
+
+void Label::processEvent(const Event & event, bool & isEventCaptured)
+{
+    if (isEventCaptured) return;
+    if (m_ignoreMouse) return;
+
+    switch (event.type)
+    {
+    case EventType::MouseUp:
+    case EventType::MouseDown:
+    case EventType::MouseMove:
+    {
+        if (getRect().hasCommon(event.pos))
+        {
+            isEventCaptured = true;
+        }
+    }
+    break;
+    default:
+    break;
+    }
 }
 
 namespace lua_label
@@ -162,6 +185,19 @@ int setWrap(lua_State * L)
     }
     return 0;
 }
+
+int ignoreMouse(lua_State * L)
+{
+    lua::Stack stack(2);
+    lua::Table tbl(stack.get(1));
+    Label * lbl = EngineHandler::getMemoryObj<Label *>(tbl);
+    if (lbl)
+    {
+        const bool ignore = stack.get(2).getBool();
+        lbl->ignoreMouse(ignore);
+    }
+    return 0;
+}
 } // lua_label
 
 void Label::bind()
@@ -175,6 +211,7 @@ void Label::bind()
         { "setColour", lua_label::setColour },
         { "setTextAlignment", lua_label::setTextAlignment },
         { "setWrap", lua_label::setWrap },
+        { "ignoreMouse", lua_label::ignoreMouse },
         { NULL, NULL }
     };
     stack.loadLibs("Label", functions);

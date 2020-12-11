@@ -13,9 +13,9 @@ class Widget;
 class Camera
 {
 private:
-    Rect  clippingRect_;    ///< old clipping rect
-    Rect  rect_;            ///< @todo
-    Point target_;          ///< @todo
+    Rect  m_clippingRect;    ///< old clipping rect
+    Rect  m_rect;            ///< @todo
+    Point m_target;          ///< @todo
 public:
     ///
     /// Constructor
@@ -48,23 +48,23 @@ public:
     ///
     /// @todo
     ///
-    const Rect & getRect() const { return rect_; }
+    const Rect & getRect() const { return m_rect; }
     ///
     /// @todo
     ///
-    void setRect(const Rect & rect) { rect_ = rect; }
+    void setRect(const Rect & rect) { m_rect = rect; }
     ///
     /// @todo
     ///
-    inline void setTarget(const int x, const int y) { target_.set(x, y); }
+    inline void setTarget(const int x, const int y) { m_target.set(x, y); }
     ///
     /// @todo
     ///
-    inline const Point & getTarget() const { return target_; }
+    inline const Point & getTarget() const { return m_target; }
     ///
     /// @todo
     ///
-    inline const Point& getOffset() const { return target_; }
+    inline const Point& getOffset() const { return m_target; }
     ///
     /// @todo
     ///

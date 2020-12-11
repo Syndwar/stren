@@ -117,29 +117,25 @@ public:
     ///
     static void bind();
     ///
-    /// store widget in memory controller
+    /// store widget in the memory controller
     ///
     static size_t storeInMemoryController(Widget * widget);
     ///
-    /// get widget from memory controller
+    /// find widget in the memory controller
     ///
-    template<typename T>
-    static T getFromMemoryController(const size_t handler)
-    {
-        if (m_engine)
-        {
-            return m_engine->getFromMemoryController<T>(handler);
-        }
-        return nullptr;
-    }
+    static size_t findInMemoryController(Widget * widget);
     ///
-    /// @todo
+    /// get widget from the memory controller
     ///
     template<typename T1, typename T2>
     static T1 getMemoryObj(const T2 & tbl)
     {
         const size_t handler = static_cast<size_t>(tbl.get("this").getInt());
-        return getFromMemoryController<T1>(handler);
+        if (m_engine)
+        {
+            return m_engine->getFromMemoryController<T1>(handler);
+        }
+        return nullptr;
     }
     ///
     /// collects unreleased resources in the engine

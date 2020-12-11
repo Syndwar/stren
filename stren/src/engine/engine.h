@@ -147,11 +147,15 @@ public:
     ///
     void serialize();
     ///
-    /// store widget in memory controller
+    /// find widget in the memory controller
+    ///
+    size_t findInMemoryController(Widget * widget);
+    ///
+    /// store widget in the memory controller
     ///
     size_t storeInMemoryController(Widget * widget);
     ///
-    /// get widget from memory controller
+    /// get widget from the memory controller
     ///
     template<typename T>
     T getFromMemoryController(const size_t handler)

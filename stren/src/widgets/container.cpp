@@ -25,33 +25,32 @@ void Container::doPostMove(const int dx, const int dy)
 
 void Container::processEvent(const Event & event, bool & isEventCaptured)
 {
-    if (isOpened())
+    if (!isOpened()) return;
+
+    if (!isEventCaptured)
     {
-        if (!isEventCaptured)
+        switch (event.type)
         {
-            switch (event.type)
+        case EventType::KeyDown:
+        case EventType::KeyUp:
+        {
+            if (hasCallback(event.getType()))
             {
-            case EventType::KeyDown:
-            case EventType::KeyUp:
-            {
-                if (hasCallback(event.type))
-                {
-                    callBack(event.type, this, event.key);
-                    isEventCaptured = true;
-                }
-            }
-            break;
+                callBack(event.getType(), this);
+                isEventCaptured = true;
             }
         }
+        break;
+        }
+    }
 
-        bool result(false);
-        for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
+    bool result(false);
+    for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
+    {
+        Widget * widget = *it;
+        if (widget && widget->isOpened())
         {
-            Widget * widget = *it;
-            if (widget && !widget->isClosed())
-            {
-                widget->processEvent(event, isEventCaptured);
-            }
+            widget->processEvent(event, isEventCaptured);
         }
     }
 }
@@ -300,7 +299,7 @@ int getAttached(lua_State * L)
             {
                 lua::Table widgetTbl;
                 widgetTbl.create();
-                widgetTbl.set("this", (void *)w);
+                widgetTbl.set("this", EngineHandler::findInMemoryController(w));
 
                 resultTbl.set(i, widgetTbl);
                 ++i;

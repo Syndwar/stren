@@ -15,6 +15,7 @@ namespace stren
 class Label : public Widget
 {
 private:
+    bool            m_ignoreMouse;      ///< @todo
     int             m_textAlignment;    ///< @todo
     CLabel          m_label;            ///< @todo
 public:
@@ -55,6 +56,10 @@ public:
     ///
     void setWrap(const bool value);
     ///
+    /// @todo
+    ///
+    void ignoreMouse(const bool value) { m_ignoreMouse = value; }
+    ///
     /// is called when widget position has changed
     ///
     virtual void doPostMove(const int dx, const int dy) override;
@@ -62,6 +67,10 @@ public:
     /// is called when widget size has changed
     ///
     virtual void doPostResize(const int dw, const int dh) override;
+    ///
+    /// process incoming system events, mark isEventCaptured true if the event was processed, otherwise - mark false to let other widget to process it
+    ///
+    virtual void processEvent(const Event & event, bool & isEventCaptured) override;
     ///
     /// @todo
     ///

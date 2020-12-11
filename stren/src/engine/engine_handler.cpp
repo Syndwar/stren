@@ -172,6 +172,15 @@ size_t EngineHandler::storeInMemoryController(Widget * widget)
     return 0;
 }
 
+size_t EngineHandler::findInMemoryController(Widget * widget)
+{
+    if (m_engine)
+    {
+        return m_engine->findInMemoryController(widget);
+    }
+    return 0;
+}
+
 void EngineHandler::collectGarbage()
 {
     if (m_engine)

@@ -16,6 +16,7 @@ Image::Image(const std::string & id)
     : Widget(id)
     , m_angle(0)
     , m_flip(Sprite::Flip::None)
+    , m_ignoreMouse(false)
 {
 }
 
@@ -71,20 +72,23 @@ void Image::setCenter(const int x, const int y)
 
 void Image::processEvent(const Event & event, bool & isEventCaptured)
 {
-    if (!isEventCaptured)
+    if (isEventCaptured) return;
+    if (m_ignoreMouse) return;
+
+    switch (event.type)
     {
-        switch (event.type)
+    case EventType::MouseUp:
+    case EventType::MouseDown:
+    case EventType::MouseMove:
+    {
+        if (getRect().hasCommon(event.pos))
         {
-        case EventType::MouseUp:
-        case EventType::MouseDown:
-        {
-            if (getRect().hasCommon(event.pos))
-            {
-                isEventCaptured = true;
-            }
+            isEventCaptured = true;
         }
-        break;
-        }
+    }
+    break;
+    default:
+    break;
     }
 }
 
@@ -109,7 +113,6 @@ int setSprite(lua_State * L)
         const std::string spr = stack.get(2).getString();
         img->setSprite(spr);
     }
-    stack.clear();
     return 0;
 }
 
@@ -123,7 +126,6 @@ int setAngle(lua_State * L)
         const int angle = stack.get(2).getInt();
         img->setAngle(angle);
     }
-    stack.clear();
     return 0;
 }
 
@@ -138,7 +140,19 @@ int setFlip(lua_State * L)
         const bool fliph = stack.get(3).getBool();
         img->setFlip(flipv, fliph);
     }
-    stack.clear();
+    return 0;
+}
+
+int ignoreMouse(lua_State * L)
+{
+    lua::Stack stack(2);
+    lua::Table tbl(stack.get(1));
+    Image * img = EngineHandler::getMemoryObj<Image *>(tbl);
+    if (img)
+    {
+        const bool ignore = stack.get(2).getBool();
+        img->ignoreMouse(ignore);
+    }
     return 0;
 }
 } // lua_image
@@ -152,6 +166,7 @@ void Image::bind()
         { "setSprite", lua_image::setSprite },
         { "setAngle", lua_image::setAngle },
         { "setFlip", lua_image::setFlip },
+        { "ignoreMouse", lua_image::ignoreMouse },
         { NULL, NULL }
     };
     stack.loadLibs("Image", functions);
