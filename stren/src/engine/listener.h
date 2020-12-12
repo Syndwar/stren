@@ -5,11 +5,11 @@
 #include <memory>
 
 #include "common/string_ext.h"
+#include "engine/event.h"
 
 namespace stren
 {
 class Widget;
-enum class EventType;
 ///
 /// class ICallback
 ///
@@ -55,7 +55,7 @@ public:
 class Listener
 {
 private:
-    std::map<EventType, std::unique_ptr<ICallback>> m_callbacks; // a list of callbacks listener must call
+    std::map<Event, std::unique_ptr<ICallback>, Event::Compare> m_callbacks; // a list of callbacks listener must call
 public:
     ///
     /// add vm callback
@@ -63,26 +63,22 @@ public:
     template<typename Method, typename Param>
     void addCallback(const std::string & type, const Method & method, const Param & param)
     {
-        EventType eventType = Event::strToType(type);
+        Event newEvent(type);
         auto callback = std::make_unique<VmCallback<Method, Param>>(method, param);
-        m_callbacks[eventType] = std::move(callback);
+        m_callbacks[newEvent] = std::move(callback);
     }
     ///
     /// delete specific callback
     ///
-    void removeCallback(const std::string & type);
-    ///
-    /// delete specific callback
-    ///
-    void removeCallback(const EventType & type);
+    void removeCallback(const Event & event);
     ///
     /// call the callback
     ///
-    void callBack(const EventType & type, Widget * widget);
+    void callBack(const Event & event, Widget * widget);
     ///
     /// return if callback exist
     ///
-    bool hasCallback(const EventType & type) const;
+    bool hasCallback(const Event & event) const;
     ///
     /// delete all callbacks
     ///

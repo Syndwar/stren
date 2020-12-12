@@ -138,10 +138,7 @@ void Button::processEvent(const Event & event, bool & isEventCaptured)
                 {
                     m_viewState = ViewState::Over;
 
-                    if (hasCallback(EventType::MouseClicked))
-                    {
-                        callBack(EventType::MouseClicked, this);
-                    }
+                    callBack(EventType::MouseClicked, this);
                     isEventCaptured = true;
                 }
             }

@@ -37,20 +37,14 @@ void Area::processEvent(const Event & event, bool & isEventCaptured)
             if (MouseState::Outside == m_mouseState)
             {
                 m_mouseState = MouseState::Over;
-                if (hasCallback(EventType::MouseOver))
-                {
-                    callBack(EventType::MouseOver, this);
-                }
+                callBack(EventType::MouseOver, this);
             }
             isEventCaptured = true;
         }
         else if (MouseState::Over == m_mouseState)
         {
             m_mouseState = MouseState::Outside;
-            if (hasCallback(EventType::MouseLeft))
-            {
-                callBack(EventType::MouseLeft, this);
-            }
+            callBack(EventType::MouseLeft, this);
         }
     }
     break;

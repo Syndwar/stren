@@ -286,7 +286,7 @@ void Widget::align()
     doPostMove(m_rect.getX() - oldRect.getX(), m_rect.getY() - oldRect.getY());
 }
 
-void Widget::attachTransform(const EventType eventType, const Transform & transform)
+void Widget::attachTransform(const std::string & eventType, const Transform & transform)
 {
     m_transform.setTransform(eventType, transform);
 }
@@ -489,7 +489,7 @@ int attachTransform(lua_State * L)
         Transform ** transform = (Transform **)stack.get(3).getUserData();
         if (transform && *transform)
         {
-            widget->attachTransform(Event::strToType(eventType), **transform);
+            widget->attachTransform(eventType, **transform);
         }
     }
     return 0;

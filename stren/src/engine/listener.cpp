@@ -1,30 +1,23 @@
 #include "listener.h"
 
 #include "lua/lua_wrapper.h"
-#include "engine/event.h"
 
 namespace stren
 {
-
-void Listener::removeCallback(const std::string & type)
+void Listener::removeCallback(const Event & event)
 {
-    removeCallback(Event::strToType(type));
-}
-
-void Listener::removeCallback(const EventType & type)
-{
-    auto it = m_callbacks.find(type);
+    auto it = m_callbacks.find(event);
     if (it != m_callbacks.end())
     {
-        m_callbacks[type].reset();
+        it->second.reset();
     }
 }
 
-void Listener::callBack(const EventType & type, Widget * widget)
+void Listener::callBack(const Event & event, Widget * widget)
 {
     if (!m_callbacks.empty())
     {
-        auto it = m_callbacks.find(type);
+        auto it = m_callbacks.find(event);
         if (it != m_callbacks.end())
         {
             if (it->second)
@@ -40,8 +33,8 @@ void Listener::clear()
     m_callbacks.clear();
 }
 
-bool Listener::hasCallback(const EventType & type) const
+bool Listener::hasCallback(const Event & event) const
 {
-    return !m_callbacks.empty() && (m_callbacks.find(type) != m_callbacks.end());
+    return !m_callbacks.empty() && (m_callbacks.find(event) != m_callbacks.end());
 }
 } // stren

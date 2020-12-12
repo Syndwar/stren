@@ -1,7 +1,10 @@
 #ifndef STREN_TEST_OBSERVER_H
 #define STREN_TEST_OBSERVER_H
 
+#include <map>
+#include <memory>
 #include "engine/event_listener.h"
+#include "engine/listener.h"
 #include "engine/observer.h"
 #include "engine/event.h"
 
@@ -63,6 +66,12 @@ public:
         {
             B b1;
         }
+        class TestCallback : public ICallback
+        {
+        public:
+            virtual void call(Widget * sender) override {}
+        };
+
 
         {
             bool isEventCaptured(false);
@@ -74,6 +83,13 @@ public:
             listener.notify(event, isEventCaptured);
             stren::assertMessage(1 == b2.i, "Error");
             listener.remove(&b2);
+        }
+        {
+            std::map<Event, std::unique_ptr<ICallback>, Event::Compare> map;
+            Event newEvent;
+            map.insert({ newEvent, std::make_unique<TestCallback>() });
+            Event newEvent2;
+            map.insert({ newEvent2, std::make_unique<TestCallback>() });
         }
     }
 };

@@ -1,7 +1,5 @@
 #include "widgets/mods/widget_transform_mod.h"
 
-#include "engine/event.h"
-
 namespace stren
 {
 void WidgetTransformMod::update(const size_t dt)
@@ -34,23 +32,23 @@ void WidgetTransformMod::postRender()
     }
 }
 
-void WidgetTransformMod::start(const EventType eventType)
+void WidgetTransformMod::start(const Event & event)
 {
-    auto it = m_transforms.find(eventType);
+    auto it = m_transforms.find(event);
     if (it != m_transforms.end())
     {
         it->second.start();
     }
 }
 
-void WidgetTransformMod::setTransform(const EventType eventType, const Transform & transform)
+void WidgetTransformMod::setTransform(const Event & event, const Transform & transform)
 {
-    m_transforms[eventType] = transform;
+    m_transforms[event] = transform;
 }
 
-bool WidgetTransformMod::isCompleted(const EventType eventType) const
+bool WidgetTransformMod::isCompleted(const Event & event) const
 {
-    auto it = m_transforms.find(eventType);
+    auto it = m_transforms.find(event);
     if (it != m_transforms.end())
     {
         return it->second.finished();

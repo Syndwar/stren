@@ -66,11 +66,11 @@ public:
     ///
     /// compare if equal
     ///
-    bool operator==(const Point & point) const { return m_x == point.m_x && m_y == point.m_y; }
+    inline bool operator==(const Point & point) const { return m_x == point.m_x && m_y == point.m_y; }
     ///
     /// compare if not equal
     ///
-    bool operator!=(const Point & point) const { return m_x != point.m_x || m_y != point.m_y; }
+    inline bool operator!=(const Point & point) const { return m_x != point.m_x || m_y != point.m_y; }
 };
 
 } // stren

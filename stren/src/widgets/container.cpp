@@ -34,9 +34,9 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
         case EventType::KeyDown:
         case EventType::KeyUp:
         {
-            if (hasCallback(event.getType()))
+            if (hasCallback(event))
             {
-                callBack(event.getType(), this);
+                callBack(event, this);
                 isEventCaptured = true;
             }
         }

@@ -133,7 +133,7 @@ public:
     ///
     /// attach transform to the widget
     ///
-    virtual void attachTransform(const EventType eventType, const Transform & transform);
+    virtual void attachTransform(const std::string & eventType, const Transform & transform);
     ///
     /// @todo
     ///

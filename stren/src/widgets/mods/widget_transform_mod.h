@@ -3,18 +3,17 @@
 
 #include <map>
 #include "engine/transform.h"
+#include "engine/event.h"
 
 namespace stren
 {
-enum class EventType;
-
 ///
 /// class WidgetTransformMod - widget transformation module
 ///
 class WidgetTransformMod
 {
 public:
-    std::map<EventType, Transform> m_transforms;        ///< map of different transformations
+    std::map<Event, Transform, Event::Compare> m_transforms;        ///< map of different transformations
     ///
     /// @todo
     ///
@@ -30,15 +29,15 @@ public:
     ///
     /// @todo
     ///
-    void start(const EventType eventType);
+    void start(const Event & event);
     ///
     /// @todo
     ///
-    void setTransform(const EventType eventType, const Transform & transform);
+    void setTransform(const Event & event, const Transform & transform);
     ///
     /// @todo
     ///
-    bool isCompleted(const EventType eventType) const;
+    bool isCompleted(const Event & event) const;
 };
 } // stren
 

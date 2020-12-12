@@ -28,25 +28,6 @@ enum class EventType
     WidgetClosing,
     TimerElapsed,
     SysQuit,
-    SysUpdate,
-    SysRender,
-    KeyUp_W,
-    KeyDown_W,
-    KeyUp_A,
-    KeyDown_A,
-    KeyUp_D,
-    KeyDown_D,
-    KeyUp_S,
-    KeyDown_S,
-    KeyUp_Grave,
-    KeyDown_Grave,
-    KeyUp_F1,
-    KeyDown_F1,
-    KeyUp_F2,
-    KeyDown_F2,
-    KeyUp_F3,
-    KeyDown_F3,
-
 };                                                  ///< possible event types
 ///
 /// class Event
@@ -54,6 +35,35 @@ enum class EventType
 class Event
 {
 public:
+    struct Compare
+    {
+        bool operator() (const Event & lhs, const Event & rhs) const
+        {
+            if (lhs.type < rhs.type)
+            {
+                return true;
+            }
+            else if (lhs.type == rhs.type)
+            {
+                if (lhs.mod < rhs.mod)
+                {
+                    return true;
+                }
+                else if (lhs.mod == rhs.mod)
+                {
+                    if (lhs.mouseButton < rhs.mouseButton)
+                    {
+                        return true;
+                    }
+                    else if (lhs.mouseButton == rhs.mouseButton)
+                    {
+                        return lhs.key < rhs.key;
+                    }
+                }
+            }
+            return false;
+        }
+    };
 
     enum class KeyMod
     {
@@ -89,6 +99,10 @@ public:
     ///
     Event(EventType type);
     ///
+    /// Constructor
+    ///
+    Event(const std::string & typeStr);
+    ///
     /// returns if event is valid
     ///
     inline bool isValid() const { return EventType::None != type; }
@@ -101,14 +115,26 @@ public:
     ///
     void clear();
     ///
-    /// returns full type
+    /// check if equal
     ///
-    EventType getType() const;
+    inline bool operator==(const Event & event)
+    {
+        return (type == event.type) && (mod == event.mod) && (mouseButton == event.mouseButton) && (key == event.key);
+    }
+private:
     ///
     /// convert string event name to EventType
     ///
+    EventType strToType(const std::string & typeStr);
+    ///
+    /// convert string to key value
+    ///
+    std::string strToKey(const std::string & typeStr);
+    ///
+    /// parse string event type
+    ///
+    void parse(const std::string & typeStr);
 
-    static EventType strToType(const std::string & type);
 };
 
 } // stren
