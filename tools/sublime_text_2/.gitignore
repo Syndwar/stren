@@ -1,3 +1,4 @@
 Data/Backup
 *.cache
 *.sublime_session
+*.sublime-workspace
