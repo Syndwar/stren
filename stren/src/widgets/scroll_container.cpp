@@ -175,9 +175,9 @@ void ScrollContainer::processEvent(const Event & event, bool & isEventCaptured)
                     {
                     case EventType::MouseDown:
                     {
-                        if (hasCallback(EventType::MouseClicked))
+                        if (hasCallback(event))
                         {
-                            callBack(EventType::MouseClicked, this);
+                            callBack(event, this);
                             isEventCaptured = true;
                         }
                     }

@@ -20,7 +20,6 @@ enum class EventType
     MouseOver,
     MouseLeft,
     MouseWheel,
-    MouseClicked,
     WidgetOpened,
     WidgetClosed,
     WidgetDelete,
@@ -130,6 +129,10 @@ private:
     /// convert string to key value
     ///
     std::string strToKey(const std::string & typeStr);
+    ///
+    /// convert string to mouse button value
+    ///
+    MouseButton strToMouse(const std::string & typeStr);
     ///
     /// parse string event type
     ///

@@ -32,6 +32,7 @@ void Event::clear()
     mod = KeyMod::None;
     mouseButton = MouseButton::None;
     pos.set(0, 0);
+    key.clear();
 }
 
 void Event::parse(const std::string & typeStr)
@@ -43,9 +44,40 @@ void Event::parse(const std::string & typeStr)
         type = strToType(output[0]);
         if (output.size() > 1)
         {
-            key = strToKey(output[1]);
+            switch (type)
+            {
+            case EventType::KeyDown:
+            case EventType::KeyUp:
+            {
+                key = strToKey(output[1]);
+            }
+            break;
+            case EventType::MouseDown:
+            case EventType::MouseUp:
+            {
+                mouseButton = strToMouse(output[1]);
+            }
+            break;
+            }
         }
     }
+}
+
+Event::MouseButton Event::strToMouse(const std::string & keyStr)
+{
+    if ("Left" == keyStr)
+    {
+        return MouseButton::Left;
+    }
+    else if ("Right" == keyStr)
+    {
+        return MouseButton::Right;
+    }
+    else if ("Middle" == keyStr)
+    {
+        return MouseButton::Middle;
+    }
+    return MouseButton::None;
 }
 
 std::string Event::strToKey(const std::string & keyStr)
@@ -65,7 +97,6 @@ EventType Event::strToType(const std::string & typeStr)
     else if ("MouseDown" == typeStr)       return EventType::MouseDown;
     else if ("MouseMove" == typeStr)       return EventType::MouseMove;
     else if ("MouseWheel" == typeStr)      return EventType::MouseWheel;
-    else if ("MouseClicked" == typeStr)    return EventType::MouseClicked;
     else if ("WidgetOpened" == typeStr)    return EventType::WidgetOpened;
     else if ("WidgetClosed" == typeStr)    return EventType::WidgetClosed;
     else if ("WidgetDelete" == typeStr)    return EventType::WidgetDelete;

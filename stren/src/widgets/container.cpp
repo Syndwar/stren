@@ -196,6 +196,7 @@ void Container::doUpdate(const size_t dt)
 {
     if (hasUpdateState(UpdateState::Update))
     {
+        removeDeadWidgets();
         sortChildren();
         removeUpdateState(UpdateState::Update);
     }
