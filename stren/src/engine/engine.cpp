@@ -56,6 +56,9 @@ void Engine::postRender()
 
 void Engine::collectGarbage()
 {
+    // collect lua garbage
+    lua::Stack stack;
+    stack.collectGarbage();
     m_memoryController.collectGarbage();
 }
 

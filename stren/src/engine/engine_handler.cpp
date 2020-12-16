@@ -329,6 +329,12 @@ int getFPS(lua_State * L)
     stack.push(fps);
     return 1;
 }
+
+int collectGarbage(lua_State * L)
+{
+    EngineHandler::collectGarbage();
+    return 0;
+}
 } // lua_engine
 
 namespace lua_game
@@ -365,6 +371,7 @@ void EngineHandler::bind()
         { "createGame", lua_engine::createGame },
         { "getTextureSize", lua_engine::getTextureSize },
         { "getFPS", lua_engine::getFPS },
+        { "collectGarbage", lua_engine::collectGarbage },
         { NULL, NULL }
     };
     stack.loadLibs("Engine", engine_functions);

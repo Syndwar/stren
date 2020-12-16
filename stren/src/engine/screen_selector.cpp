@@ -28,9 +28,6 @@ void ScreenSelector::update()
         m_currentScreen = m_nextScreen;
         m_currentScreen->open();
         m_nextScreen = nullptr;
-        // collect lua garbage
-        lua::Stack stack;
-        stack.collectGarbage();
         EngineHandler::collectGarbage();
     }
 }
