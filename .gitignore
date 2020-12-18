@@ -49,3 +49,4 @@ bin/LICENSE.tiff.txt
 bin/LICENSE.webp.txt
 bin/LICENSE.zlib.txt
 bin/save/
+bin/maps/.gitignore

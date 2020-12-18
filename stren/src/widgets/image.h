@@ -29,9 +29,13 @@ public:
     ///
     virtual ~Image();
     ///
-    /// @todo
+    /// sets image rotation angle
     ///
     inline void setAngle(const double angle) { m_angle = angle; }
+    ///
+    /// returns image rotation angle
+    ///
+    inline double getAngle() const { return m_angle; }
     ///
     /// @todo
     ///
@@ -48,6 +52,10 @@ public:
     /// @todo
     ///
     void setCenter(const int x, const int y);
+    ///
+    /// @todo
+    ///
+    const Point & getCenter() const { return m_center; }
     ///
     /// @todo
     ///

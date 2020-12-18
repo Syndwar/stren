@@ -129,6 +129,37 @@ int setAngle(lua_State * L)
     return 0;
 }
 
+int getAngle(lua_State * L)
+{
+    lua::Stack stack(1);
+    lua::Table tbl(stack.get(1));
+    Image * img = EngineHandler::getMemoryObj<Image *>(tbl);
+    if (img)
+    {
+        const double angle = img->getAngle();
+        stack.push(angle);
+    }
+    else
+    {
+        stack.push();
+    }
+    return 1;
+}
+
+int setCenter(lua_State * L)
+{
+    lua::Stack stack(3);
+    lua::Table tbl(stack.get(1));
+    Image * img = EngineHandler::getMemoryObj<Image *>(tbl);
+    if (img)
+    {
+        const int x = stack.get(2).getInt();
+        const int y = stack.get(3).getInt();
+        img->setCenter(x, y);
+    }
+    return 0;
+}
+
 int setFlip(lua_State * L)
 {
     lua::Stack stack(3);
@@ -165,6 +196,8 @@ void Image::bind()
         { "new", lua_image::create },
         { "setSprite", lua_image::setSprite },
         { "setAngle", lua_image::setAngle },
+        { "getAngle", lua_image::getAngle },
+        { "setCenter", lua_image::setCenter },
         { "setFlip", lua_image::setFlip },
         { "ignoreMouse", lua_image::ignoreMouse },
         { NULL, NULL }
