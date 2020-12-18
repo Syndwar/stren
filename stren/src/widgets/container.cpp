@@ -41,6 +41,14 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
             }
         }
         break;
+        case EventType::MouseMove:
+        {
+            if (hasCallback(event))
+            {
+                callBack(event, this);
+            }
+        }
+        break;
         }
     }
 

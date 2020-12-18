@@ -81,11 +81,11 @@ public:
     ///
     /// set widget rectangle
     ///
-    void setRect(const int x, const int y, const int w, const int h);
+    virtual void setRect(const int x, const int y, const int w, const int h);
     ///
     /// set widget rectangle
     ///
-    void setRect(const Rect & rect);
+    virtual void setRect(const Rect & rect);
     ///
     /// close/open widget
     ///

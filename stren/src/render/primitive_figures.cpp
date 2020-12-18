@@ -21,6 +21,11 @@ PrimitiveRect::~PrimitiveRect()
 {
 }
 
+void PrimitiveRect::resize(const int w, const int h)
+{
+    m_rect.setSize(w, h);
+}
+
 void PrimitiveRect::render(const Colour & colour)
 {
     if (SDL_Renderer * renderer = Renderer::instantiate())

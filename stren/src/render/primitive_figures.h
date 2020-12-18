@@ -33,6 +33,10 @@ public:
     /// move primitive using offset dx, dy
     ///
     virtual void moveBy(const int dx, const int dy) = 0;
+    ///
+    /// resize primitive using new size w, h
+    ///
+    virtual void resize(const int w, const int h) = 0;
 };
 ///
 /// class PrimitiveRect
@@ -68,6 +72,10 @@ public:
     /// returns primitive rectangle
     ///
     const Rect & getRect() const { return m_rect; }
+    ///
+    /// change primitive rect
+    ///
+    virtual void resize(const int w, const int h) override;
 };
 ///
 /// class PrimitiveRects
@@ -98,6 +106,10 @@ public:
     /// move primitive using offset dx, dy
     ///
     virtual void moveBy(const int dx, const int dy) override;
+    ///
+    /// change primitive rect
+    ///
+    virtual void resize(const int w, const int h) override {}
 };
 ///
 /// class PrimitiveLines
@@ -128,6 +140,10 @@ public:
     /// move primitive using offset dx, dy
     ///
     virtual void moveBy(const int dx, const int dy) override;
+    ///
+    /// change primitive rect
+    ///
+    virtual void resize(const int w, const int h) override {}
 };
 ///
 /// class PrimitivePoint
@@ -157,6 +173,10 @@ public:
     /// move primitive using offset dx, dy
     ///
     virtual void moveBy(const int dx, const int dy) override;
+    ///
+    /// change primitive rect
+    ///
+    virtual void resize(const int w, const int h) override {}
 };
 ///
 /// class PrimitivePoints
@@ -186,6 +206,10 @@ public:
     /// move primitive using offset dx, dy
     ///
     virtual void moveBy(const int dx, const int dy) override;
+    ///
+    /// change primitive rect
+    ///
+    virtual void resize(const int w, const int h) override {}
 };
 ///
 /// class PrimitiveCircle
@@ -217,6 +241,10 @@ public:
     /// move primitive using offset dx, dy
     ///
     virtual void moveBy(const int dx, const int dy) override;
+    ///
+    /// change primitive rect
+    ///
+    virtual void resize(const int w, const int h) override {}
 };
 } // stren
 #endif // STREN_PRIMITIVE_FIGURES

@@ -76,6 +76,15 @@ void Primitive::moveBy(const int dx, const int dy)
     }
 }
 
+void Primitive::setRect(const int x, const int y, const int w, const int h)
+{
+    if (m_figure)
+    {
+        m_figure->moveTo(x, y);
+        m_figure->resize(w, h);
+    }
+}
+
 namespace lua_primitive
 {
 int create(lua_State * L)

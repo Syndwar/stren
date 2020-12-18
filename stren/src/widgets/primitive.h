@@ -65,6 +65,10 @@ public:
     ///
     virtual void moveBy(const int dx, const int dy) override;
     ///
+    /// move widget and resize if possible
+    ///
+    virtual void setRect(const int x, const int y, const int w, const int h) override;
+    ///
     /// render primitive figure
     ///
     virtual void doRender() override;
