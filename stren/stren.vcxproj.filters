@@ -240,6 +240,7 @@
     <ClInclude Include="src\engine\memory_controller.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\common\point.cpp">
@@ -414,5 +415,11 @@
     <ClCompile Include="src\engine\memory_controller.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="stren.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
 </Project>
