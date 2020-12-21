@@ -39,11 +39,11 @@ public:
     ///
     /// @todo
     ///
-    inline void setFlip(const int flip) { m_flip = flip; }
+    void setFlip(const bool fliph, const bool flipv);
     ///
     /// @todo
     ///
-    void setFlip(const bool flipv, const bool fliph);
+    inline int getFlip() const { return m_flip; }
     ///
     /// @todo
     ///
@@ -69,6 +69,10 @@ public:
     ///
     static void bind();
 private:
+    ///
+    /// @todo
+    ///
+    void setFlip(const int flip) { m_flip = flip; }
     ///
     /// @todo
     ///

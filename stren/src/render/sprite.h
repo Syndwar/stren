@@ -20,13 +20,14 @@ public:
         None = 0x00000000,
         Horizontal = 0x00000001,
         Vertical = 0x00000002
-    };                                   ///< @todo
+    };                                   ///< possible flip values
 private:
+
     bool            m_isDirty;           ///< @todo
-    ITexture *      m_texture;           ///< @todo
-    Rect            m_rect;              ///< @todo
+    ITexture *      m_texture;           ///< texture interface
+    Rect            m_rect;              ///< sprite rectangle
     std::string     m_textureId;         ///< @todo
-    Colour          m_colour;            ///< @todo
+    Colour          m_colour;            ///< sprite render colour
 public:
     ///
     /// Default Constructor

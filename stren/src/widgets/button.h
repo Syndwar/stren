@@ -54,15 +54,15 @@ public:
     ///
     /// @todo
     ///
-    inline double angle() const { return m_angle; }
+    inline double getAngle() const { return m_angle; }
     ///
     /// @todo
     ///
-    inline void setFlip(const int flip) { m_flip = flip; }
+    void setFlip(const bool fliph, const bool flipv);
     ///
     /// @todo
     ///
-    inline int flip() const { return m_flip; }
+    inline int getFlip() const { return m_flip; }
     ///
     /// @todo
     ///
@@ -100,6 +100,10 @@ public:
     ///
     virtual void processEvent(const Event & event, bool & isEventCaptured) override;
 private:
+    ///
+    /// @todo
+    ///
+    inline void setFlip(const int flip) { m_flip = flip; }
     ///
     /// @todo
     ///

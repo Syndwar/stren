@@ -84,6 +84,20 @@ size_t Button::getTextureIndex() const
     return 0;
 }
 
+void Button::setFlip(const bool fliph, const bool flipv)
+{
+    int flip(Sprite::Flip::None);
+    if (fliph)
+    {
+        flip |= Sprite::Flip::Horizontal;
+    }
+    if (flipv)
+    {
+        flip |= Sprite::Flip::Vertical;
+    }
+    setFlip(flip);
+}
+
 void Button::doRender()
 {
     if (hasUpdateState(UpdateState::Update))

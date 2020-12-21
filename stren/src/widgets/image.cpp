@@ -24,16 +24,16 @@ Image::~Image()
 {
 }
 
-void Image::setFlip(const bool flipv, const bool fliph)
+void Image::setFlip(const bool fliph, const bool flipv)
 {
     int flip(Sprite::Flip::None);
-    if (flipv)
-    {
-        flip |= Sprite::Flip::Vertical;
-    }
     if (fliph)
     {
         flip |= Sprite::Flip::Horizontal;
+    }
+    if (flipv)
+    {
+        flip |= Sprite::Flip::Vertical;
     }
     setFlip(flip);
 }
@@ -167,9 +167,9 @@ int setFlip(lua_State * L)
     Image * img = EngineHandler::getMemoryObj<Image *>(tbl);
     if (img)
     {
-        const bool flipv = stack.get(2).getBool();
-        const bool fliph = stack.get(3).getBool();
-        img->setFlip(flipv, fliph);
+        const bool fliph = stack.get(2).getBool();
+        const bool flipv = stack.get(3).getBool();
+        img->setFlip(fliph, flipv);
     }
     return 0;
 }
