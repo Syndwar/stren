@@ -69,8 +69,8 @@ void PrimitiveRect::moveBy(const int dx, const int dy)
 ///
 PrimitiveRects::PrimitiveRects(const std::vector<Rect> & rects, const bool fill)
     : PrimitiveFigure()
-    , fill_(fill)
-    , rects_(rects)
+    , m_fill(fill)
+    , m_rects(rects)
 {
 }
 
@@ -88,7 +88,7 @@ void PrimitiveRects::render(const Colour & colour)
         const Point & offset = Renderer::getOffset();
 
         SDL_Rect sdlRect;
-        for (const Rect & rect : rects_)
+        for (const Rect & rect : m_rects)
         {
             // check if any rect is inside the clipping area
             const int x = rect.getX() - offset.getX();
@@ -102,7 +102,7 @@ void PrimitiveRects::render(const Colour & colour)
                 sdlRect.w = w;
                 sdlRect.h = h;
 
-                if (fill_)
+                if (m_fill)
                 {
                     SDL_RenderFillRect(renderer, &sdlRect);
                 }
@@ -118,7 +118,7 @@ void PrimitiveRects::render(const Colour & colour)
 
 void PrimitiveRects::moveTo(const int x, const int y)
 {
-    for (Rect & rect : rects_)
+    for (Rect & rect : m_rects)
     {
         rect.moveTo(x, y);
     }
@@ -126,10 +126,16 @@ void PrimitiveRects::moveTo(const int x, const int y)
 
 void PrimitiveRects::moveBy(const int dx, const int dy)
 {
-    for (Rect & rect : rects_)
+    for (Rect & rect : m_rects)
     {
         rect.moveBy(dx, dy);
     }
+}
+
+void PrimitiveRects::reset(const std::vector<Rect> & rects, const bool fill)
+{
+    m_rects = rects;
+    m_fill = fill;
 }
 ///
 /// PrimitiveLines

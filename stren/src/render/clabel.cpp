@@ -25,7 +25,7 @@ void CLabel::setText(const std::string & text)
 
 void CLabel::update(const Rect & rect, const int alignment)
 {
-    if (!m_text.empty() && !m_fontId.empty())
+    if (!m_fontId.empty())
     {
         m_glyphs.clear();
         for (const char letter : m_text)

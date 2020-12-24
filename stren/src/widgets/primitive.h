@@ -69,6 +69,10 @@ public:
     ///
     virtual void setRect(const int x, const int y, const int w, const int h) override;
     ///
+    /// reset primitive geometry
+    ///
+    virtual void reset(const std::vector<Rect> & rects, const bool fill);
+    ///
     /// render primitive figure
     ///
     virtual void doRender() override;

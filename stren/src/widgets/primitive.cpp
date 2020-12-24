@@ -85,6 +85,14 @@ void Primitive::setRect(const int x, const int y, const int w, const int h)
     }
 }
 
+void Primitive::reset(const std::vector<Rect> & rects, const bool fill)
+{
+    if (m_figure)
+    {
+        m_figure->reset(rects, fill);
+    }
+}
+
 namespace lua_primitive
 {
 int create(lua_State * L)
@@ -201,6 +209,22 @@ int createRects(lua_State * L)
     }
     return 0;
 }
+
+int reset(lua_State * L)
+{
+    lua::Stack stack(2);
+    lua::Table tbl(stack.get(1));
+    Primitive * primitive = EngineHandler::getMemoryObj<Primitive *>(tbl);
+    if (primitive)
+    {
+        lua::Table tbl(stack.get(2));
+        const bool fill = stack.get(3).getBool();
+        std::vector<Rect> rects;
+        lua::tableToRectsVector(tbl, rects);
+        primitive->reset(rects, fill);
+    }
+    return 0;
+}
 } // primitive_bind
 
 void Primitive::bind()
@@ -216,6 +240,7 @@ void Primitive::bind()
         { "createLines", lua_primitive::creatLines },
         { "createPoints", lua_primitive::createPoints },
         { "createRects", lua_primitive::createRects },
+        { "reset", lua_primitive::reset },
         { NULL, NULL }
     };
     stack.loadLibs("Primitive", functions);

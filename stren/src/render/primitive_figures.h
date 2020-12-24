@@ -37,6 +37,10 @@ public:
     /// resize primitive using new size w, h
     ///
     virtual void resize(const int w, const int h) = 0;
+    ///
+    /// reset primitive geometry
+    ///
+    virtual void reset(const std::vector<Rect> & rects, const bool fill) = 0;
 };
 ///
 /// class PrimitiveRect
@@ -76,6 +80,10 @@ public:
     /// change primitive rect
     ///
     virtual void resize(const int w, const int h) override;
+    ///
+    /// reset primitive geometry
+    ///
+    virtual void reset(const std::vector<Rect> & rects, const bool fill) override {}
 };
 ///
 /// class PrimitiveRects
@@ -83,8 +91,8 @@ public:
 class PrimitiveRects : public PrimitiveFigure
 {
 private:
-    bool                fill_;  ///< @todo
-    std::vector<Rect>   rects_; ///< @todo
+    bool                m_fill;  ///< @todo
+    std::vector<Rect>   m_rects; ///< @todo
 public:
     ///
     /// Constructor
@@ -110,6 +118,10 @@ public:
     /// change primitive rect
     ///
     virtual void resize(const int w, const int h) override {}
+    ///
+    /// change rects and fill mode
+    ///
+    virtual void reset(const std::vector<Rect> & rects, const bool fill);
 };
 ///
 /// class PrimitiveLines
@@ -144,6 +156,10 @@ public:
     /// change primitive rect
     ///
     virtual void resize(const int w, const int h) override {}
+    ///
+    /// reset primitive geometry
+    ///
+    virtual void reset(const std::vector<Rect> & rects, const bool fill) override {}
 };
 ///
 /// class PrimitivePoint
@@ -177,6 +193,10 @@ public:
     /// change primitive rect
     ///
     virtual void resize(const int w, const int h) override {}
+    ///
+    /// reset primitive geometry
+    ///
+    virtual void reset(const std::vector<Rect> & rects, const bool fill) override {}
 };
 ///
 /// class PrimitivePoints
@@ -210,6 +230,10 @@ public:
     /// change primitive rect
     ///
     virtual void resize(const int w, const int h) override {}
+    ///
+    /// reset primitive geometry
+    ///
+    virtual void reset(const std::vector<Rect> & rects, const bool fill) override {}
 };
 ///
 /// class PrimitiveCircle
@@ -245,6 +269,10 @@ public:
     /// change primitive rect
     ///
     virtual void resize(const int w, const int h) override {}
+    ///
+    /// reset primitive geometry
+    ///
+    virtual void reset(const std::vector<Rect> & rects, const bool fill) override {}
 };
 } // stren
 #endif // STREN_PRIMITIVE_FIGURES
