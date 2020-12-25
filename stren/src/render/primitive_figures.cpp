@@ -118,14 +118,20 @@ void PrimitiveRects::render(const Colour & colour)
 
 void PrimitiveRects::moveTo(const int x, const int y)
 {
+    if (m_rects.empty()) return;
+    const int left = m_rects[0].getX();
+    const int top = m_rects[0].getY();
+    const int dx = x - left;
+    const int dy = y - top;
     for (Rect & rect : m_rects)
     {
-        rect.moveTo(x, y);
+        rect.moveBy(dx, dy);
     }
 }
 
 void PrimitiveRects::moveBy(const int dx, const int dy)
 {
+    if (m_rects.empty()) return;
     for (Rect & rect : m_rects)
     {
         rect.moveBy(dx, dy);
