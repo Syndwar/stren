@@ -61,6 +61,10 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
             widget->processEvent(event, isEventCaptured);
         }
     }
+    if (!isEventCaptured && isModal())
+    {
+        isEventCaptured = true;
+    }
 }
 
 void Container::doRender()

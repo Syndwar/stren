@@ -19,6 +19,7 @@ Widget::Widget(const std::string & id)
     , m_order(0)
     , m_alignment(0)
     , m_debugView(false)
+    , m_isModal(false)
     , m_viewState(ViewState::Opened)
     , m_updateState(UpdateState::Update)
 {
@@ -521,6 +522,19 @@ int switchDebugView(lua_State * L)
     }
     return 0;
 }
+
+int setModal(lua_State * L)
+{
+    lua::Stack stack(2);
+    lua::Table tbl(stack.get(1));
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
+    if (widget)
+    {
+        const bool value = stack.get(2).getBool();
+        widget->setModal(value);
+    }
+    return 0;
+}
 } // lua_widget
 
 void Widget::bind()
@@ -544,6 +558,7 @@ void Widget::bind()
         { "attachTransform", lua_widget::attachTransform },
         { "addCallback", lua_widget::addCallback },
         { "switchDebugView", lua_widget::switchDebugView },
+        { "setModal", lua_widget::setModal },
         { NULL, NULL }
     };
     stack.loadLibs("Widget", functions);

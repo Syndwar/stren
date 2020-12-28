@@ -43,6 +43,7 @@ private:
     int                                 m_updateState;       ///< widget update state; Default - State::Type::Update
     int                                 m_alignment;         ///< @todo
     WidgetTransformMod                  m_transform;         ///< widget transformation module
+    bool                                m_isModal;           ///< is widget gets all events when opened
     bool                                m_debugView;         ///< debug view that draws rectangles over widget position
     std::unique_ptr<PrimitiveRect>      m_debugRect;         ///< @todo
 public:
@@ -170,6 +171,14 @@ public:
     /// @todo
     ///
     virtual bool isDead() const { return !getParent(); }
+    ///
+    /// @todo
+    ///
+    virtual bool isModal() const { return m_isModal; }
+    ///
+    /// @todo
+    ///
+    virtual void setModal(const bool value) { m_isModal = value; }
 protected:
     ///
     /// @todo

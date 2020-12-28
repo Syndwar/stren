@@ -180,9 +180,25 @@ int setText(lua_State * L)
         const std::string text = stack.get(2).getString();
         edit->setText(text);
     }
-
-    stack.clear();
     return 0;
+}
+
+int getText(lua_State * L)
+{
+    lua::Stack stack(1);
+    lua::Table tbl(stack.get(1));
+    TextEdit * edit = EngineHandler::getMemoryObj<TextEdit *>(tbl);
+    if (edit)
+    {
+        const std::string & text = edit->getText();
+        stack.push(text);
+    }
+    else
+    {
+        stack.push();
+    }
+
+    return 1;
 }
 
 int setFont(lua_State * L)
@@ -195,7 +211,6 @@ int setFont(lua_State * L)
         const std::string font = stack.get(2).getString();
         edit->setFont(font);
     }
-    stack.clear();
     return 0;
 }
 
@@ -209,7 +224,6 @@ int setColour(lua_State * L)
         const std::string colorStr = stack.get(2).getString();
         edit->setColour(colorStr);
     }
-    stack.clear();
     return 0;
 }
 
@@ -223,7 +237,6 @@ int setTextAlignment(lua_State * L)
         const std::string textAlign = stack.get(2).getString();
         edit->setTextAlignment(textAlign);
     }
-    stack.clear();
     return 0;
 }
 } // lua_text_edit
@@ -235,6 +248,7 @@ void TextEdit::bind()
     {
         { "new", lua_text_edit::create },
         { "setText", lua_text_edit::setText },
+        { "getText", lua_text_edit::getText },
         { "setFont", lua_text_edit::setFont },
         { "setColour", lua_text_edit::setColour },
         { "setTextAlignment", lua_text_edit::setTextAlignment },
