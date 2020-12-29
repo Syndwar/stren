@@ -82,6 +82,10 @@ public:
     ///
     /// @todo
     ///
+    const std::string & getText() const;
+    ///
+    /// @todo
+    ///
     void setTextAlignment(const int alignment);
     ///
     /// @todo

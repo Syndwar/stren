@@ -141,6 +141,7 @@ void Widget::open()
 {
     if (ViewState::Closed == getState())
     {
+        callBack(EventType::WidgetOpening, this);
         setState(ViewState::Opening);
         startTransform(EventType::WidgetOpening);
     }
@@ -150,6 +151,7 @@ void Widget::close()
 {
     if (ViewState::Opened == getState())
     {
+        callBack(EventType::WidgetClosing, this);
         setState(ViewState::Closing);
         startTransform(EventType::WidgetClosing);
     }
@@ -157,6 +159,7 @@ void Widget::close()
 
 void Widget::instantOpen()
 {
+    callBack(EventType::WidgetOpening, this);
     setState(ViewState::Opened);
     callBack(EventType::WidgetOpened, this);
     doOpen();
@@ -164,6 +167,7 @@ void Widget::instantOpen()
 
 void Widget::instantClose()
 {
+    callBack(EventType::WidgetClosing, this);
     setState(ViewState::Closed);
     callBack(EventType::WidgetClosed, this);
     doClose();

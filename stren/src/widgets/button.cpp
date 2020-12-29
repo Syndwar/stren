@@ -40,6 +40,11 @@ void Button::setText(const std::string & text)
     addUpdateState(UpdateState::Update);
 }
 
+const std::string & Button::getText() const
+{
+    return m_label.getText();
+}
+
 void Button::setFont(const std::string & fontId)
 {
     m_label.setFont(fontId);
@@ -187,9 +192,26 @@ int setText(lua_State * L)
         const std::string text = stack.get(2).getString();
         btn->setText(text);
     }
-
-    stack.clear();
     return 0;
+}
+
+int getText(lua_State * L)
+{
+    lua::Stack stack(1);
+    lua::Table tbl(stack.get(1));
+    Button * btn = EngineHandler::getMemoryObj<Button *>(tbl);
+    if (btn)
+    {
+        const std::string & text = btn->getText();
+        stack.push(text);
+        
+    }
+    else
+    {
+        stack.push();
+    }
+
+    return 1;
 }
 
 int setFont(lua_State * L)
@@ -202,7 +224,6 @@ int setFont(lua_State * L)
         const std::string font = stack.get(2).getString();
         btn->setFont(font);
     }
-    stack.clear();
     return 0;
 }
 
@@ -216,7 +237,6 @@ int setTextColour(lua_State * L)
         const std::string colorStr = stack.get(2).getString();
         btn->setColour(colorStr);
     }
-    stack.clear();
     return 0;
 }
 
@@ -230,7 +250,6 @@ int setTextAlignment(lua_State * L)
         const std::string textAlign = stack.get(2).getString();
         btn->setTextAlignment(textAlign);
     }
-    stack.clear();
     return 0;
 }
 
@@ -247,7 +266,6 @@ int setSprites(lua_State * L)
         const std::string disabledSpr = stack.get(5).getString();
         btn->setSprites(upSpr, downSpr, overSpr, disabledSpr);
     }
-    stack.clear();
     return 0;
 }
 } // lua_button
@@ -259,6 +277,7 @@ void Button::bind()
     {
         { "new", lua_button::create },
         { "setText", lua_button::setText },
+        { "getText", lua_button::getText },
         { "setFont", lua_button::setFont },
         { "setColour", lua_button::setTextColour },
         { "setTextAlignment", lua_button::setTextAlignment },

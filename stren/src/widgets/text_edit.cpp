@@ -23,17 +23,23 @@ TextEdit::~TextEdit()
 
 void TextEdit::enableInputMode()
 {
-    m_isInputMode = true;
-    std::string new_text = getText();
-    setText(new_text.append("|"));
+    if (!m_isInputMode)
+    {
+        m_isInputMode = true;
+        std::string new_text = getText();
+        setText(new_text.append("|"));
+    }
 }
 
 void TextEdit::cancelInputMode()
 {
-    std::string new_text = getText();
-    new_text.pop_back();
-    setText(new_text);
-    m_isInputMode = false;
+    if (m_isInputMode)
+    {
+        std::string new_text = getText();
+        new_text.pop_back();
+        setText(new_text);
+        m_isInputMode = false;
+    }
 }
 
 bool TextEdit::isInputMode() const
@@ -93,69 +99,77 @@ void TextEdit::doRender()
 
 void TextEdit::processEvent(const Event & event, bool & isEventCaptured)
 {
-    if (isEventCaptured) return;
-
-    switch (event.type)
-    {
-    case EventType::KeyUp:
+    if (isEventCaptured)
     {
         if (isInputMode())
         {
-            if ("Return" == event.key || "Escape" == event.key)
+            cancelInputMode();
+        }
+    }
+    else
+    {
+        switch (event.type)
+        {
+        case EventType::KeyUp:
+        {
+            if (isInputMode())
             {
-                cancelInputMode();
-                isEventCaptured = true;
-            }
-            else if ("Backspace" == event.key)
-            {
-                std::string new_text = getText();
-                if (new_text.size() > 1)
+                if ("Return" == event.key || "Escape" == event.key)
                 {
+                    cancelInputMode();
+                    isEventCaptured = true;
+                }
+                else if ("Backspace" == event.key)
+                {
+                    std::string new_text = getText();
+                    if (new_text.size() > 1)
+                    {
+                        new_text.pop_back();
+                        new_text.pop_back();
+                        new_text.append("|");
+                        setText(new_text);
+                    }
+                    isEventCaptured = true;
+                }
+                else if ("Space" == event.key)
+                {
+                    std::string new_text = getText();
                     new_text.pop_back();
+                    new_text.append(" |");
+                    setText(new_text);
+                    isEventCaptured = true;
+                }
+                else if (1 == event.key.size())
+                {
+                    std::string new_text = getText();
                     new_text.pop_back();
+                    if (Event::KeyMod::Shift == event.mod)
+                    {
+                        const char input[] = { (char)toupper(event.key[0]), "\0" };
+                        new_text.append(input);
+                    }
+                    else
+                    {
+                        const char input[] = { (char)tolower(event.key[0]), "\0" };
+                        new_text.append(input);
+                    }
                     new_text.append("|");
                     setText(new_text);
+                    isEventCaptured = true;
                 }
-                isEventCaptured = true;
-            }
-            else if ("Space" == event.key)
-            {
-                std::string new_text = getText();
-                new_text.pop_back();
-                new_text.append(" |");
-                setText(new_text);
-                isEventCaptured = true;
-            }
-            else if (1 == event.key.size())
-            {
-                std::string new_text = getText();
-                new_text.pop_back();
-                if (Event::KeyMod::Shift == event.mod)
-                {
-                    const char input[] = { (char)toupper(event.key[0]), "\0" };
-                    new_text.append(input);
-                }
-                else
-                {
-                    const char input[] = { (char)tolower(event.key[0]), "\0" };
-                    new_text.append(input);
-                }
-                new_text.append("|");
-                setText(new_text);
-                isEventCaptured = true;
             }
         }
-    }
-    break;
-    case EventType::MouseDown:
-    {
-        if (getRect().hasCommon(event.pos))
+        break;
+        case EventType::MouseDown:
         {
-            enableInputMode();
-            isEventCaptured = true;
+            if (getRect().hasCommon(event.pos))
+            {
+                enableInputMode();
+                isEventCaptured = true;
+            }
         }
-    }
-    break;
+        break;
+        }
     }
 }
 
