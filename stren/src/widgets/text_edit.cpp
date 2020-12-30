@@ -145,8 +145,15 @@ void TextEdit::processEvent(const Event & event, bool & isEventCaptured)
                     new_text.pop_back();
                     if (Event::KeyMod::Shift == event.mod)
                     {
-                        const char input[] = { (char)toupper(event.key[0]), "\0" };
-                        new_text.append(input);
+                        if ("-" == event.key)
+                        {
+                            new_text.append("_");
+                        }
+                        else
+                        {
+                            const char input[] = { (char)toupper(event.key[0]), "\0" };
+                            new_text.append(input);
+                        }
                     }
                     else
                     {
