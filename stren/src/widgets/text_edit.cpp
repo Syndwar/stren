@@ -39,6 +39,7 @@ void TextEdit::cancelInputMode()
         new_text.pop_back();
         setText(new_text);
         m_isInputMode = false;
+        callBack(EventType::TextEdited, this);
     }
 }
 

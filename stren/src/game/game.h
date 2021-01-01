@@ -49,32 +49,6 @@ public:
     /// @todo
     ///
     void switchScreen(Screen * screen);
-    /*
-    ///
-    /// @todo
-    ///
-    void createBoard();
-    ///
-    /// @todo
-    ///
-    void createTerrain();
-    ///
-    /// @todo
-    ///
-    void createObjects();
-    ///
-    /// @todo
-    ///
-    void createUnits();
-    ///
-    /// @todo
-    ///
-    void createItems();
-    ///
-    /// @todo
-    ///
-    void addUnit(const UnitStats & stats);
-    */
 };
 } // stren
 

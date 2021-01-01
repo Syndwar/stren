@@ -106,6 +106,7 @@ EventType Event::strToType(const std::string & typeStr)
     else if ("SysQuit" == typeStr)         return EventType::SysQuit;
     else if ("MouseOver" == typeStr)       return EventType::MouseOver;
     else if ("MouseLeft" == typeStr)       return EventType::MouseLeft;
+    else if ("TextEdited" == typeStr)      return EventType::TextEdited;
     return EventType::Unknown;
 }
 } // stren
