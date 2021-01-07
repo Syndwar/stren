@@ -134,6 +134,23 @@ int setText(lua_State * L)
     return 0;
 }
 
+int getText(lua_State * L)
+{
+    lua::Stack stack(1);
+    lua::Table tbl(stack.get(1));
+    Label * lbl = EngineHandler::getMemoryObj<Label *>(tbl);
+    if (lbl)
+    {
+        const std::string & text = lbl->getText();
+        stack.push(text);
+    }
+    else
+    {
+        stack.push();
+    }
+    return 1;
+}
+
 int setFont(lua_State * L)
 {
     lua::Stack stack(2);
@@ -207,6 +224,7 @@ void Label::bind()
     {
         { "new", lua_label::create },
         { "setText", lua_label::setText },
+        { "getText", lua_label::getText },
         { "setFont", lua_label::setFont },
         { "setColour", lua_label::setColour },
         { "setTextAlignment", lua_label::setTextAlignment },
