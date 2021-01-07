@@ -15,6 +15,7 @@ private:
     int                 m_textAlignment;    ///< @todo
     bool                m_isInputMode;      ///< @todo
     CLabel              m_label;            ///< @todo
+    std::string         m_textBackup;       ///< text backup is used to store old text during the input
 public:
     ///
     /// Constructor
@@ -51,14 +52,6 @@ public:
     ///
     /// @todo
     ///
-    void enableInputMode();
-    ///
-    /// @todo
-    ///
-    void cancelInputMode();
-    ///
-    /// @todo
-    ///
     bool isInputMode() const;
     ///
     /// @todo
@@ -77,6 +70,14 @@ private:
     /// @todo
     ///
     virtual void doRender() override;
+    ///
+    /// @todo
+    ///
+    void enableInputMode();
+    ///
+    /// @todo
+    ///
+    void cancelInputMode();
 };
 }
 #endif // STREN_TEXT_EDIT_H

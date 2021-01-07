@@ -26,8 +26,8 @@ void TextEdit::enableInputMode()
     if (!m_isInputMode)
     {
         m_isInputMode = true;
-        std::string new_text = getText();
-        setText(new_text.append("|"));
+        m_textBackup = getText();
+        setText("|");
     }
 }
 
@@ -35,11 +35,9 @@ void TextEdit::cancelInputMode()
 {
     if (m_isInputMode)
     {
-        std::string new_text = getText();
-        new_text.pop_back();
-        setText(new_text);
+        setText(m_textBackup);
         m_isInputMode = false;
-        callBack(EventType::TextEdited, this);
+        m_textBackup.clear();
     }
 }
 
@@ -100,14 +98,19 @@ void TextEdit::doRender()
 
 void TextEdit::processEvent(const Event & event, bool & isEventCaptured)
 {
-    if (isEventCaptured)
+    if (isInputMode())
     {
-        if (isInputMode())
+        switch (event.type)
+        {
+        case EventType::MouseDown:
         {
             cancelInputMode();
         }
+        break;
+        }
     }
-    else
+
+    if (!isEventCaptured)
     {
         switch (event.type)
         {
@@ -115,7 +118,15 @@ void TextEdit::processEvent(const Event & event, bool & isEventCaptured)
         {
             if (isInputMode())
             {
-                if ("Return" == event.key || "Escape" == event.key)
+                if ("Return" == event.key)
+                {
+                    m_textBackup = getText();
+                    m_textBackup.pop_back();
+                    cancelInputMode();
+                    callBack(EventType::TextEdited, this);
+                    isEventCaptured = true;
+                }
+                else if ("Escape" == event.key)
                 {
                     cancelInputMode();
                     isEventCaptured = true;
