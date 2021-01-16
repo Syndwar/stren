@@ -25,9 +25,10 @@ private:
         Up = 0,
         Over,
         Pressed,
+        Disabled,
     };                                                              ///< @todo
 
-    static const size_t kSpritesCount = 3;                          ///< @todo
+    static const size_t kSpritesCount = 4;                           ///< @todo
 
     int                                 m_textAlignment;             ///< @todo
     int                                 m_flip;                      ///< @todo
@@ -63,6 +64,14 @@ public:
     /// @todo
     ///
     inline int getFlip() const { return m_flip; }
+    ///
+    /// enables/disables button functionality on demand
+    ///
+    void enable(const bool value);
+    ///
+    /// returns if button is enabled/disabled
+    ///
+    bool isEnabled() const;
     ///
     /// @todo
     ///

@@ -28,6 +28,16 @@ Button::~Button()
 {
 }
 
+void Button::enable(const bool value)
+{
+    m_viewState = value ? ViewState::Up : ViewState::Disabled;
+}
+
+bool Button::isEnabled() const
+{
+    return ViewState::Disabled == m_viewState;
+}
+
 void Button::setColour(const Colour & colour)
 {
     m_label.setColour(colour);
@@ -86,6 +96,7 @@ size_t Button::getTextureIndex() const
 {
     if (ViewState::Over == m_viewState) return 1;
     if (ViewState::Pressed == m_viewState) return 2;
+    if (ViewState::Disabled == m_viewState) return 3;
     return 0;
 }
 
@@ -124,50 +135,54 @@ void Button::setSprites(const std::string & upSpr, const std::string & downSpr, 
     m_spriteIds[0] = upSpr;
     m_spriteIds[1] = downSpr;
     m_spriteIds[2] = overSpr;
+    m_spriteIds[3] = disSpr;
     addUpdateState(UpdateState::Update);
 }
 
 void Button::processEvent(const Event & event, bool & isEventCaptured)
 {
-    switch (event.type)
+    if (ViewState::Disabled != m_viewState)
     {
-    case EventType::MouseDown:
-    case EventType::MouseUp:
-    case EventType::MouseMove:
-    {
-        const bool hasMouse = !isEventCaptured && isOpened() && getRect().hasCommon(event.pos);
-        if (hasMouse)
+        switch (event.type)
         {
-            if (EventType::MouseMove == event.type)
+        case EventType::MouseDown:
+        case EventType::MouseUp:
+        case EventType::MouseMove:
+        {
+            const bool hasMouse = !isEventCaptured && isOpened() && getRect().hasCommon(event.pos);
+            if (hasMouse)
             {
-                if (ViewState::Over != m_viewState && ViewState::Pressed != m_viewState)
+                if (EventType::MouseMove == event.type)
                 {
-                    m_viewState = ViewState::Over;
+                    if (ViewState::Over != m_viewState && ViewState::Pressed != m_viewState)
+                    {
+                        m_viewState = ViewState::Over;
+                        isEventCaptured = true;
+                    }
+                }
+                else if (EventType::MouseDown == event.type)
+                {
+                    m_viewState = ViewState::Pressed;
                     isEventCaptured = true;
                 }
-            }
-            else if (EventType::MouseDown == event.type)
-            {
-                m_viewState = ViewState::Pressed;
-                isEventCaptured = true;
-            }
-            else if (EventType::MouseUp == event.type)
-            {
-                if (ViewState::Pressed == m_viewState)
+                else if (EventType::MouseUp == event.type)
                 {
-                    m_viewState = ViewState::Over;
+                    if (ViewState::Pressed == m_viewState)
+                    {
+                        m_viewState = ViewState::Over;
 
-                    callBack(event, this);
-                    isEventCaptured = true;
+                        callBack(event, this);
+                        isEventCaptured = true;
+                    }
                 }
             }
+            else if (ViewState::Up != m_viewState)
+            {
+                m_viewState = ViewState::Up;
+            }
         }
-        else if (ViewState::Up != m_viewState)
-        {
-            m_viewState = ViewState::Up;
+        break;
         }
-    }
-    break;
     }
 }
 
@@ -268,6 +283,36 @@ int setSprites(lua_State * L)
     }
     return 0;
 }
+
+int enable(lua_State * L)
+{
+    lua::Stack stack(2);
+    lua::Table tbl(stack.get(1));
+    Button * btn = EngineHandler::getMemoryObj<Button *>(tbl);
+    if (btn)
+    {
+        const bool value = stack.get(2).getBool();
+        btn->enable(value);
+    }
+    return 0;
+}
+
+int isEnabled(lua_State * L)
+{
+    lua::Stack stack(1);
+    lua::Table tbl(stack.get(1));
+    Button * btn = EngineHandler::getMemoryObj<Button *>(tbl);
+    if (btn)
+    {
+        const bool value = btn->isEnabled();
+        stack.push(value);
+    }
+    else
+    {
+        stack.push();
+    }
+    return 1;
+}
 } // lua_button
 
 void Button::bind()
@@ -282,6 +327,8 @@ void Button::bind()
         { "setColour", lua_button::setTextColour },
         { "setTextAlignment", lua_button::setTextAlignment },
         { "setSprites", lua_button::setSprites },
+        { "isEnabled", lua_button::isEnabled },
+        { "enable", lua_button::enable },
         { NULL, NULL }
     };
     stack.loadLibs("Button", functions);
