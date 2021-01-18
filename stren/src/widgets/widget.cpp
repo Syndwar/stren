@@ -177,16 +177,20 @@ void Widget::updateViewState()
 {
     if (ViewState::Opening == m_viewState)
     {
-        if (isTransformCompleted(EventType::WidgetOpening))
+        if (isTransformCompleted(EventType::WidgetOpened))
         {
-            instantOpen();
+            setState(ViewState::Opened);
+            callBack(EventType::WidgetOpened, this);
+            doOpen();
         }
     }
     else if (ViewState::Closing == m_viewState)
     {
-        if (isTransformCompleted(EventType::WidgetClosing))
+        if (isTransformCompleted(EventType::WidgetClosed))
         {
-            instantClose();
+            setState(ViewState::Closed);
+            callBack(EventType::WidgetClosed, this);
+            doClose();
         }
     }
 }
