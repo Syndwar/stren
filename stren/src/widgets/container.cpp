@@ -53,9 +53,10 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
     }
 
     bool result(false);
-    for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
+    size_t last = m_attached.size();
+    while (last)
     {
-        Widget * widget = *it;
+        Widget * widget = m_attached[--last];
         if (widget && widget->isOpened())
         {
             widget->processEvent(event, isEventCaptured);
@@ -213,9 +214,10 @@ void Container::doUpdate(const size_t dt)
         removeUpdateState(UpdateState::Update);
     }
 
-    for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
+    size_t last = m_attached.size();
+    while (last)
     {
-        Widget * widget = *it;
+        Widget * widget = m_attached[--last];
         if (widget && !widget->isClosed())
         {
             widget->update(dt);

@@ -17,40 +17,47 @@ Area::~Area()
 
 void Area::processEvent(const Event & event, bool & isEventCaptured)
 {
-    if (isEventCaptured) return;
-
-    switch (event.type)
+    if (!isEventCaptured)
     {
-    case EventType::MouseDown:
-    case EventType::MouseUp:
-    {
-        if (getRect().hasCommon(event.pos))
+        switch (event.type)
         {
-            isEventCaptured = true;
-        }
-    }
-    break;
-    case EventType::MouseMove:
-    {
-        if (getRect().hasCommon(event.pos))
+        case EventType::MouseDown:
+        case EventType::MouseUp:
         {
-            if (MouseState::Outside == m_mouseState)
+            if (getRect().hasCommon(event.pos))
             {
-                m_mouseState = MouseState::Over;
-                callBack(EventType::MouseOver, this);
+                isEventCaptured = true;
             }
-            isEventCaptured = true;
         }
-        else if (MouseState::Over == m_mouseState)
+        break;
+        case EventType::MouseMove:
         {
-            m_mouseState = MouseState::Outside;
-            callBack(EventType::MouseLeft, this);
+            if (getRect().hasCommon(event.pos))
+            {
+                if (MouseState::Outside == m_mouseState)
+                {
+                    m_mouseState = MouseState::Over;
+                    callBack(EventType::MouseOver, this);
+                }
+                isEventCaptured = true;
+            }
+            else if (MouseState::Over == m_mouseState)
+            {
+                m_mouseState = MouseState::Outside;
+                callBack(EventType::MouseLeft, this);
+            }
+        }
+        break;
+        default:
+        break;
         }
     }
-    break;
-    default:
-    break;
+    else if (MouseState::Over == m_mouseState)
+    {
+        m_mouseState = MouseState::Outside;
+        callBack(EventType::MouseLeft, this);
     }
+
 }
 
 namespace lua_area
