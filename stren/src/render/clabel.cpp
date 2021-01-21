@@ -61,8 +61,6 @@ void CLabel::align(const Rect & rect, const int alignment)
 
         glyph.moveTo(offsetX, offsetY);
 
-        offsetX += glyphWidth;
-
         if (rowHeight < glyphHeight)
         {
             rowHeight = glyphHeight;
@@ -76,6 +74,8 @@ void CLabel::align(const Rect & rect, const int alignment)
         {
             m_textRect.setWidth(offsetX + glyphWidth);
         }
+
+        offsetX += glyphWidth;
     }
 
     const int oldX = m_textRect.getX();
