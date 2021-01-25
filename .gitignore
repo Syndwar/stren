@@ -38,15 +38,4 @@
 .vs
 .output
 .temp
-bin/LICENSE.FLAC.txt
-bin/LICENSE.freetype.txt
-bin/LICENSE.jpeg.txt
-bin/LICENSE.modplug.txt
-bin/LICENSE.mpg123.txt
-bin/LICENSE.ogg-vorbis.txt
-bin/LICENSE.png.txt
-bin/LICENSE.tiff.txt
-bin/LICENSE.webp.txt
-bin/LICENSE.zlib.txt
-bin/save/
-bin/maps/.gitignore
+bin/
