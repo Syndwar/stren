@@ -27,8 +27,23 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
 {
     if (!isOpened()) return;
 
+    bool result(false);
+    size_t last = m_attached.size();
+    while (last)
+    {
+        Widget * widget = m_attached[--last];
+        if (widget && widget->isOpened())
+        {
+            widget->processEvent(event, isEventCaptured);
+        }
+    }
     if (!isEventCaptured)
     {
+        if (isModal())
+        {
+            isEventCaptured = true;
+        }
+
         switch (event.type)
         {
         case EventType::KeyDown:
@@ -50,21 +65,6 @@ void Container::processEvent(const Event & event, bool & isEventCaptured)
         }
         break;
         }
-    }
-
-    bool result(false);
-    size_t last = m_attached.size();
-    while (last)
-    {
-        Widget * widget = m_attached[--last];
-        if (widget && widget->isOpened())
-        {
-            widget->processEvent(event, isEventCaptured);
-        }
-    }
-    if (!isEventCaptured && isModal())
-    {
-        isEventCaptured = true;
     }
 }
 

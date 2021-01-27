@@ -42,7 +42,8 @@ void Event::parse(const std::string & typeStr)
     if (!output.empty())
     {
         type = strToType(output[0]);
-        if (output.size() > 1)
+        const size_t paramsCount = output.size();
+        if (paramsCount > 1)
         {
             switch (type)
             {
@@ -50,12 +51,29 @@ void Event::parse(const std::string & typeStr)
             case EventType::KeyUp:
             {
                 key = strToKey(output[1]);
+                if (paramsCount > 2)
+                {
+                    mod = strToKeyMod(output[1]);
+                    key = strToKey(output[2]);
+                }
+                else
+                {
+                    mod = strToKeyMod(output[1]);
+                    key = strToKey(output[1]);
+                }
             }
             break;
             case EventType::MouseDown:
             case EventType::MouseUp:
             {
-                mouseButton = strToMouse(output[1]);
+                if (paramsCount > 2)
+                {
+                    mouseButton = strToMouse(output[2]);
+                }
+                else
+                {
+                    mouseButton = strToMouse(output[1]);
+                }
             }
             break;
             }
@@ -78,6 +96,23 @@ Event::MouseButton Event::strToMouse(const std::string & keyStr)
         return MouseButton::Middle;
     }
     return MouseButton::None;
+}
+
+Event::KeyMod Event::strToKeyMod(const std::string & keyStr)
+{
+    if ("Ctrl" == keyStr)
+    {
+        return KeyMod::Control;
+    }
+    else if ("Alt" == keyStr)
+    {
+        return KeyMod::Alt;
+    }
+    else if ("Shift" == keyStr)
+    {
+        return KeyMod::Shift;
+    }
+    return KeyMod::None;
 }
 
 std::string Event::strToKey(const std::string & keyStr)

@@ -135,6 +135,10 @@ private:
     ///
     MouseButton strToMouse(const std::string & typeStr);
     ///
+    /// convert string to key modification
+    ///
+    KeyMod strToKeyMod(const std::string & keyStr);
+    ///
     /// parse string event type
     ///
     void parse(const std::string & typeStr);
