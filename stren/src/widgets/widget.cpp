@@ -177,7 +177,7 @@ void Widget::updateViewState()
 {
     if (ViewState::Opening == m_viewState)
     {
-        if (isTransformCompleted(EventType::WidgetOpened))
+        if (isTransformCompleted(EventType::WidgetOpening))
         {
             setState(ViewState::Opened);
             callBack(EventType::WidgetOpened, this);
@@ -186,7 +186,7 @@ void Widget::updateViewState()
     }
     else if (ViewState::Closing == m_viewState)
     {
-        if (isTransformCompleted(EventType::WidgetClosed))
+        if (isTransformCompleted(EventType::WidgetClosing))
         {
             setState(ViewState::Closed);
             callBack(EventType::WidgetClosed, this);
