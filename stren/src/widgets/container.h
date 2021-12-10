@@ -68,7 +68,7 @@ public:
     ///
     /// detach widget from the container, no longer owns
     ///
-    virtual void detach(Widget * widget);
+    virtual void detach(Widget * widget) override;
     ///
     ///
     /// detach widgets from the container

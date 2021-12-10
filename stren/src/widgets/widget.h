@@ -179,6 +179,14 @@ public:
     /// @todo
     ///
     virtual void setModal(const bool value) { m_isModal = value; }
+    ///
+    /// @todo
+    ///
+    virtual void detach();
+    ///
+    /// @todo
+    ///
+    virtual void detach(Widget * widget) {}
 protected:
     ///
     /// @todo

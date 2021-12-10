@@ -30,6 +30,14 @@ Widget::~Widget()
     callBack(EventType::WidgetDelete, this);
 }
 
+void Widget::detach()
+{
+    if (m_parent)
+    {
+        m_parent->detach(this);
+    }
+}
+
 void Widget::moveTo(const int x, const int y)
 {
     const int dx = x - m_rect.getX();
@@ -543,6 +551,18 @@ int setModal(lua_State * L)
     }
     return 0;
 }
+
+int detach(lua_State * L)
+{
+    lua::Stack stack(1);
+    lua::Table tbl(stack.get(1));
+    Widget * widget = EngineHandler::getMemoryObj<Widget *>(tbl);
+    if (widget)
+    {
+        widget->detach();
+    }
+    return 0;
+}
 } // lua_widget
 
 void Widget::bind()
@@ -567,6 +587,7 @@ void Widget::bind()
         { "addCallback", lua_widget::addCallback },
         { "switchDebugView", lua_widget::switchDebugView },
         { "setModal", lua_widget::setModal },
+        { "detach", lua_widget::detach },
         { NULL, NULL }
     };
     stack.loadLibs("Widget", functions);
