@@ -1,7 +1,7 @@
 #ifndef STREN_TEXTURES_DATA_H
 #define STREN_TEXTURES_DATA_H
 
-#include <map>
+#include <unordered_map>
 
 #include "common/string_ext.h"
 #include "render/sprite.h"
@@ -15,8 +15,8 @@ class Sprite;
 class SpritesRepository
 {
 private:
-    bool                            m_isReady;      ///< flag if repository is loaded and ready
-    std::map<std::string, Sprite>   m_sprites;      ///< loaded sprites
+    bool                                        m_isReady;      ///< flag if repository is loaded and ready
+    std::unordered_map<std::string, Sprite>     m_sprites;      ///< loaded sprites
 public:
     ///
     /// Constructor

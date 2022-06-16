@@ -1,7 +1,7 @@
 #ifndef STREN_SOUNDS_REPOSITORY
 #define STREN_SOUNDS_REPOSITORY
 
-#include <map>
+#include <unordered_map>
 
 #include "sound.h"
 
@@ -18,9 +18,9 @@ namespace stren
 class SoundsRepository
 {
 private:
-    static Sound                 kEmptySound;   ///< empty sound
-    bool                         m_isReady;     ///< flag if repository was initialized
-    std::map<std::string, Sound> m_sounds;      ///< loaded sounds
+    static Sound                            kEmptySound;    ///< empty sound
+    bool                                    m_isReady;      ///< flag if repository was initialized
+    std::unordered_map<std::string, Sound>  m_sounds;       ///< loaded sounds
 
 public:
     ///

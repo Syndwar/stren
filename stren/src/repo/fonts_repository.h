@@ -12,8 +12,8 @@ namespace stren
 class FontsRepository
 {
 private:
-    bool                                 m_isReady; /// flag if repository is loaded and ready
-    std::map<std::string, FontTexture>   m_fonts;   ///< loaded fonts
+    bool                                            m_isReady; /// flag if repository is loaded and ready
+    std::unordered_map<std::string, FontTexture>    m_fonts;   ///< loaded fonts
 public:
     ///
     /// Constructor

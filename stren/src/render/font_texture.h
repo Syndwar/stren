@@ -1,7 +1,7 @@
 #ifndef STREN_FONT_TEXTURE_H
 #define STREN_FONT_TEXTURE_H
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "render/itexture.h"
@@ -19,11 +19,11 @@ namespace stren
 class FontTexture : public ITexture
 {
 private:
-    SDL_Texture *           m_texture;   ///< texture itself
-    int                     m_size;      ///< font size
-    std::string             m_glyphs;    ///< characters that font have
-    std::string             m_filePath;  ///< path to the font file
-    std::map<char, Rect>    m_rects;     ///< positions of the characters on the font texture
+    SDL_Texture *                       m_texture;   ///< texture itself
+    int                                 m_size;      ///< font size
+    std::string                         m_glyphs;    ///< characters that font have
+    std::string                         m_filePath;  ///< path to the font file
+    std::unordered_map<char, Rect>      m_rects;     ///< positions of the characters on the font texture
 
     class GlyphSurface
     {

@@ -1,7 +1,7 @@
 #ifndef STREN_MUSIC_REPOSITORY
 #define STREN_MUSIC_REPOSITORY
 
-#include <map>
+#include <unordered_map>
 #include "music.h"
 
 namespace lua
@@ -17,9 +17,9 @@ namespace stren
 class MusicRepository
 {
 private:
-    static Music                 kEmptyMusic;   ///< empty sound
-    bool                         m_isReady;     ///< flag if repository was initialized
-    std::map<std::string, Music> m_tracks;      ///< loaded tracks
+    static Music                 kEmptyMusic;           ///< empty sound
+    bool                         m_isReady;             ///< flag if repository was initialized
+    std::unordered_map<std::string, Music> m_tracks;    ///< loaded tracks
 public:
     ///
     /// Constructor

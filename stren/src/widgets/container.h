@@ -2,6 +2,7 @@
 #define STREN_CONTAINER_H
 
 #include <vector>
+#include <unordered_map>
 
 #include "widgets/widget.h"
 #include "utils/utils.h"
@@ -14,8 +15,8 @@ namespace stren
 class Container : public Widget
 {
 private:
-    std::vector<Widget *>            m_attached; ///< @todo
-    std::map<std::string, Widget *>  m_map;      ///< @todo
+    std::vector<Widget *>                       m_attached; ///< @todo
+    std::unordered_map<std::string, Widget *>   m_map;      ///< @todo
 
 public:
     ///

@@ -1,7 +1,7 @@
 #ifndef STREN_TEXTURES_REPO_H
 #define STREN_TEXTURES_REPO_H
 
-#include <map>
+#include <unordered_map>
 
 #include "common/string_ext.h"
 #include "render/image_texture.h"
@@ -14,8 +14,8 @@ namespace stren
 class TexturesRepository
 {
 private:
-    bool                                m_isReady;    ///< flag if repository is loaded and ready
-    std::map<std::string, ImageTexture> m_textures;   ///< loaded textures
+    bool                                          m_isReady;    ///< flag if repository is loaded and ready
+    std::unordered_map<std::string, ImageTexture> m_textures;   ///< loaded textures
 
 public:
     ///

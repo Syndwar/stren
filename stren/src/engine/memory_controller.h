@@ -1,8 +1,7 @@
 #ifndef STREN_MEMORY_CONTROLLER_H
 #define STREN_MEMORY_CONTROLLER_H
 
-#include <map>
-#include <vector>
+#include <unordered_map>
 
 namespace stren
 {
@@ -13,9 +12,8 @@ class Widget;
 class MemoryController
 {
 private:
-    size_t                     m_counter; ///< @todo
-    std::map<size_t, Widget *> m_content; ///< @todo
-    std::vector<size_t> removeList;
+    size_t                               m_counter; ///< @todo
+    std::unordered_map<size_t, Widget *> m_content; ///< @todo
 public:
     ///
     /// Constructor

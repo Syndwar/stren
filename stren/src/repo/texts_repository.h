@@ -1,7 +1,7 @@
 #ifndef STREN_TEXTS_REPOSITORY_H
 #define STREN_TEXTS_REPOSITORY_H
 
-#include <map>
+#include <unordered_map>
 #include "common/string_ext.h"
 
 namespace stren
@@ -12,8 +12,8 @@ namespace stren
 class TextsRepository
 {
 private:
-    bool                               m_isReady; ///< flag if repository is loaded and ready
-    std::map<std::string, std::string> m_texts;   ///< loaded texts
+    bool                                            m_isReady; ///< flag if repository is loaded and ready
+    std::unordered_map<std::string, std::string>    m_texts;   ///< loaded texts
 public:
     ///
     /// Constructor
